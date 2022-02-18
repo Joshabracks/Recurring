@@ -1,25 +1,46 @@
-using Data;
-using Unity.Mathematics;
+using Gameplay.Data;
 using UnityEngine;
 
 namespace Gameplay.Terrain
 {
     public struct Chunk
     {
-        private Array2D<byte> _data;
+        public Array2D<byte> Data {get;}
+        private int _xCoordinate;
+        private int _yCoordinate;
 
-        public Chunk(int xCoordinate, int yCoordinate)
+        public Chunk(int xCoordinate, int yCoordinate, int chunkSize, int worldSeed, float frequency, float terrainDensity)
         {
-            _data = new Array2D<byte>(WorldData.ChunkSize);
-            int xStart = xCoordinate * WorldData.ChunkSize;
-            int yStart = yCoordinate * WorldData.ChunkSize;
-            for (int x = xStart; x < xStart + WorldData.ChunkSize; x++) {
-                for (int y = yStart; y < yStart + WorldData.ChunkSize; y++) {
-                    float terrainValue = Mathf.PerlinNoise(x + WorldData.WorldSeed * WorldData.Frequency, y - WorldData.WorldSeed * WorldData.Frequency);
-                    // Setting terrain to open (Value 0) or blocked (Value 1)
-                    _data.Set(x, y, terrainValue < WorldData.TerrainDensity ? (byte)0 : (byte)1);
+            // Instatiate Data and coordiantes
+            _xCoordinate = xCoordinate;
+            _yCoordinate = yCoordinate;
+            Data = new Array2D<byte>(chunkSize);
+            
+            // Build Data
+            int xStart = xCoordinate * chunkSize;
+            int yStart = yCoordinate * chunkSize;
+
+            for (int x = 0; x < chunkSize; x++) {
+                for (int y = 0; y < chunkSize; y++) {
+                    float terrainValue = Mathf.PerlinNoise(xStart + x + worldSeed * frequency, yStart + y - worldSeed * frequency);
+                    Data.Set(x, y, terrainValue < terrainDensity ? (byte)0 : (byte)1);
                 }
             }
+        }
+
+        public Chunk(int xCoordinate, int yCoordinate, int chunkSize, byte[] data)
+        {
+            _xCoordinate = xCoordinate;
+            _yCoordinate = yCoordinate;
+            Data = new Array2D<byte>(chunkSize, data);
+        }
+
+        public void Set(int x, int y, byte value) {
+            Data.Set(x, y, value);
+        }
+
+        public byte Get(int x, int y) {
+            return Data.Get(x, y);
         }
     }
 }

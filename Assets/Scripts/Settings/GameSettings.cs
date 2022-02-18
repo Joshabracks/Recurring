@@ -9,6 +9,10 @@ namespace Gameplay.Data
         private struct SettingsValues
         {
             public int TargetFramerate;
+            public int ChunkSize;
+            public int WorldSeed;
+            public float Frequency;
+            public float TerrainDensity;
         }
 
         private SettingsValues values;
@@ -36,7 +40,14 @@ namespace Gameplay.Data
             if (!fs.Exists(path))
             {
                 Debug.Log("create " + path);
-                fs.SaveJSON(new SettingsValues{TargetFramerate = 60});
+                fs.SaveJSON(new SettingsValues
+                {
+                    TargetFramerate = 60,
+                    ChunkSize = 64,
+                    WorldSeed = 1337,
+                    Frequency = 0.97f,
+                    TerrainDensity = .5f
+                });
             }
             SettingsValues settings = fs.LoadFromJSON<SettingsValues>(path);
             return settings;
