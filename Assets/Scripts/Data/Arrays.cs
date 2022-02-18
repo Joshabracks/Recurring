@@ -1,4 +1,4 @@
-namespace Data
+namespace Gameplay.Data
 {
     public struct Array3D<T>
     {
@@ -26,6 +26,11 @@ namespace Data
             return (Height * Depth * x) + (Height * y) + z;
         }
 
+        public T[] Raw()
+        {
+            return data;
+        }
+
         public int Length()
         {
             return data.Length;
@@ -43,7 +48,22 @@ namespace Data
             Height = height;
             data = new T[Width * Height];
         }
-        public Array2D(int size) {
+
+        public Array2D(int width, int height, T[] arrayData)
+        {
+            Width = width;
+            Height = height;
+            data = arrayData;
+        }
+
+        public Array2D(int size, T[] arrayData)
+        {
+            Width = size;
+            Height = size;
+            data = arrayData;
+        }
+        public Array2D(int size)
+        {
             Width = size;
             Height = size;
             data = new T[Width * Height];
@@ -55,6 +75,10 @@ namespace Data
         public T Get(int x, int y)
         {
             return data[index(x, y)];
+        }
+        public T[] Raw()
+        {
+            return data;
         }
         private int index(int x, int y)
         {

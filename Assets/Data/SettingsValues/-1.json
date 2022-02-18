@@ -1,3 +1,7 @@
 {
-    "TargetFramerate": 60
+    "TargetFramerate": 60,
+    "ChunkSize": 64,
+    "WorldSeed": 1337,
+    "Frequency": 0.9700000286102295,
+    "TerrainDensity": 0.5
 }
