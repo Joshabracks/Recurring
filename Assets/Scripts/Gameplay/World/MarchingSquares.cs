@@ -2,86 +2,94 @@ using UnityEngine;
 using Gameplay.Data;
 using System.Collections.Generic;
 using Gameplay.Terrain;
-public class MarchingSquares
+
+namespace Gameplay.Terrain
 {
+
+  public class MarchingSquares
+  {
     private Vector2[] vertices = new Vector2[]{
-        new Vector2(-1, 1),
-        new Vector2(0, 1),
-        new Vector2(1, 1),
-        new Vector2(-1, 0),
-        // new Vector2(0, 0),
-        new Vector2(1, 0),
-        new Vector2(-1, -1),
-        new Vector2(0, -1),
-        new Vector2(1, -1),
+      new Vector2(-1, 1),
+      new Vector2(0, 1),
+      new Vector2(1, 1),
+      new Vector2(-1, 0),
+      // new Vector2(0, 0),
+      new Vector2(1, 0),
+      new Vector2(-1, -1),
+      new Vector2(0, -1),
+      new Vector2(1, -1),
     };
 
     public struct ChunkBuilder
     {
-        private Array2D<int> lookup;
-        public void Init()
+      private int[][] triangleLookup = new int[][]{
+        new int[]{},
+        new int[]{7, 1, 0},
+        new int[]{3, 2, 1},
+        new int[]{7, 3, 0, 3, 2, 0},
+        new int[]{5, 4, 3},
+        new int[]{7, 1, 0, 5, 1, 7, 5, 3, 1, 5, 4, 3},
+        new int[]{5, 4, 1, 4, 2, 1, },
+        new int[]{7, 5, 0, 5, 4, 0, 4, 2, 0},
+        new int[]{6, 5, 7},
+        new int[]{6, 5, 1, 6, 1, 0},
+        new int[]{6, 5, 7, 5, 1, 7, 5, 3, 1, 3, 2, 1},
+        new int[]{5, 3, 2, 5, 2, 6, 6, 2, 0},
+        new int[]{6, 3, 7, 6, 4, 3},
+        new int[]{6, 4, 0, 4, 1, 0, 4, 3, 1},
+        new int[]{6, 1, 7, 6, 2, 1, 6, 4, 2},
+        new int[]{6, 4, 2, 6, 2, 0}
+    };
+
+    private Vector3[] squareVertices = new Vector3[]{
+      new Vector3(-1, 0, -1), 
+      new Vector3(0, 0, -1), 
+      new Vector3(1, 0, -1),
+      new Vector3(1, 0, 0),                       
+      new Vector3(1, 0, 1),
+      new Vector3(0, 0, 1), 
+      new Vector3(-1, 0, 1), 
+      new Vector3(-1, 0, 0)
+    };
+
+      public Mesh BuildChunkMesh(World world, Vector2 chunkCoord)
+      {
+        Chunk chunk = world.GetChunk(chunkCoord);
+        Mesh mesh = new Mesh();
+        List<Vector3> vertices = new List<Vector3>();
+        List<Vector2> uv = new List<Vector2>();
+        List<int> triangles = new List<int>();
+        for (int x = 0; x < chunk.Data.Width; x++)
         {
-            lookup = new Array2D<int>(
-                16, 
-                12, 
-                new int[]{
-                    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                    3, 6, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                    4, 7, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                    3, 4, 5, 4, 7, 5, -1, -1, -1,-1, -1, -1,
-                    1, 2, 4,-1, -1, -1,-1, -1, -1,-1, -1, -1,
-                    1, 2, 4, 1, 4, 6, 1, 6, 3, 3, 6, 5,
-                    1, 2, 7, 1, 7, 6,-1, -1, -1,-1, -1, -1,
-                    1, 2, 7, 1, 7, 3, 3, 7, 5,-1, -1, -1,
-                    0, 1, 3,-1, -1, -1,-1, -1, -1,-1, -1, -1,
-                    0, 1, 6, 0, 6, 5,-1, -1, -1,-1, -1, -1,
-                    0, 1, 3, 1, 6, 3, 1, 4, 6, 4, 7, 6,
-                    0, 1, 5, 1, 4, 5, 4, 7, 5,-1, -1, -1,
-                    0, 2, 3, 2, 4, 3,-1, -1, -1,-1, -1, -1,
-                    0, 6, 5, 0, 4, 6, 0, 2, 4,-1, -1, -1,
-                    0, 2, 4, 2, 6, 4, 2, 7, 6,-1, -1, -1,
-                    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                }
-            );
-        }
-
-        public Mesh BuildChunkMesh(Dictionary<string, Chunk> chunks, string chunkKey) {
-            Chunk chunk = chunks[chunkKey];
-            Array2D<byte> data = chunk.Data;
-            string[] keySplit = chunkKey.Split('|');
-            int[] chunkCoord = new int[]{int.Parse(keySplit[0]), int.Parse(keySplit[1])};
-            Mesh mesh = new Mesh();
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector2> uv = new List<Vector2>();
-            List<int> triangles = new List<int>();
-            for (int x = 0; x < data.Width; x++) {
-                for (int y = 0; y < data.Height; y++) {
-                    if ((int)data.Get(x, y) == 0) 
-                    {
-                        // List<Vector2> verts = getVerts(x, y);
-                    }
-                }
+          for (int y = 0; y < chunk.Data.Height; y++)
+          {
+            Vector2 cellCoord = new Vector2(x, y);
+            byte cellValue = world.GetCell(chunkCoord, cellCoord);
+            int _case = getCase(world, chunk, chunkCoord, cellCoord);
+            int[] tris = triangleLookup[_case];
+            if (tris.Length > 0) {
+              for (int i = 0; i < squareVertices.Length; i++) {
+                vertices.Add(new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].y + (y * 2)));
+                // --- do stuff
+              }
             }
-            return mesh;
+          }
         }
-    }
+        return mesh;
+      }
 
-    // private int[][] lookup = new int[][]{
-    //     new int[]{},
-    //     new int[]{3, 7, 6},
-    //     new int[]{5, 8, 7},
-    //     new int[]{3, 5, 6, 5, 8, 6},
-    //     new int[]{1, 2, 5},
-    //     new int[]{1, 2, 5, 1, 5, 7, 1, 7, 3, 3, 7, 6},
-    //     new int[]{1, 2, 8, 1, 8, 7},
-    //     new int[]{1, 2, 8, 1, 8, 3, 3, 8, 6},
-    //     new int[]{0, 1, 3},
-    //     new int[]{0, 1, 7, 0, 7, 6},
-    //     new int[]{0, 1, 3, 1, 7, 3, 1, 5, 7, 5, 8, 7},
-    //     new int[]{0, 1, 6, 1, 5, 6, 5, 8, 6},
-    //     new int[]{0, 2, 3, 2, 5, 3},
-    //     new int[]{0, 7, 6, 0, 5, 7, 0, 2, 5},
-    //     new int[]{0, 2, 5, 2, 7, 5, 2, 8, 7},
-    //     new int[]{}
-    // };
+      private int getCase(World world, Chunk chunk, Vector2 chunkCoord, Vector2 cellCoord)
+      {
+        byte value = chunk.Get((int)cellCoord.x, (int)cellCoord.y);
+        int[] caseValues = new int[]{
+          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
+          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y)) ? 1 : 0,
+          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y + 1)) ? 1 : 0,
+          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y + 1)) ? 1 : 0,
+        };
+        int _case = new Converter().BinaryToInt(caseValues);
+        return _case;
+      }
+    }
+  }
 }
