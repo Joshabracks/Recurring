@@ -44,6 +44,10 @@ namespace Gameplay.Terrain
             return _chunks[key];
         }
 
+        public Chunk GetChunk(Vector2 key) {
+            return GetChunk((int)key.x, (int)key.y);
+        }
+
         public byte GetCell(int x, int y) {
             int[] values = indexValues(x, y);
             string key = chunkKey(values[0], values[1]);
@@ -51,6 +55,12 @@ namespace Gameplay.Terrain
                 AddChunk(values[0], values[1]);
             }
             return _chunks[key].Get(values[2], values[3]);
+        }
+
+        public byte GetCell(Vector2 chunkCoord, Vector2 cellCoord) {
+            int x = (int)cellCoord.x + (int)(chunkCoord.x * _chunkSize);
+            int y = (int)cellCoord.y + (int)(chunkCoord.y * _chunkSize);
+            return GetCell(x, y);
         }
 
         public void SetCell(int x, int y, byte value) {

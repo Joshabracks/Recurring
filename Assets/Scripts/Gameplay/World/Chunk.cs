@@ -6,8 +6,8 @@ namespace Gameplay.Terrain
     public struct Chunk
     {
         public Array2D<byte> Data {get;}
-        private int _xCoordinate;
-        private int _yCoordinate;
+        public int _xCoordinate;
+        public int _yCoordinate;
 
         public Chunk(int xCoordinate, int yCoordinate, int chunkSize, int worldSeed, float frequency, float terrainDensity)
         {
