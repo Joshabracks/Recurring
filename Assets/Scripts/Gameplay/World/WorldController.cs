@@ -9,10 +9,18 @@ namespace Gameplay.Terrain
         private World _world;
         private Dictionary<Vector2, GameObject> chunkRenders;
         public Material material;
+        [Range(1, 10000)]
+        public int seed = 1337;
+        [Range(0, 5)]
+        public float density = 0.5f;
+        [Range(0, .1f)]
+        public float frequency = 0.005f;
+
+        public int chunkSize = 32;
         void Start()
         {
             chunkRenders = new Dictionary<Vector2, GameObject>();
-            _world = new World(1337, 64, .01f, .5f);
+            _world = new World(seed, chunkSize, frequency, density);
             initChunk(new Vector2(0, 0));
         }
 
@@ -46,7 +54,7 @@ namespace Gameplay.Terrain
                     Mesh mesh = chunkBuilder.BuildChunkMesh(_world, keys[i]);
                     GameObject go = new GameObject();
                     go.transform.parent = gameObject.transform;
-                    go.transform.position = new Vector3(keys[i].x * 2 * 64, 0, keys[i].y * 2 * 64);
+                    go.transform.position = new Vector3(keys[i].x * 2 * chunkSize, 0, keys[i].y * 2 * chunkSize);
                     
                     MeshRenderer renderer = go.AddComponent<MeshRenderer>();
                     renderer.material = material;

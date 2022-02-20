@@ -26,13 +26,13 @@ namespace Gameplay.Terrain
     };
 
         private Vector3[] squareVertices = new Vector3[]{
-            new Vector3(-1, 0, -1),
-            new Vector3(0, 0, -1),
-            new Vector3(1, 0, -1),
-            new Vector3(1, 0, 0),
-            new Vector3(1, 0, 1),
-            new Vector3(0, 0, 1),
             new Vector3(-1, 0, 1),
+            new Vector3(0, 0, 1),
+            new Vector3(1, 0, 1),
+            new Vector3(1, 0, 0),
+            new Vector3(1, 0, -1),
+            new Vector3(0, 0, -1),
+            new Vector3(-1, 0, -1),
             new Vector3(-1, 0, 0)
         };
 
@@ -49,22 +49,27 @@ namespace Gameplay.Terrain
                 for (int y = 0; y < chunk.Data.Height; y++)
                 {
                     Vector2 cellCoord = new Vector2(x, y);
-                    byte cellValue = world.GetCell(chunkCoord, cellCoord);
-                    int _case = getCase(world, chunk, chunkCoord, cellCoord);
-                    int[] tris = triangleLookup[_case];
-                    if (tris.Length > 0)
+                    // int cellValue = world.GetCell(chunkCoord, cellCoord);
+                    int cellValue = chunk.Data.Get(x, y);
+                    List<Vector2> cases = getCases(world, chunk, chunkCoord, cellCoord);
+                    for (int c = 0; c < cases.Count; c++)
                     {
-                        for (int i = 0; i < squareVertices.Length; i++)
+                        Vector2 _case = cases[c];
+                        int[] tris = triangleLookup[(int)_case.x];
+                        if (tris.Length > 0)
                         {
-                            Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
-                            vertices.Add(vertex);
-                            uv.Add(new Vector2(vertex.x, vertex.z));
-                            uv2.Add(new Vector2((int)cellValue, (int)cellValue));
-                        }
-                        int triIndexStart = vertices.Count;
-                        for (int i = 0; i < tris.Length; i++)
-                        {
-                            triangles.Add(triIndexStart + tris[i] - squareVertices.Length);
+                            for (int i = 0; i < squareVertices.Length; i++)
+                            {
+                                Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
+                                vertices.Add(vertex);
+                                uv.Add(new Vector2(vertex.x, vertex.z));
+                                uv2.Add(new Vector2((int)_case.y, (int)_case.y));
+                            }
+                            int triIndexStart = vertices.Count;
+                            for (int i = tris.Length - 1; i >= 0; i--)
+                            {
+                                triangles.Add(triIndexStart + tris[i] - squareVertices.Length);
+                            }
                         }
                     }
                 }
@@ -72,23 +77,46 @@ namespace Gameplay.Terrain
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uv.ToArray();
-            mesh.uv2 = uv2.ToArray(); 
+            mesh.uv2 = uv2.ToArray();
             mesh.RecalculateNormals();
             // mesh.RecalculateBounds();
             return mesh;
         }
 
-        private int getCase(World world, Chunk chunk, Vector2 chunkCoord, Vector2 cellCoord)
+        private List<Vector2> getCases(World world, Chunk chunk, Vector2 chunkCoord, Vector2 cellCoord)
         {
-            byte value = chunk.Get((int)cellCoord.x, (int)cellCoord.y);
-            int[] caseValues = new int[]{
-                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
-                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y)) ? 1 : 0,
-                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y + 1)) ? 1 : 0,
-                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y + 1)) ? 1 : 0,
-            };
-            int _case = new Converter().BinaryToInt(caseValues);
-            return _case;
+            List<Vector2> cases = new List<Vector2>();
+            for (int i = 0; i < 4; i++)
+            {
+                int value = (int)i;
+                // int value = chunk.Get((int)cellCoord.x, (int)cellCoord.y);
+                int[] caseValues = new int[]{
+                    value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
+                    value == world.GetCell(
+                            cellCoord.x < chunk.Data.Width - 1 ? chunkCoord : new Vector2(chunkCoord.x + 1, chunkCoord.y), 
+                            new Vector2((cellCoord.x < chunk.Data.Width - 1) ? cellCoord.x + 1 : 0, cellCoord.y)
+                        ) ? 1 : 0,
+                    value == world.GetCell(
+                            new Vector2(
+                                cellCoord.x < chunk.Data.Width - 1 ? chunkCoord.x + 1 : 0,
+                                cellCoord.y < chunk.Data.Height - 1 ? chunkCoord.y + 1 : 0), 
+                            new Vector2(
+                                cellCoord.x < chunk.Data.Width - 1 ? cellCoord.x + 1: 0, 
+                                cellCoord.y < chunk.Data.Height - 1 ? cellCoord.y + 1 : 0)
+                        ) ? 1 : 0,
+                    value == world.GetCell(
+                            cellCoord.y < chunk.Data.Height - 1 ? chunkCoord : new Vector2(chunkCoord.x, chunkCoord.y + 1), 
+                            new Vector2(cellCoord.x, cellCoord.y < chunk.Data.Height - 1 ? cellCoord.y + 1 : 0)
+                        ) ? 1 : 0,
+                };
+                int _case = new Converter().BinaryToInt(caseValues);
+                if (_case > 0)
+                {
+                    cases.Add(new Vector2(_case, i));
+                }
+            }
+
+            return cases;
         }
     }
 }

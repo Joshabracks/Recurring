@@ -1,6 +1,5 @@
 using System.IO;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Gameplay.Data
 {
@@ -43,29 +42,29 @@ namespace Gameplay.Data
             writer.Close();
         }
 
-        public void Save(byte[] data, string pathName, string fileName, string fileExtension) {
-            string directoryPath = $"{Application.dataPath}/Data/{pathName}";
-            string filePath = $"{directoryPath}/{fileName}.{fileExtension}";
-            SecurePath(directoryPath);
-            FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+        // public void Save(int[] data, string pathName, string fileName, string fileExtension) {
+        //     string directoryPath = $"{Application.dataPath}/Data/{pathName}";
+        //     string filePath = $"{directoryPath}/{fileName}.{fileExtension}";
+        //     SecurePath(directoryPath);
+        //     FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
 
-            fs.Write(data, 0, data.Length);
+        //     fs.Write(data, 0, data.Length);
         }
 
-        public Dictionary<string, byte[]>LoadAllBytes(string pathName, string fileExtension) {
-            Dictionary<string, byte[]> result = new Dictionary<string, byte[]>();
-            string directoryPath = $"{Application.dataPath}/{pathName}";
-            if (Directory.Exists(directoryPath)) {
-                string[] files = Directory.GetFiles(directoryPath);
-                foreach (string file in files) {
-                    if (file.Contains("." + fileExtension)) {
-                        string key = fileExtension.Split('.')[0];
-                        byte[] data = File.ReadAllBytes($"{directoryPath}/{file}");
-                        result[key] = data;
-                    }
-                }
-            }
-            return result;
-        }
-    }
+        // public Dictionary<string, int[]>LoadAllBytes(string pathName, string fileExtension) {
+        //     Dictionary<string, int[]> result = new Dictionary<string, int[]>();
+        //     string directoryPath = $"{Application.dataPath}/{pathName}";
+        //     if (Directory.Exists(directoryPath)) {
+        //         string[] files = Directory.GetFiles(directoryPath);
+        //         foreach (string file in files) {
+        //             if (file.Contains("." + fileExtension)) {
+        //                 string key = fileExtension.Split('.')[0];
+        //                 int[] data = File.ReadAllBytes($"{directoryPath}/{file}");
+        //                 result[key] = data;
+        //             }
+        //         }
+        //     }
+        //     return result;
+        // }
+    // }
 }
