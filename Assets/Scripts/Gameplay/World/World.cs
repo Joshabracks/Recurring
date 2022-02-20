@@ -11,10 +11,10 @@ namespace Gameplay.Terrain
     }
     public struct World
     {
-        private int _seed;
-        private int _chunkSize;
-        private float _frequency;
-        private float _terrainDensity;
+        public int _seed;
+        public int _chunkSize;
+        public float _frequency;
+        public float _terrainDensity;
         private Dictionary<Vector2, Chunk> _chunks;
         private Dictionary<Vector2, bool> _chunksRendered;
         public World(int seed, int chunkSize, float frequency, float terrainDensity) {
@@ -49,6 +49,14 @@ namespace Gameplay.Terrain
             }
             return _chunks[chunkCoord].Get((int)cellCoord.x, (int)cellCoord.y);
         }
+
+        // public float GetFloat(Vector2 chunkCoord, Vector2 cellCoord) {
+        //     if (!_chunks.ContainsKey(chunkCoord))
+        //     {
+        //         AddChunk(chunkCoord);
+        //     }
+        //     return _chunks[chunkCoord].GetFloat((int)cellCoord.x, (int)cellCoord.y);
+        // }
 
         public bool IsChunkRendered(Vector2 key) {
             return _chunksRendered[key];

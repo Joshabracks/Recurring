@@ -6,6 +6,7 @@ namespace Gameplay.Terrain
     public struct Chunk
     {
         public Array2D<int> Data {get;}
+        // public Array2D<float> ExactFLoats {get;}
         public int _xCoordinate;
         public int _yCoordinate;
 
@@ -19,6 +20,7 @@ namespace Gameplay.Terrain
             _xCoordinate = xCoordinate;
             _yCoordinate = yCoordinate;
             Data = new Array2D<int>(chunkSize);
+            // ExactFLoats = new Array2D<float>(chunkSize);
             
             // Build Data
             int xOffset = xCoordinate * chunkSize;
@@ -30,16 +32,10 @@ namespace Gameplay.Terrain
                     
                     int dataVal = Mathf.FloorToInt(terrainValue * 4);
                     
+                    // ExactFLoats.Set(x, y, terrainValue);
                     Data.Set(x, y, dataVal);
                 }
             }
-        }
-
-        public Chunk(int xCoordinate, int yCoordinate, int chunkSize, int[] data)
-        {
-            _xCoordinate = xCoordinate;
-            _yCoordinate = yCoordinate;
-            Data = new Array2D<int>(chunkSize, data);
         }
 
         public void Set(int x, int y, int value) {
@@ -49,5 +45,9 @@ namespace Gameplay.Terrain
         public int Get(int x, int y) {
             return Data.Get(x, y);
         }
+
+        // public float GetFloat(int x, int y) {
+        //     return ExactFLoats.Get(x, y);
+        // }
     }
 }

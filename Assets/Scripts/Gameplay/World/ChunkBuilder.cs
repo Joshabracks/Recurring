@@ -90,19 +90,19 @@ namespace Gameplay.Terrain
                 int[] caseValues = new int[]{
                     value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
                     value == world.GetCell(
-                            cellCoord.x < chunk.Data.Width - 1 ? chunkCoord : new Vector2(chunkCoord.x + 1, chunkCoord.y), 
+                            cellCoord.x < chunk.Data.Width - 1 ? chunkCoord : new Vector2(chunkCoord.x + 1, chunkCoord.y),
                             new Vector2((cellCoord.x < chunk.Data.Width - 1) ? cellCoord.x + 1 : 0, cellCoord.y)
                         ) ? 1 : 0,
                     value == world.GetCell(
                             new Vector2(
                                 cellCoord.x < chunk.Data.Width - 1 ? chunkCoord.x : chunkCoord.x + 1,
-                                cellCoord.y < chunk.Data.Height - 1 ? chunkCoord.y : chunkCoord.y + 1), 
+                                cellCoord.y < chunk.Data.Height - 1 ? chunkCoord.y : chunkCoord.y + 1),
                             new Vector2(
-                                cellCoord.x < chunk.Data.Width - 1 ? cellCoord.x + 1: 0, 
+                                cellCoord.x < chunk.Data.Width - 1 ? cellCoord.x + 1: 0,
                                 cellCoord.y < chunk.Data.Height - 1 ? cellCoord.y + 1 : 0)
                         ) ? 1 : 0,
                     value == world.GetCell(
-                            cellCoord.y < chunk.Data.Height - 1 ? chunkCoord : new Vector2(chunkCoord.x, chunkCoord.y + 1), 
+                            cellCoord.y < chunk.Data.Height - 1 ? chunkCoord : new Vector2(chunkCoord.x, chunkCoord.y + 1),
                             new Vector2(cellCoord.x, cellCoord.y < chunk.Data.Height - 1 ? cellCoord.y + 1 : 0)
                         ) ? 1 : 0,
                 };
