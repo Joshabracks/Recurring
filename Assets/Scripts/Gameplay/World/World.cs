@@ -55,7 +55,7 @@ namespace Gameplay.Terrain
             int[] values = indexValues(x, y);
             Vector2 key = new Vector2(values[0], values[1]);
             if (!_chunks.ContainsKey(key)) {
-                AddChunk(new Vector2(values[0], values[1]));
+                AddChunk(key);
             }
             return _chunks[key].Get(values[2], values[3]);
         }
@@ -79,10 +79,18 @@ namespace Gameplay.Terrain
         }
 
         private int[] indexValues(int x, int y) {
+            
             int a = (x % _chunkSize);
-            int b = (y % _chunkSize);
             int c = (x - a) / _chunkSize;
+            if (c < 0) 
+            {
+                c += _chunkSize;
+            }
+            int b = (y % _chunkSize); 
             int d = (y - b) / _chunkSize;
+            if (d < 0) {
+                d += _chunkSize;
+            }
             return new int[]{a, b, c, d};
         }
 

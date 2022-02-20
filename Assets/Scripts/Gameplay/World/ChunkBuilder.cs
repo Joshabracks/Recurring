@@ -26,15 +26,15 @@ namespace Gameplay.Terrain
     };
 
         private Vector3[] squareVertices = new Vector3[]{
-      new Vector3(-1, 0, -1),
-      new Vector3(0, 0, -1),
-      new Vector3(1, 0, -1),
-      new Vector3(1, 0, 0),
-      new Vector3(1, 0, 1),
-      new Vector3(0, 0, 1),
-      new Vector3(-1, 0, 1),
-      new Vector3(-1, 0, 0)
-    };
+            new Vector3(-1, 0, -1),
+            new Vector3(0, 0, -1),
+            new Vector3(1, 0, -1),
+            new Vector3(1, 0, 0),
+            new Vector3(1, 0, 1),
+            new Vector3(0, 0, 1),
+            new Vector3(-1, 0, 1),
+            new Vector3(-1, 0, 0)
+        };
 
         public Mesh BuildChunkMesh(World world, Vector2 chunkCoord)
         {
@@ -56,7 +56,7 @@ namespace Gameplay.Terrain
                     {
                         for (int i = 0; i < squareVertices.Length; i++)
                         {
-                            Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].y + (y * 2));
+                            Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
                             vertices.Add(vertex);
                             uv.Add(new Vector2(vertex.x, vertex.z));
                             uv2.Add(new Vector2((int)cellValue, (int)cellValue));
@@ -64,7 +64,7 @@ namespace Gameplay.Terrain
                         int triIndexStart = vertices.Count;
                         for (int i = 0; i < tris.Length; i++)
                         {
-                            triangles.Add(triIndexStart + tris[i]);
+                            triangles.Add(triIndexStart + tris[i] - squareVertices.Length);
                         }
                     }
                 }
@@ -72,7 +72,9 @@ namespace Gameplay.Terrain
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uv.ToArray();
-            mesh.uv2 = uv2.ToArray();
+            mesh.uv2 = uv2.ToArray(); 
+            mesh.RecalculateNormals();
+            // mesh.RecalculateBounds();
             return mesh;
         }
 
@@ -80,11 +82,11 @@ namespace Gameplay.Terrain
         {
             byte value = chunk.Get((int)cellCoord.x, (int)cellCoord.y);
             int[] caseValues = new int[]{
-          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
-          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y)) ? 1 : 0,
-          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y + 1)) ? 1 : 0,
-          value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y + 1)) ? 1 : 0,
-        };
+                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
+                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y)) ? 1 : 0,
+                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x + 1, cellCoord.y + 1)) ? 1 : 0,
+                value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y + 1)) ? 1 : 0,
+            };
             int _case = new Converter().BinaryToInt(caseValues);
             return _case;
         }
