@@ -49,7 +49,6 @@ namespace Gameplay.Terrain
                 for (int y = 0; y < chunk.Data.Height; y++)
                 {
                     Vector2 cellCoord = new Vector2(x, y);
-                    // int cellValue = world.GetCell(chunkCoord, cellCoord);
                     int cellValue = chunk.Data.Get(x, y);
                     List<Vector2> cases = getCases(world, chunk, chunkCoord, cellCoord);
                     for (int c = 0; c < cases.Count; c++)
@@ -79,7 +78,6 @@ namespace Gameplay.Terrain
             mesh.uv = uv.ToArray();
             mesh.uv2 = uv2.ToArray();
             mesh.RecalculateNormals();
-            // mesh.RecalculateBounds();
             return mesh;
         }
 
@@ -89,7 +87,6 @@ namespace Gameplay.Terrain
             for (int i = 0; i < 4; i++)
             {
                 int value = (int)i;
-                // int value = chunk.Get((int)cellCoord.x, (int)cellCoord.y);
                 int[] caseValues = new int[]{
                     value == world.GetCell(chunkCoord, new Vector2(cellCoord.x, cellCoord.y)) ? 1 : 0,
                     value == world.GetCell(

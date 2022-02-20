@@ -31,7 +31,6 @@ namespace Gameplay.Terrain
                     int dataVal = Mathf.FloorToInt(terrainValue * 4);
                     
                     Data.Set(x, y, dataVal);
-                    // Data.Set(x, y, terrainValue < terrainDensity ? (int)0 : (int)1);
                 }
             }
         }
