@@ -197,9 +197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: b382b57911950fc4baa6a84fc6a28aec, type: 2}
   seed: 1337
-  density: 0.14
-  frequency: 0.0089
-  chunkSize: 16
+  density: 1.75
+  frequency: 0.0059
+  chunkSize: 64
 --- !u!4 &1129821001
 Transform:
   m_ObjectHideFlags: 0

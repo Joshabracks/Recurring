@@ -95,8 +95,8 @@ namespace Gameplay.Terrain
                         ) ? 1 : 0,
                     value == world.GetCell(
                             new Vector2(
-                                cellCoord.x < chunk.Data.Width - 1 ? chunkCoord.x + 1 : 0,
-                                cellCoord.y < chunk.Data.Height - 1 ? chunkCoord.y + 1 : 0), 
+                                cellCoord.x < chunk.Data.Width - 1 ? chunkCoord.x : chunkCoord.x + 1,
+                                cellCoord.y < chunk.Data.Height - 1 ? chunkCoord.y : chunkCoord.y + 1), 
                             new Vector2(
                                 cellCoord.x < chunk.Data.Width - 1 ? cellCoord.x + 1: 0, 
                                 cellCoord.y < chunk.Data.Height - 1 ? cellCoord.y + 1 : 0)
