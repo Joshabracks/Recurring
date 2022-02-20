@@ -62,7 +62,8 @@ namespace Gameplay.Terrain
                                 Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
                                 vertices.Add(vertex);
                                 uv.Add(new Vector2(vertex.x, vertex.z));
-                                uv2.Add(new Vector2((int)_case.y, (int)_case.y));
+                                uv2.Add(new Vector2((int)_case.y, cases.Count > 1 ? -1 : (int)_case.y));
+                                
                             }
                             int triIndexStart = vertices.Count;
                             for (int i = tris.Length - 1; i >= 0; i--)
@@ -84,7 +85,7 @@ namespace Gameplay.Terrain
         private List<Vector2> getCases(World world, Chunk chunk, Vector2 chunkCoord, Vector2 cellCoord)
         {
             List<Vector2> cases = new List<Vector2>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) // TODO Update "4" to match number of terrain values
             {
                 int value = (int)i;
                 int[] caseValues = new int[]{
