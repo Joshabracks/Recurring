@@ -57,13 +57,19 @@ namespace  Gameplay.Player
             {
                 int index = hit.triangleIndex * 3;
                 MeshCollider mc = hit.collider as MeshCollider;
+                if (mc == null) {
+                    return;
+                }
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 TerrainType terrainType = (TerrainType)(uv2.x);
-                Debug.Log(terrainType.ToString());
                 if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
                     return;
                 }
+            }
+            else 
+            {
+                return;
             }
 
             MainCharacterModel.transform.position = new Vector3(
