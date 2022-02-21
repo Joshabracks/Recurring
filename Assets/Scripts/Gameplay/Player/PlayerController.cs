@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Gameplay.Terrain;
 
 namespace  Gameplay.Player 
 {
@@ -9,7 +8,6 @@ namespace  Gameplay.Player
     {
         public PlayerCharacter MainCharacter;
         public GameObject MainCharacterModel;
-        
         
         void Start() {
             MainCharacter = new PlayerCharacter();
@@ -40,12 +38,40 @@ namespace  Gameplay.Player
                 MainCharacterModel.transform.rotation = _lookRotation;
             }    
         }
+
         public void movePlayer() {
+
             Vector2 direction = new Vector2(
                 MainCharacter.movement.x,
                 MainCharacter.movement.y
-            );
+            ).normalized;
             
+            Vector3 blockingPointHover = new Vector3(
+                MainCharacterModel.transform.position.x + direction.x * 1f,
+                MainCharacterModel.transform.position.y,
+                MainCharacterModel.transform.position.z + direction.y * 1f
+            );
+            Ray ray = new Ray(blockingPointHover, Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) 
+            {
+                int index = hit.triangleIndex * 3;
+                MeshCollider mc = hit.collider as MeshCollider;
+                if (mc == null) {
+                    return;
+                }
+                Mesh mesh = mc.sharedMesh;
+                Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
+                TerrainType terrainType = (TerrainType)(uv2.x);
+                if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
+                    return;
+                }
+            }
+            else 
+            {
+                return;
+            }
+
             MainCharacterModel.transform.position = new Vector3(
                 MainCharacterModel.transform.position.x + direction.x * MainCharacter.Speed,
                 MainCharacterModel.transform.position.y,
