@@ -62,7 +62,7 @@ namespace Gameplay.Terrain
                                 Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
                                 vertices.Add(vertex);
                                 uv.Add(new Vector2(vertex.x, vertex.z));
-                                uv2.Add(new Vector2((int)_case.y, cases.Count > 1 ? -1 : (int)_case.y));
+                                uv2.Add(new Vector2(_case.y, cases.Count > 1 ? -1 : (int)_case.y));
                                 
                             }
                             int triIndexStart = vertices.Count;

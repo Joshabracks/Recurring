@@ -1,5 +1,6 @@
 using Gameplay.Data;
 using UnityEngine;
+using System;
 
 namespace Gameplay.Terrain
 {
@@ -11,7 +12,8 @@ namespace Gameplay.Terrain
         public int _yCoordinate;
 
         public Chunk(int xCoordinate, int yCoordinate, int chunkSize, int worldSeed, float frequency, float terrainDensity)
-        {
+        {   
+            int terrainTypeCount = Enum.GetNames(typeof(TerrainType)).Length;
             FastNoiseLite fs = new FastNoiseLite();
             fs.SetSeed(worldSeed);
             fs.SetFrequency(frequency);
@@ -22,6 +24,8 @@ namespace Gameplay.Terrain
             Data = new Array2D<int>(chunkSize);
             // ExactFLoats = new Array2D<float>(chunkSize);
             
+            // This is a test comment to add a change... 
+            
             // Build Data
             int xOffset = xCoordinate * chunkSize;
             int yOffset = yCoordinate * chunkSize;
@@ -30,7 +34,7 @@ namespace Gameplay.Terrain
                 for (int y = 0; y < chunkSize; y++) {
                     float terrainValue = (fs.GetNoise((x + xOffset) * terrainDensity, (y + yOffset) * terrainDensity) + 1) / 2;
                     
-                    int dataVal = Mathf.FloorToInt(terrainValue * 4);
+                    int dataVal = Mathf.FloorToInt(terrainValue * terrainTypeCount);
                     
                     // ExactFLoats.Set(x, y, terrainValue);
                     Data.Set(x, y, dataVal);
