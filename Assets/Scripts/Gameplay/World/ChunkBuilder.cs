@@ -104,6 +104,7 @@ namespace Gameplay.Terrain
             mesh.uv = uv.ToArray();
             mesh.uv2 = uv2.ToArray();
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
             return mesh;
         }
 

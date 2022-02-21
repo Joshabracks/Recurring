@@ -16,6 +16,7 @@ namespace Gameplay.Terrain
         public float frequency = 0.005f;
 
         public int chunkSize = 32;
+        private int _biomes;
         void Start()
         {
             chunkRenders = new Dictionary<Vector2, GameObject>();
@@ -59,6 +60,7 @@ namespace Gameplay.Terrain
                     renderer.material = material;
                     MeshFilter filter = go.AddComponent<MeshFilter>();
                     filter.mesh = mesh;
+                    go.AddComponent<MeshCollider>();
                     chunkRenders[keys[i]] = go;
                 }   
             }
