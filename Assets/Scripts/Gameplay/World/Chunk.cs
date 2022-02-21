@@ -7,7 +7,6 @@ namespace Gameplay.Terrain
     public struct Chunk
     {
         public Array2D<int> Data {get;}
-        // public Array2D<float> ExactFLoats {get;}
         public int _xCoordinate;
         public int _yCoordinate;
 
@@ -22,9 +21,6 @@ namespace Gameplay.Terrain
             _xCoordinate = xCoordinate;
             _yCoordinate = yCoordinate;
             Data = new Array2D<int>(chunkSize);
-            // ExactFLoats = new Array2D<float>(chunkSize);
-            
-            // This is a test comment to add a change... 
             
             // Build Data
             int xOffset = xCoordinate * chunkSize;
@@ -36,7 +32,6 @@ namespace Gameplay.Terrain
                     
                     int dataVal = Mathf.FloorToInt(terrainValue * terrainTypeCount);
                     
-                    // ExactFLoats.Set(x, y, terrainValue);
                     Data.Set(x, y, dataVal);
                 }
             }

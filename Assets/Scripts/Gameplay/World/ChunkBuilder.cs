@@ -1,6 +1,7 @@
 using UnityEngine;
 using Gameplay.Data;
 using System.Collections.Generic;
+using System;
 
 namespace Gameplay.Terrain
 {
@@ -23,6 +24,25 @@ namespace Gameplay.Terrain
         new int[]{6, 4, 0, 4, 1, 0, 4, 3, 1},
         new int[]{6, 1, 7, 6, 2, 1, 6, 4, 2},
         new int[]{6, 4, 2, 6, 2, 0}
+    };
+
+    private bool[][] edgeLookup = new bool[][]{
+        new bool[]{},
+        new bool[]{true, true, false},
+        new bool[]{true, false, true},
+        new bool[]{true, true, false, true, false, false},
+        new bool[]{true, false, true},
+        new bool[]{true, true, false, true, true, true, true, true, true, true, false, true},
+        new bool[]{true, false, true, false, false, true, },
+        new bool[]{true, true, false, true, false, false, false, false, false},
+        new bool[]{false, true, true},
+        new bool[]{false, true, true, false, true, false},
+        new bool[]{false, true, true, true, true, true, true, true, true, true, false, true},
+        new bool[]{true, true, false, true, false, false, false, false, false},
+        new bool[]{false, true, true, false, false, true},
+        new bool[]{false, false, false, false, true, false, false, true, true},
+        new bool[]{false, true, true, false, false, true, false, false, false},
+        new bool[]{false, false, false, false, false, false}
     };
 
         private Vector3[] squareVertices = new Vector3[]{
@@ -55,6 +75,7 @@ namespace Gameplay.Terrain
                     {
                         Vector2 _case = cases[c];
                         int[] tris = triangleLookup[(int)_case.x];
+                        bool[] edges = edgeLookup[(int)_case.x];
                         if (tris.Length > 0)
                         {
                             for (int i = 0; i < squareVertices.Length; i++)
@@ -62,13 +83,17 @@ namespace Gameplay.Terrain
                                 Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
                                 vertices.Add(vertex);
                                 uv.Add(new Vector2(vertex.x, vertex.z));
-                                uv2.Add(new Vector2(_case.y, cases.Count > 1 ? -1 : (int)_case.y));
+                                uv2.Add(new Vector2(_case.y, 1));
                                 
                             }
                             int triIndexStart = vertices.Count;
                             for (int i = tris.Length - 1; i >= 0; i--)
                             {
-                                triangles.Add(triIndexStart + tris[i] - squareVertices.Length);
+                                int triIndex = triIndexStart + tris[i] - squareVertices.Length;
+                                triangles.Add(triIndex);
+                                if (!edges[i]) {
+                                    uv2[triIndex] = new Vector2(uv2[triIndex].x, -1);
+                                }
                             }
                         }
                     }
@@ -85,7 +110,8 @@ namespace Gameplay.Terrain
         private List<Vector2> getCases(World world, Chunk chunk, Vector2 chunkCoord, Vector2 cellCoord)
         {
             List<Vector2> cases = new List<Vector2>();
-            for (int i = 0; i < 4; i++) // TODO Update "4" to match number of terrain values
+            int terrainTypeCount = Enum.GetNames(typeof(TerrainType)).Length;
+            for (int i = 0; i < terrainTypeCount; i++)
             {
                 int value = (int)i;
                 int[] caseValues = new int[]{
