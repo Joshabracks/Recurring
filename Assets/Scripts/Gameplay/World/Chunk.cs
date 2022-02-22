@@ -44,9 +44,5 @@ namespace Gameplay.Terrain
         public int Get(int x, int y) {
             return Data.Get(x, y);
         }
-
-        // public float GetFloat(int x, int y) {
-        //     return ExactFLoats.Get(x, y);
-        // }
     }
 }

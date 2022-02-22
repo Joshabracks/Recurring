@@ -8,6 +8,7 @@ namespace  Gameplay.Player
     {
         public PlayerCharacter MainCharacter;
         public GameObject MainCharacterModel;
+
         
         void Start() {
             MainCharacter = new PlayerCharacter();
@@ -37,6 +38,29 @@ namespace  Gameplay.Player
                 //rotate us over time according to speed until we are in the required rotation
                 MainCharacterModel.transform.rotation = _lookRotation;
             }    
+        }
+
+        public GameObject GetCurrentChunk() {
+            Vector2 direction = new Vector2(
+                MainCharacter.movement.x,
+                MainCharacter.movement.y
+            ).normalized;
+            
+            Vector3 blockingPointHover = new Vector3(
+                MainCharacterModel.transform.position.x + direction.x * 1f,
+                MainCharacterModel.transform.position.y,
+                MainCharacterModel.transform.position.z + direction.y * 1f
+            );
+            Ray ray = new Ray(blockingPointHover, Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) 
+            {
+                GameObject go = hit.collider.gameObject;
+                if (go.tag == "Chunk") {
+                    return go;
+                }
+            }
+            return null;
         }
 
         public void movePlayer() {
