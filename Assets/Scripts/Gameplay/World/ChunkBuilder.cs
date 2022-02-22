@@ -23,7 +23,45 @@ namespace Gameplay.Terrain
         new int[]{6, 3, 7, 6, 4, 3},
         new int[]{6, 4, 0, 4, 1, 0, 4, 3, 1},
         new int[]{6, 1, 7, 6, 2, 1, 6, 4, 2},
-        new int[]{6, 4, 2, 6, 2, 0}
+        new int[]{6, 4, 2, 6, 2, 0},
+    };
+
+    public int [][] altTriangleLookup3 = new int[][]{
+        null,
+        null,
+        null,
+        new int[]{7, 3, 0, 3, 2, 0, 5, 3, 7},
+        null,
+        null,
+        new int[]{5, 4, 1, 4, 2, 1, 5, 1, 7},
+        null,
+        null,
+        new int[]{6, 5, 1, 6, 1, 0, 5, 3, 1},
+        null,
+        null,
+        new int[]{6, 3, 7, 6, 4, 3, 7, 3, 1},
+        null,
+        null,
+        null,
+    };
+
+    public int [][] altTriangleLookup4 = new int[][]{
+        null,
+        new int[]{7, 1, 0, 7, 8, 1},
+        new int[]{3, 2, 1, 8, 3, 1},
+        null,
+        new int[]{5, 4, 3, 5, 3, 8},
+        null,
+        null,
+        null,
+        new int[]{6, 5, 7, 5, 8, 7},
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
     };
 
     private bool[][] edgeLookup = new bool[][]{
@@ -42,8 +80,28 @@ namespace Gameplay.Terrain
         new bool[]{false, true, true, false, false, true},
         new bool[]{false, false, false, false, true, false, false, true, true},
         new bool[]{false, true, true, false, false, true, false, false, false},
-        new bool[]{false, false, false, false, false, false}
+        new bool[]{false, false, false, false, false, false},
     };
+
+    public bool [][] altEdgeCases = new bool[][]{
+        null,
+        new bool[]{true, true, false, true, true, true},
+        new bool[]{true, false, true, true, true, true},
+        new bool[]{true, true, false, true, false, false, true, true, true},
+        new bool[]{true, false, true, true, true, true},
+        null,
+        new bool[]{true, false, true, false, false, true, true, true, true},
+        null,
+        new bool[]{false, true, true, true, true, true},
+        new bool[]{false, true, true, false, true, false, true, true, true},
+        null,
+        null,
+        new bool[]{false, true, true, false, false, true, true, true, true},
+        null,
+        null,
+        null,
+    };
+
 
         private Vector3[] squareVertices = new Vector3[]{
             new Vector3(-1, 0, 1),
@@ -53,7 +111,8 @@ namespace Gameplay.Terrain
             new Vector3(1, 0, -1),
             new Vector3(0, 0, -1),
             new Vector3(-1, 0, -1),
-            new Vector3(-1, 0, 0)
+            new Vector3(-1, 0, 0),
+            new Vector3(0, 0, 0)
         };
 
         public Mesh BuildChunkMesh(World world, Vector2 chunkCoord)
@@ -76,27 +135,45 @@ namespace Gameplay.Terrain
                         Vector2 _case = cases[c];
                         int[] tris = triangleLookup[(int)_case.x];
                         bool[] edges = edgeLookup[(int)_case.x];
-                        if (tris.Length > 0)
+                        if (cases.Count == 3 && altTriangleLookup3[(int)_case.x] != null) {
+
+                            tris = altTriangleLookup3[(int)_case.x];
+                            edges = altEdgeCases[(int)_case.x];
+                        } else if (cases.Count == 4) {
+                            tris = altTriangleLookup4[(int)_case.x];
+                            edges = altEdgeCases[(int)_case.x];
+                        }
+                        
+                        for (int i = 0; i < squareVertices.Length; i++)
                         {
-                            for (int i = 0; i < squareVertices.Length; i++)
-                            {
-                                Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
-                                vertices.Add(vertex);
-                                uv.Add(new Vector2(vertex.x, vertex.z));
-                                uv2.Add(new Vector2(_case.y, 1));
-                                
-                            }
-                            int triIndexStart = vertices.Count;
-                            for (int i = tris.Length - 1; i >= 0; i--)
-                            {
-                                int triIndex = triIndexStart + tris[i] - squareVertices.Length;
-                                triangles.Add(triIndex);
-                                if (!edges[i]) {
-                                    uv2[triIndex] = new Vector2(uv2[triIndex].x, -1);
-                                }
+                            Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
+                            vertices.Add(vertex);
+                            uv.Add(new Vector2(vertex.x, vertex.z));
+                            uv2.Add(new Vector2(_case.y, 1));
+                            
+                        }
+                        int triIndexStart = vertices.Count;
+                        for (int i = tris.Length - 1; i >= 0; i--)
+                        {
+                            int triIndex = triIndexStart + tris[i] - squareVertices.Length;
+                            triangles.Add(triIndex);
+                            if (!edges[i]) {
+                                uv2[triIndex] = new Vector2(uv2[triIndex].x, -1);
                             }
                         }
+                        
                     }
+                    // if (cases.Count == 4) 
+                    // {
+                    //     Debug.Log("Adding big case")
+                    //     int[] tris = triangleLookup[16];
+                    //     int triIndexStart = vertices.Count;
+                    //     for (int i = 0; i < tris.Length; i++)
+                    //     {
+                    //         int triIndex = triIndexStart + tris[i] - squareVertices.Length;
+                    //         triangles.Add(triIndex);
+                    //     }
+                    // }
                 }
             }
             mesh.vertices = vertices.ToArray();
@@ -140,7 +217,6 @@ namespace Gameplay.Terrain
                     cases.Add(new Vector2(_case, i));
                 }
             }
-
             return cases;
         }
     }
