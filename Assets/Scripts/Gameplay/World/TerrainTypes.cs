@@ -7,8 +7,10 @@ namespace Gameplay.Terrain {
         Hole,
     }
 
-    public enum BlockingTerrainType {
-        Water,
-        Hole
+    public class BlockingTerrainType {
+        public TerrainType[] Types = new TerrainType[] {
+            TerrainType.Water,
+            TerrainType.Hole
+        };
     }
 }

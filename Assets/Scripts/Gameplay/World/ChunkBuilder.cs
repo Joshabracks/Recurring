@@ -163,17 +163,6 @@ namespace Gameplay.Terrain
                         }
                         
                     }
-                    // if (cases.Count == 4) 
-                    // {
-                    //     Debug.Log("Adding big case")
-                    //     int[] tris = triangleLookup[16];
-                    //     int triIndexStart = vertices.Count;
-                    //     for (int i = 0; i < tris.Length; i++)
-                    //     {
-                    //         int triIndex = triIndexStart + tris[i] - squareVertices.Length;
-                    //         triangles.Add(triIndex);
-                    //     }
-                    // }
                 }
             }
             mesh.vertices = vertices.ToArray();
