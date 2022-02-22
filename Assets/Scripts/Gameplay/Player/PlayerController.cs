@@ -8,6 +8,7 @@ namespace  Gameplay.Player
     {
         public PlayerCharacter MainCharacter;
         public GameObject MainCharacterModel;
+
         
         void Start() {
             MainCharacter = new PlayerCharacter();
@@ -37,6 +38,10 @@ namespace  Gameplay.Player
                 //rotate us over time according to speed until we are in the required rotation
                 MainCharacterModel.transform.rotation = _lookRotation;
             }    
+        }
+
+        public GameObject GetCurrentChunk() {
+
         }
 
         public void movePlayer() {

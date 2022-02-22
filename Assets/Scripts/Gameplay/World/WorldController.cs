@@ -24,17 +24,14 @@ namespace Gameplay.Terrain
             initChunk(new Vector2(0, 0));
         }
 
-        private void initChunk(Vector2 key) {
-            Debug.Log("INIT CHUNKS");
+        public void initChunk(Vector2 key) {
             Vector2[] keysToCheck = new Vector2[] {
                 new Vector2(key.x -1, key.y + 1),   new Vector2(key.x, key.y + 1),    new Vector2(key.x + 1, key.y + 1),
                 new Vector2(key.x -1, key.y),       key,                              new Vector2(key.x + 1, key.y),
                 new Vector2(key.x -1, key.y - 1),   new Vector2(key.x, key.y - 1),    new Vector2(key.x + 1, key.y - 1),
                 
             };
-            Debug.Log("VERIFY CHUNKS");
             verifyChunks(keysToCheck);
-            Debug.Log("RENDER CHUNKS");
             renderChunks(keysToCheck);
         }
 
@@ -61,6 +58,7 @@ namespace Gameplay.Terrain
                     MeshFilter filter = go.AddComponent<MeshFilter>();
                     filter.mesh = mesh;
                     go.AddComponent<MeshCollider>();
+                    go.name = keys[i].x + "," + keys[i].y;
                     chunkRenders[keys[i]] = go;
                 }   
             }
