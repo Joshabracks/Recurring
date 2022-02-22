@@ -1,3 +1,4 @@
+
 namespace Gameplay.Data
 {
     public struct Array3D<T>
