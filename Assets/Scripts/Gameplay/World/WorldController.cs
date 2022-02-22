@@ -59,7 +59,9 @@ namespace Gameplay.Terrain
                     filter.mesh = mesh;
                     go.AddComponent<MeshCollider>();
                     go.name = keys[i].x + "," + keys[i].y;
+                    go.tag = "Chunk";
                     chunkRenders[keys[i]] = go;
+                    _world.ChunkIsRendered(keys[i]);
                 }   
             }
         }

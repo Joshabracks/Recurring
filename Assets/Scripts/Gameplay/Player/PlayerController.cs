@@ -41,7 +41,26 @@ namespace  Gameplay.Player
         }
 
         public GameObject GetCurrentChunk() {
-
+            Vector2 direction = new Vector2(
+                MainCharacter.movement.x,
+                MainCharacter.movement.y
+            ).normalized;
+            
+            Vector3 blockingPointHover = new Vector3(
+                MainCharacterModel.transform.position.x + direction.x * 1f,
+                MainCharacterModel.transform.position.y,
+                MainCharacterModel.transform.position.z + direction.y * 1f
+            );
+            Ray ray = new Ray(blockingPointHover, Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) 
+            {
+                GameObject go = hit.collider.gameObject;
+                if (go.tag == "Chunk") {
+                    return go;
+                }
+            }
+            return null;
         }
 
         public void movePlayer() {
