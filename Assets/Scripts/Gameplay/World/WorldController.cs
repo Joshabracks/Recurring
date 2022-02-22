@@ -65,5 +65,16 @@ namespace Gameplay.Terrain
                 }   
             }
         }
+        public void EnableDisableChunksByDistance(GameObject currentChunk, int drawDistance) {
+            foreach (KeyValuePair<Vector2, GameObject> pair in chunkRenders) {
+                GameObject go = pair.Value;
+                if (Vector3.Distance(go.transform.position, currentChunk.transform.position) > chunkSize * drawDistance) {
+                    go.SetActive(false);
+                } else {
+                    go.SetActive(true);
+                }
+            }
+        }
     }
+
 }

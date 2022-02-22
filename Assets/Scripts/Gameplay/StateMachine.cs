@@ -10,6 +10,7 @@ namespace Gameplay.State
 
     public class StateMachine : MonoBehaviour
     {
+        public int drawDistance = 4;
         public WorldController worldController;
         public PlayerController playerController;
 
@@ -23,6 +24,7 @@ namespace Gameplay.State
             string[] coordsString = currentChunkObject.name.Split(',');
             Vector2 coords = new Vector2(int.Parse(coordsString[0]), int.Parse(coordsString[1]));
             worldController.initChunk(coords);
+            worldController.EnableDisableChunksByDistance(currentChunkObject, drawDistance);
         }
     }
 
