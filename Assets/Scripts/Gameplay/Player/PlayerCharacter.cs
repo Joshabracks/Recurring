@@ -30,6 +30,7 @@ namespace Gameplay.Player
         public void CheckGearModifiers() {
             floating = false;
             ModifiedSpeed = Speed;
+            targetFloatHeight = 0.5f;
             foreach (Gear g in gear) {
                 g.MoveModifier();
             }

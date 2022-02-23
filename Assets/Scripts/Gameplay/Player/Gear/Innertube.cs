@@ -47,9 +47,11 @@ namespace Gameplay.Player {
             playerCharacter.ModifiedSpeed *= .8f;
             if (playerCharacter.terrainType == Terrain.TerrainType.Water) 
             {
-                playerCharacter.ModifiedSpeed *= .6f;
+                if (playerCharacter.targetFloatHeight < 0.5f) {
+                    playerCharacter.ModifiedSpeed *= .6f;
+                }
                 playerCharacter.floating = true;
-                playerCharacter.targetFloatHeight = 0;
+                playerCharacter.targetFloatHeight -= 0.5f;
             }
         }
     }

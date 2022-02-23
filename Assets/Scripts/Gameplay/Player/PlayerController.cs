@@ -19,7 +19,7 @@ namespace  Gameplay.Player
         void pickupStuff() {
             GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
             foreach (GameObject go in allGear) {
-                if (Vector3.Distance(go.transform.position, MainCharacter.transform.position) > 2) {
+                if (Vector2.Distance(new Vector2(go.transform.position.x, go.transform.position.z), new Vector2(MainCharacter.transform.position.x, MainCharacter.transform.position.z)) > 2) {
                     continue;
                 }
                 Gear g = go.GetComponent<Gear>();
@@ -81,13 +81,17 @@ namespace  Gameplay.Player
 
         public void floatPlayer() {
             float height = MainCharacter.transform.position.y;
+            float drag = 0.1f;
             if (MainCharacter.floating) {
                 if (MainCharacter.targetFloatHeight > height) {
-                    MainCharacter.verticalVelocity += (MainCharacter.targetFloatHeight - height) * 2;
+                    float diff = ((MainCharacter.targetFloatHeight - height + drag) * 0.25f);
+                    MainCharacter.verticalVelocity +=  diff;
                 } else if (MainCharacter.targetFloatHeight < height) {
-                    MainCharacter.verticalVelocity -= (height - MainCharacter.targetFloatHeight) * 0.25f;
+                    float diff = ((height - MainCharacter.targetFloatHeight + drag) * 0.25f);
+                    MainCharacter.verticalVelocity -=  diff;
                 }
-                MainCharacter.transform.position = new Vector3(MainCharacter.transform.position.x, height + (Time.deltaTime * MainCharacter.verticalVelocity), MainCharacter.transform.position.z);
+                MainCharacter.transform.position = new Vector3(MainCharacter.transform.position.x, MainCharacter.transform.position.y + (MainCharacter.verticalVelocity * Time.deltaTime), MainCharacter.transform.position.z);
+                // MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, MainCharacter.targetFloatHeight, MainCharacter.transform.position.z), 5 * Time.deltaTime);
             } else if(MainCharacter.transform.position.y != 0.5f) {
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
             }
