@@ -5,6 +5,9 @@ namespace Gameplay.Terrain {
         Grass,
         Water,
         Hole,
+        Rock,
+        QuickSand,
+        Lava,
     }
 
     public class BlockingTerrainType {
