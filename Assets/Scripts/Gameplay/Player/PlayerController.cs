@@ -7,21 +7,37 @@ namespace  Gameplay.Player
     public class PlayerController : MonoBehaviour
     {
         public PlayerCharacter MainCharacter;
-        public GameObject MainCharacterModel;
+        // public GameObject MainCharacter;
 
-        
-        void Start() {
-            MainCharacter = new PlayerCharacter();
-        }
+        private float blockingPointHoverHeight = 0.5f;
 
         void Update() {
             setMove();
+            pickupStuff();
+        }
+
+        void pickupStuff() {
+            GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
+            foreach (GameObject go in allGear) {
+                if (Vector3.Distance(go.transform.position, MainCharacter.transform.position) > 2) {
+                    continue;
+                }
+                Gear g = go.GetComponent<Gear>();
+                if (g != null && g.playerCharacter != MainCharacter) {
+                    g.playerCharacter = MainCharacter;
+                    g.PickUp();
+                }
+            }
         }
         
         void FixedUpdate() {
+            MainCharacter.CheckGearModifiers();
+            floatPlayer();
             movePlayer();
             turnPlayer();
         }
+
+        
 
         public void turnPlayer() {
             Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -30,13 +46,13 @@ namespace  Gameplay.Player
             {
                 Vector3 Target = hit.point;
                 //find the vector pointing from our position to the target
-                Vector3 _direction = (Target - MainCharacterModel.transform.position).normalized;
+                Vector3 _direction = (Target - MainCharacter.transform.position).normalized;
 
                 //create the rotation we need to be in to look at the target
                 Quaternion _lookRotation = Quaternion.LookRotation(_direction);
 
                 //rotate us over time according to speed until we are in the required rotation
-                MainCharacterModel.transform.rotation = _lookRotation;
+                MainCharacter.transform.rotation = _lookRotation;
             }    
         }
 
@@ -47,9 +63,9 @@ namespace  Gameplay.Player
             ).normalized;
             
             Vector3 blockingPointHover = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * 1f,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * 1f
+                MainCharacter.transform.position.x + direction.x * 1f,
+                blockingPointHoverHeight,
+                MainCharacter.transform.position.z + direction.y * 1f
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);
             RaycastHit hit;
@@ -63,6 +79,20 @@ namespace  Gameplay.Player
             return null;
         }
 
+        public void floatPlayer() {
+            float height = MainCharacter.transform.position.y;
+            if (MainCharacter.floating) {
+                if (MainCharacter.targetFloatHeight > height) {
+                    MainCharacter.verticalVelocity += (MainCharacter.targetFloatHeight - height) * 2;
+                } else if (MainCharacter.targetFloatHeight < height) {
+                    MainCharacter.verticalVelocity -= (height - MainCharacter.targetFloatHeight) * 0.25f;
+                }
+                MainCharacter.transform.position = new Vector3(MainCharacter.transform.position.x, height + (Time.deltaTime * MainCharacter.verticalVelocity), MainCharacter.transform.position.z);
+            } else if(MainCharacter.transform.position.y != 0.5f) {
+                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
+            }
+        }
+
         public void movePlayer() {
 
             Vector2 direction = new Vector2(
@@ -71,9 +101,9 @@ namespace  Gameplay.Player
             ).normalized;
             
             Vector3 blockingPointHover = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * 1f,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * 1f
+                MainCharacter.transform.position.x + direction.x * 1f,
+                blockingPointHoverHeight,
+                MainCharacter.transform.position.z + direction.y * 1f
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);
             RaycastHit hit;
@@ -90,22 +120,23 @@ namespace  Gameplay.Player
                 if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
                     return;
                 }
+                MainCharacter.terrainType = terrainType;
             }
             else 
             {
                 return;
             }
 
-            MainCharacterModel.transform.position = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * MainCharacter.Speed,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * MainCharacter.Speed
+            MainCharacter.transform.position = new Vector3(
+                MainCharacter.transform.position.x + direction.x * MainCharacter.ModifiedSpeed,
+                MainCharacter.transform.position.y,
+                MainCharacter.transform.position.z + direction.y * MainCharacter.ModifiedSpeed
             );
 
             Camera.main.transform.position = new Vector3(
-                MainCharacterModel.transform.position.x,
+                MainCharacter.transform.position.x,
                 Camera.main.transform.position.y,
-                MainCharacterModel.transform.position.z
+                MainCharacter.transform.position.z
             );
         }
 
