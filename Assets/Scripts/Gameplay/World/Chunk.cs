@@ -69,8 +69,9 @@ namespace Gameplay.Terrain
                     float ty = (y + yOffset) * terrainDensity;
                     biomeWarp.DomainWarp(ref tx, ref ty);
 
-                    float bv = biomeMap.GetNoise(bx, by);
-                    int biomeKey = Mathf.FloorToInt(((Mathf.Abs(bv) + 1) / 2) * 20);
+                    float bv = (biomeMap.GetNoise(bx, by) + 1) / 2;
+                    int biomeKey = Mathf.FloorToInt(bv * 20);
+                    
                     if (biomeData[biomeKey] == 0) {
                         biomeData[biomeKey] = bv;
                     }
