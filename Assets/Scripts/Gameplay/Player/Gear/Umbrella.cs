@@ -7,9 +7,13 @@ namespace Gameplay.Player {
     public class Umbrella : Gear
     {
         private bool set = false;
+        private float angle = 0;
+
         public override void makeEquip() {
             if (equippedCharacter != null) {
-                // transform.position = Vector3.MoveTowards(transform.position, new Vector3(equippedCharacter.transform.position.x + .5f, equippedCharacter.transform.position.y, equippedCharacter.transform.position.z), Time.deltaTime * 10);
+                if (equippedCharacter.Health <= 0) {
+                    return;
+                }
                 if (!set) {
                     if (Vector2.Distance(new Vector2(equippedCharacter.transform.position.x, equippedCharacter.transform.position.z), new Vector2(transform.position.x, transform.position.z)) > 0.5f) {
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(equippedCharacter.transform.position.x + .5f, equippedCharacter.transform.position.y, equippedCharacter.transform.position.z), Time.deltaTime * 10);
@@ -18,33 +22,32 @@ namespace Gameplay.Player {
                     {
                         set = true;
                     }
+                } else {
+
+                    if (equippedCharacter.floating) {
+                        if (angle > 0) {
+                            angle -= Time.deltaTime * 100;
+                            transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
+                        }
+                    } else {
+                        if (angle < 60) {
+                            angle += Time.deltaTime * 100;
+                            transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
+                        }
+                    }                
                 }
-                // if (equippedCharacter.terrainType == Terrain.TerrainType.Lava) {
-                //     transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, new Vector3(56.3f, 0, 0), Time.deltaTime * 3, Time.deltaTime * 3));
-                // } else {
-                //     transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, new Vector3(0, 0, 0), Time.deltaTime * 3, Time.deltaTime * 3));
-                // }
+        
             }
         }
 
         public override void Equip()
         {
-                        transform.parent = equippedCharacter.transform;
-
-            // playerCharacter.AllowedTerrain.Add(Terrain.TerrainType.Hole);
+            transform.parent = equippedCharacter.transform;
+            transform.rotation = equippedCharacter.transform.rotation;
         }
 
         public override void Unequip()
         {
-            // playerCharacter.AllowedTerrain.Remove(Terrain.TerrainType.Hole);
-            // List<Gear> gear = equippedCharacter.gear;
-            // equippedCharacter.gear = new List<Gear>();
-            // foreach (Gear g in gear) {
-            //     if (g != this) {
-            //         equippedCharacter.gear.Add(g);
-            //     }
-            // }
-            // equippedCharacter.gear.Remove(this as Gear);
             equippedCharacter.Unequip(this);
             equippedCharacter = null;
         }
@@ -56,7 +59,6 @@ namespace Gameplay.Player {
         }
         public override void Drop()
         {
-            // playerCharacter.gear.Remove(this);
             Unequip();
         }
 
@@ -70,6 +72,9 @@ namespace Gameplay.Player {
             if (equippedCharacter.terrainType == Terrain.TerrainType.Lava) {
                 equippedCharacter.floating = true;
                 equippedCharacter.targetFloatHeight += 1;
+            } else if (equippedCharacter.transform.position.y > .5f || (equippedCharacter.terrainType == Terrain.TerrainType.Hole && !equippedCharacter.floating && equippedCharacter.transform.position.y > -2)) {
+                equippedCharacter.floating = true;
+                equippedCharacter.targetFloatHeight = -2;
             }
         }
     }

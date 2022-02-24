@@ -93,7 +93,10 @@ namespace  Gameplay.Player
                 float verticalOffset = (Mathf.Sin(Time.timeSinceLevelLoad * 5) * 0.1f) + MainCharacter.targetFloatHeight;
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, verticalOffset, MainCharacter.transform.position.z), Time.deltaTime * 5);
             } 
-            else if(MainCharacter.transform.position.y != 0.5f && !MainCharacter.falling) {
+            else if(MainCharacter.transform.position.y < 0.5f && !MainCharacter.falling) {
+                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 50);
+            }
+            else if(MainCharacter.transform.position.y > 0.5f && !MainCharacter.falling) {
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
             }
         }
