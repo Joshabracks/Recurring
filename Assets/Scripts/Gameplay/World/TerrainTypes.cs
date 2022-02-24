@@ -13,7 +13,9 @@ namespace Gameplay.Terrain {
     public class BlockingTerrainType {
         public TerrainType[] Types = new TerrainType[] {
             TerrainType.Water,
-            TerrainType.Hole
+            TerrainType.Hole,
+            TerrainType.QuickSand,
+            TerrainType.Lava
         };
     }
 }

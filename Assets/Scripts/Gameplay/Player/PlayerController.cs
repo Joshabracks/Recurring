@@ -45,6 +45,7 @@ namespace  Gameplay.Player
             if (Physics.Raycast (ray, out hit)) 
             {
                 Vector3 Target = hit.point;
+                Target.y = MainCharacter.transform.position.y;
                 //find the vector pointing from our position to the target
                 Vector3 _direction = (Target - MainCharacter.transform.position).normalized;
 
@@ -83,14 +84,15 @@ namespace  Gameplay.Player
             float height = MainCharacter.transform.position.y;
             float drag = 0.1f;
             if (MainCharacter.floating) {
-                if (MainCharacter.targetFloatHeight > height) {
-                    float diff = ((MainCharacter.targetFloatHeight - height + drag) * 0.25f);
-                    MainCharacter.verticalVelocity +=  diff;
-                } else if (MainCharacter.targetFloatHeight < height) {
-                    float diff = ((height - MainCharacter.targetFloatHeight + drag) * 0.25f);
-                    MainCharacter.verticalVelocity -=  diff;
-                }
-                MainCharacter.transform.position = new Vector3(MainCharacter.transform.position.x, MainCharacter.transform.position.y + (MainCharacter.verticalVelocity * Time.deltaTime), MainCharacter.transform.position.z);
+                // if (MainCharacter.targetFloatHeight > height) {
+                //     float diff = ((MainCharacter.targetFloatHeight - height + drag) * 0.25f);
+                //     MainCharacter.verticalVelocity +=  diff;
+                // } else if (MainCharacter.targetFloatHeight < height) {
+                //     float diff = ((height - MainCharacter.targetFloatHeight + drag) * 0.25f);
+                //     MainCharacter.verticalVelocity -=  diff;
+                // }
+                float verticalOffset = (Mathf.Sin(Time.timeSinceLevelLoad * 5) * 0.1f) + MainCharacter.targetFloatHeight;
+                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, verticalOffset, MainCharacter.transform.position.z), Time.deltaTime * 5);
                 // MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, MainCharacter.targetFloatHeight, MainCharacter.transform.position.z), 5 * Time.deltaTime);
             } else if(MainCharacter.transform.position.y != 0.5f) {
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
@@ -121,9 +123,9 @@ namespace  Gameplay.Player
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 TerrainType terrainType = (TerrainType)(uv2.x);
-                if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
-                    return;
-                }
+                // if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
+                //     return;
+                // }
                 MainCharacter.terrainType = terrainType;
             }
             else 
