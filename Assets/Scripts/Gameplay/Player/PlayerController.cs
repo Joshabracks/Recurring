@@ -6,7 +6,7 @@ namespace  Gameplay.Player
     
     public class PlayerController : MonoBehaviour
     {
-        public PlayerCharacter MainCharacter;
+        public Character MainCharacter;
         // public GameObject MainCharacter;
 
         private float blockingPointHoverHeight = 0.5f;
@@ -16,6 +16,18 @@ namespace  Gameplay.Player
             pickupStuff();
         }
 
+        void FixedUpdate() {
+            MainCharacter.MakeEquip();
+            MainCharacter.CheckGearModifiers();
+            MainCharacter.CheckTerrainModifiers();
+            floatPlayer();
+            if (MainCharacter.Health <= 0) {
+                return; 
+            }
+            movePlayer();
+            turnPlayer();
+        }
+
         void pickupStuff() {
             GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
             foreach (GameObject go in allGear) {
@@ -23,19 +35,14 @@ namespace  Gameplay.Player
                     continue;
                 }
                 Gear g = go.GetComponent<Gear>();
-                if (g != null && g.playerCharacter != MainCharacter) {
-                    g.playerCharacter = MainCharacter;
+                if (g != null && g.equippedCharacter != MainCharacter) {
+                    g.equippedCharacter = MainCharacter;
                     g.PickUp();
                 }
             }
         }
         
-        void FixedUpdate() {
-            MainCharacter.CheckGearModifiers();
-            floatPlayer();
-            movePlayer();
-            turnPlayer();
-        }
+        
 
         
 
@@ -82,19 +89,11 @@ namespace  Gameplay.Player
 
         public void floatPlayer() {
             float height = MainCharacter.transform.position.y;
-            float drag = 0.1f;
             if (MainCharacter.floating) {
-                // if (MainCharacter.targetFloatHeight > height) {
-                //     float diff = ((MainCharacter.targetFloatHeight - height + drag) * 0.25f);
-                //     MainCharacter.verticalVelocity +=  diff;
-                // } else if (MainCharacter.targetFloatHeight < height) {
-                //     float diff = ((height - MainCharacter.targetFloatHeight + drag) * 0.25f);
-                //     MainCharacter.verticalVelocity -=  diff;
-                // }
                 float verticalOffset = (Mathf.Sin(Time.timeSinceLevelLoad * 5) * 0.1f) + MainCharacter.targetFloatHeight;
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, verticalOffset, MainCharacter.transform.position.z), Time.deltaTime * 5);
-                // MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, MainCharacter.targetFloatHeight, MainCharacter.transform.position.z), 5 * Time.deltaTime);
-            } else if(MainCharacter.transform.position.y != 0.5f) {
+            } 
+            else if(MainCharacter.transform.position.y != 0.5f && !MainCharacter.falling) {
                 MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
             }
         }
@@ -108,7 +107,7 @@ namespace  Gameplay.Player
             
             Vector3 blockingPointHover = new Vector3(
                 MainCharacter.transform.position.x + direction.x * 1f,
-                blockingPointHoverHeight,
+                MainCharacter.transform.position.y >= .5f ? MainCharacter.transform.position.y : .5f ,
                 MainCharacter.transform.position.z + direction.y * 1f
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);

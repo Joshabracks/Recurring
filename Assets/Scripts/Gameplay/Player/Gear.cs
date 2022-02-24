@@ -11,10 +11,11 @@ namespace Gameplay.Player {
     }
     public abstract class Gear : MonoBehaviour
     {
+        public float health = 5;
         private void Start() {
             gameObject.tag = "Gear";
         }
-        public PlayerCharacter playerCharacter;
+        public Character equippedCharacter;
         public abstract void Equip();
         public abstract void Unequip();
         public abstract void PickUp();
@@ -22,8 +23,5 @@ namespace Gameplay.Player {
         public abstract void TakeDamage();
         public abstract void MoveModifier();
         public abstract void makeEquip();
-        private void Update() {
-            makeEquip();
-        }
     }
 }

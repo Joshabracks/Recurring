@@ -7,33 +7,33 @@ namespace Gameplay.Player {
     public class Innertube : Gear
     {
         public override void makeEquip() {
-            if (playerCharacter != null) {
+            if (equippedCharacter != null) {
                 if (transform.position.x != 0 || transform.position.y != 0 || transform.position.z != 0) {
-                    transform.position = Vector3.MoveTowards(transform.position, playerCharacter.transform.position, Time.deltaTime * 10);
+                    transform.position = Vector3.MoveTowards(transform.position, equippedCharacter.transform.position, Time.deltaTime * 10);
                 }
             }
         }
 
         public override void Equip()
         {
-            transform.parent = playerCharacter.transform;
-            playerCharacter.AllowedTerrain.Add(Terrain.TerrainType.Water);
+            transform.parent = equippedCharacter.transform;
+            // playerCharacter.AllowedTerrain.Add(Terrain.TerrainType.Water);
         }
 
         public override void Unequip()
         {
-            playerCharacter = null;
+            equippedCharacter = null;
             transform.parent = null;
         }
 
         public override void PickUp()
         {
-            playerCharacter.gear.Add(this);
+            equippedCharacter.gear.Add(this);
             Equip();
         }
         public override void Drop()
         {
-            playerCharacter.gear.Remove(this);
+            equippedCharacter.gear.Remove(this);
             Unequip();
         }
 
@@ -44,14 +44,14 @@ namespace Gameplay.Player {
 
         public override void MoveModifier()
         {
-            playerCharacter.ModifiedSpeed *= .8f;
-            if (playerCharacter.terrainType == Terrain.TerrainType.Water) 
+            equippedCharacter.ModifiedSpeed *= .8f;
+            if (equippedCharacter.terrainType == Terrain.TerrainType.Water) 
             {
-                if (playerCharacter.targetFloatHeight < 0.5f) {
-                    playerCharacter.ModifiedSpeed *= .6f;
+                if (equippedCharacter.targetFloatHeight < 0.5f) {
+                    equippedCharacter.ModifiedSpeed *= .6f;
                 }
-                playerCharacter.floating = true;
-                playerCharacter.targetFloatHeight -= 0.5f;
+                equippedCharacter.floating = true;
+                equippedCharacter.targetFloatHeight -= 0.5f;
             }
         }
     }
