@@ -11,6 +11,11 @@ namespace  Gameplay.Player
 
         private float blockingPointHoverHeight = 0.5f;
 
+        private void Awake() {
+            MainCharacter.Randomize();
+            MainCharacter.SetCustomizationValues();
+        }
+
         void Update() {
             setMove();
             pickupStuff();

@@ -7,6 +7,9 @@ namespace Gameplay.Player
     
     public class Character : MonoBehaviour
     {
+        public GameObject RightEye;
+        public GameObject LeftEye;
+        public GameObject Body;
         public List<Gear> gear;
         public float Health = 10;
         public float MaxHealth = 10;
@@ -22,13 +25,145 @@ namespace Gameplay.Player
         public float targetFloatHeight = 0;
         public float verticalVelocity = 0;
         private float suffocationModifier = .4f;
-        public Character() {
-            gear = new List<Gear>();
-            movement = new Vector2();
-            // AllowedTerrain = new List<TerrainType>();
-            // AllowedTerrain.Add(TerrainType.Dirt);
-            // AllowedTerrain.Add(TerrainType.Grass);
-            // AllowedTerrain.Add(TerrainType.Sand);
+        public AI ai;
+
+
+        public Color SkinColor;
+        public Color EyeColor;
+        public Color IrisColor;
+        public Color PupilColor;
+        [Range(0, 1)]
+        public float SkinRoughness;
+        [Range(.1f, .44f)]
+        public float EyelidPosition;
+        [Range(0, 1)]
+        public float EyeSize;
+        [Range(0, 1)]
+        public float EyeSpacing;
+        [Range(.5f, 1)]
+        public float BodyHeight;
+        public float BodyWidth;
+        [Range(.05f, .147f)]
+        public float EyeLookY;
+        [Range(-.27f, -.23f)]
+        public float EyeLookX;
+        [Range(.1f, 1)]
+        public float IrisSize;
+        [Range(.1f, 1)]
+        public float PupilSize;
+        public float Smile;
+        public float MouthWidth;
+        public float MouthOpen;
+        public float TeethOpen;
+
+
+        // private float seconds = 0;
+        private void Update() {
+            // seconds += Time.deltaTime;
+            // if (seconds >= 1) {
+            //     Randomize();
+            //     SetCustomizationValues();
+            //     seconds = 0;
+            // }
+            if (ai != null) {
+                // do ai stuff
+                
+            }
+        }
+
+        private void Awake() {
+            Randomize();    
+        }
+
+        public void Randomize() {
+            SkinColor = Random.ColorHSV(0, 1);
+            EyeColor = Random.ColorHSV(0, 1);
+            IrisColor = Random.ColorHSV(0, 1);
+            PupilColor = Random.ColorHSV(0, 1);
+            SkinRoughness = Random.Range(.01f, 1);
+            EyelidPosition = Random.Range(.1f, .44f);
+            EyeSize = Random.Range(.5f, 1);
+            EyeSpacing = Random.Range(-.95f, -.5f);
+            BodyHeight = Random.Range(.5f, 1);
+            BodyWidth = Random.Range(.5f, 1);
+            IrisSize = Random.Range(.08f, .16f);
+            PupilSize = Random.Range(0.01f, .08f);
+            MouthOpen = Random.Range(.03f, .232f);
+            MouthWidth = Random.Range(.023f, .238f);
+            TeethOpen = Random.Range(0, .238f);
+            Smile = Random.Range(-0.1f, .671f);
+
+
+            EyeLookY = Random.Range(.05f, .147f);
+            EyeLookX = -.2498f;
+            // EyeLookX = Random.Range(-.27f, -.23f);
+
+
+        }
+
+        public void SetCustomizationValues() {
+            Material _body = Body.gameObject.GetComponent<MeshRenderer>().material;
+            Material _rightEye = RightEye.gameObject.GetComponent<MeshRenderer>().material;
+            Material _leftEye = LeftEye.gameObject.GetComponent<MeshRenderer>().material;
+            // SkinColor
+            _body.SetColor("Color_c9b0e0dfacb84c87a24618eea7b3d861", SkinColor);
+            _rightEye.SetColor("Color_8cbb982647ed49f0a5c9f595711113f0", SkinColor);
+            _leftEye.SetColor("Color_8cbb982647ed49f0a5c9f595711113f0", SkinColor);
+            // SkinRoughness
+            _body.SetFloat("Vector1_84b477cc3c2e4d089342a26b2a53ab9e", SkinRoughness);
+            _rightEye.SetFloat("Vector1_549f0fee6d3c40239cb492f1c0dfe4df", SkinRoughness);
+            _leftEye.SetFloat("Vector1_549f0fee6d3c40239cb492f1c0dfe4df", SkinRoughness);
+            // EyeColor
+            _rightEye.SetColor("Color_ca45d8a7905f40c291a1451df70014b0", EyeColor);
+            _leftEye.SetColor("Color_ca45d8a7905f40c291a1451df70014b0", EyeColor);
+            // IrisColor
+            _rightEye.SetColor("Color_ac1f9112475c432685728afe941b7661", IrisColor);
+            _leftEye.SetColor("Color_ac1f9112475c432685728afe941b7661", IrisColor);
+            // PupilColor
+            _rightEye.SetColor("Color_c0e17f4523ff42719aacaa10999c39c9", PupilColor);
+            _leftEye.SetColor("Color_c0e17f4523ff42719aacaa10999c39c9", PupilColor);
+            // IrisSize
+            _rightEye.SetFloat("Vector1_eae4e3df392e4e06844152a91f4b5887", IrisSize);
+            _leftEye.SetFloat("Vector1_eae4e3df392e4e06844152a91f4b5887", IrisSize);
+            // PupilSize
+            _rightEye.SetFloat("Vector1_572ab91db3d54d6c95239de619484396", PupilSize);
+            _leftEye.SetFloat("Vector1_572ab91db3d54d6c95239de619484396", PupilSize);
+            // LookX
+            _rightEye.SetFloat("Vector1_9979475be7dd4d029c53f3b8d0bbb64a", EyeLookX);
+            _leftEye.SetFloat("Vector1_9979475be7dd4d029c53f3b8d0bbb64a", EyeLookX);
+            // LookY
+            _rightEye.SetFloat("Vector1_bcb7e772ac2543f0a4f4ee289502ad17", EyeLookY);
+            _leftEye.SetFloat("Vector1_bcb7e772ac2543f0a4f4ee289502ad17", EyeLookY);
+            // Mouth
+            _body.SetFloat("Vector1_6decf4ff65b849a3a10735c6af22a86c", MouthOpen);
+            _body.SetFloat("Vector1_9785ac54f99345cdac2f47ee51317a62", MouthWidth);
+            _body.SetFloat("Vector1_fe2e7edb90364604929ec17303e41edb", Smile);
+            _body.SetFloat("Vector1_a57ded8bb1e042dfbb2e2f2ab0e0bc3f", TeethOpen);
+            // BodyHeight
+            Body.gameObject.transform.localScale = new Vector3(
+                BodyWidth,
+                BodyHeight,
+                BodyWidth
+            );
+            // EyeSize
+            RightEye.gameObject.transform.localScale = new Vector3(
+                EyeSize,
+                EyeSize,
+                EyeSize
+            );
+            LeftEye.gameObject.transform.localScale = new Vector3(
+                EyeSize,
+                EyeSize,
+                EyeSize
+            );
+            // EyeSpacing
+            Vector3 directionOfTravelRight = -Body.transform.right;
+            Vector3 rightEyeDirection = directionOfTravelRight + directionOfTravelRight.normalized * EyeSpacing;
+            RightEye.transform.position = Body.transform.position + rightEyeDirection;
+
+            Vector3 directionOfTravelLeft = Body.transform.right;
+            Vector3 leftEyeDirection = directionOfTravelLeft + directionOfTravelLeft.normalized * EyeSpacing;
+            LeftEye.transform.position = Body.transform.position + leftEyeDirection;
         }
 
         public void CheckGearModifiers() {

@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Skybox_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: cb4b179e3aee75043a635ed791662d07, type: 3}
-  m_ShaderKeywords: _METALLIC_SETUP _SUNDISK_HIGH_QUALITY
+  m_Name: Eye
+  m_Shader: {fileID: -6465566751694194690, guid: 0ad1a5dc96d08c04a97f2e913ff1b44a, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -72,34 +76,60 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_6431ea484361456dbe3a8db6e55824bd: 20
-    - Vector1_d3e94cbb71f34dca9d8b8ab98827edbe: -11.33
-    - _AtmosphereThickness: 0.53
+    - Vector1_32c49fe9e1474282b78ae247b698f87d: -0.03
+    - Vector1_4f08c76a1404422a8d66ae996bd2fbfa: 0.276
+    - Vector1_549f0fee6d3c40239cb492f1c0dfe4df: 0.715
+    - Vector1_572ab91db3d54d6c95239de619484396: 0.05
+    - Vector1_5a43292625484d09a72724bf1aa682b6: 0
+    - Vector1_9979475be7dd4d029c53f3b8d0bbb64a: -0.2498
+    - Vector1_bcb7e772ac2543f0a4f4ee289502ad17: 0.1178
+    - Vector1_eae4e3df392e4e06844152a91f4b5887: 0.16
+    - _AlphaClip: 0
+    - _Blend: 0
     - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
+    - _Cull: 2
     - _Cutoff: 0.5
+    - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Exposure: 1.25
-    - _GlossMapScale: 1
-    - _Glossiness: 0.5
-    - _GlossyReflections: 1
+    - _EnvironmentReflections: 1
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
     - _Metallic: 0
-    - _Mode: 0
     - _OcclusionStrength: 1
-    - _Parallax: 0.02
+    - _Parallax: 0.005
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunDisk: 2
-    - _SunSize: 1
-    - _SunSizeConvergence: 1
-    - _UVSec: 0
+    - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_8cbb982647ed49f0a5c9f595711113f0: {r: 0.4716981, g: 0.23362406, b: 0.32012984, a: 0}
+    - Color_ac1f9112475c432685728afe941b7661: {r: 0.20259732, g: 1, b: 0.10849059, a: 0}
+    - Color_c0e17f4523ff42719aacaa10999c39c9: {r: 0.2735849, g: 0.11227306, b: 0.11227306, a: 0}
+    - Color_ca45d8a7905f40c291a1451df70014b0: {r: 0.754717, g: 0.28123888, b: 0.28123888, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.2017244, g: 0.09603061, b: 0.24528301, a: 1}
-    - _SkyTint: {r: 0.9716981, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &2315287470728224339
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
