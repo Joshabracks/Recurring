@@ -16,7 +16,7 @@ namespace Gameplay.Player {
                     return;
                 }
                 if (!set) {
-                    Vector3 directionOfTravel = equippedCharacter.transform.right;
+                    Vector3 directionOfTravel = equippedCharacter.transform.forward;
                     Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * -.5f;
                     Vector3 targetPosition = equippedCharacter.transform.position + finalDirection;
                     transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 10);

@@ -17,7 +17,7 @@ namespace Gameplay.Player
             Reset
         }
 
-        private AttackState attackState = AttackState.Reset;
+        private AttackState attackState = AttackState.Idle;
         public override void makeEquip()
         {
             if (equippedCharacter != null)
@@ -29,7 +29,7 @@ namespace Gameplay.Player
                 if (!set)
                 {
                     Vector3 directionOfTravel = equippedCharacter.transform.right;
-                    Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * -.5f;
+                    Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * .1f;
                     Vector3 targetPosition = equippedCharacter.transform.position + finalDirection;
                     transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 10);
 
@@ -38,19 +38,31 @@ namespace Gameplay.Player
                         set = true;
                     }
                 }
+                if (attackState == AttackState.Reset) {
+                    if (angle > 0)
+                {
+                    angle -= Time.deltaTime * 100;
+                    transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
+                }
+                else
+                {
+                    // do the thing
+                    attackState = AttackState.Idle;
+                }
+                }
             }
         }
 
         public void Attack()
         {
-            if (attackState == AttackState.Idle)
+            if (attackState == AttackState.Idle && set)
             {
                 attackState = AttackState.Strike;
             }
 
             if (attackState == AttackState.Strike)
             {
-                if (angle < 60)
+                if (angle < 90)
                 {
                     angle += Time.deltaTime * 200;
                     transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);

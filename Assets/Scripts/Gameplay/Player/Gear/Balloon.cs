@@ -14,7 +14,7 @@ namespace Gameplay.Player
                 if (!set)
                 {
 
-                    Vector3 directionOfTravel = -equippedCharacter.transform.right;
+                    Vector3 directionOfTravel = -equippedCharacter.transform.forward;
                     Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * .1f;
                     Vector3 targetPosition = equippedCharacter.transform.position + finalDirection;
                     targetPosition = new Vector3(targetPosition.x, targetPosition.y + 4, targetPosition.z);
