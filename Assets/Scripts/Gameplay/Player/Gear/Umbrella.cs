@@ -8,6 +8,7 @@ namespace Gameplay.Player {
     {
         private bool set = false;
         private float angle = 0;
+        private bool hasBalloon = false;
 
         public override void makeEquip() {
             if (equippedCharacter != null) {
@@ -15,16 +16,23 @@ namespace Gameplay.Player {
                     return;
                 }
                 if (!set) {
-                    if (Vector2.Distance(new Vector2(equippedCharacter.transform.position.x, equippedCharacter.transform.position.z), new Vector2(transform.position.x, transform.position.z)) > 0.5f) {
-                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(equippedCharacter.transform.position.x + .5f, equippedCharacter.transform.position.y, equippedCharacter.transform.position.z), Time.deltaTime * 10);
-                    }
-                    else 
-                    {
+                    Vector3 directionOfTravel = equippedCharacter.transform.right;
+                    Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * -.5f;
+                    Vector3 targetPosition = equippedCharacter.transform.position + finalDirection;
+                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 10);
+
+                    if (transform.position == targetPosition) {
                         set = true;
                     }
                 } else {
-
-                    if (equippedCharacter.floating) {
+                    hasBalloon = false;
+                    foreach (Gear g in equippedCharacter.gear) {
+                        Balloon b = g as Balloon;
+                        if (b != null) {
+                            hasBalloon = true;
+                        }
+                    }
+                    if (equippedCharacter.floating && !hasBalloon) {
                         if (angle > 0) {
                             angle -= Time.deltaTime * 100;
                             transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
@@ -73,8 +81,10 @@ namespace Gameplay.Player {
                 equippedCharacter.floating = true;
                 equippedCharacter.targetFloatHeight += 1;
             } else if (equippedCharacter.transform.position.y > .5f || (equippedCharacter.terrainType == Terrain.TerrainType.Hole && !equippedCharacter.floating && equippedCharacter.transform.position.y > -2)) {
-                equippedCharacter.floating = true;
-                equippedCharacter.targetFloatHeight = -2;
+                if (!hasBalloon) {
+                    equippedCharacter.floating = true;
+                    equippedCharacter.targetFloatHeight = -2;
+                }
             }
         }
     }
