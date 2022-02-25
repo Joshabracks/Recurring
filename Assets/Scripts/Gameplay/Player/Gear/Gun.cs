@@ -7,7 +7,15 @@ namespace Gameplay.Player {
     public class Gun : Weapon
     {
         private bool set = false;
-        private float angle = 0;
+        public float range = 5;
+        public float projectiles = 1;
+        public float spread = 0;
+        public Color barrelColor;
+        public Color bodyColor;
+        public Color cogColor;
+        public GameObject Barrel;
+        public GameObject Body;
+        public GameObject Cog;
 
         public override void makeEquip() {
             if (equippedCharacter != null) {
@@ -52,7 +60,27 @@ namespace Gameplay.Player {
         
             }
         }
+        
+        public override void Randomize() {
+            damage = Random.Range(.1f, 1) * powerScale;
+            projectiles = Random.Range(.1f, 1) * powerScale;
+            spread = Random.Range(.1f, 1);
+            barrelColor = Random.ColorHSV(0, 1);
+            bodyColor = Random.ColorHSV(0, 1);
+            cogColor = Random.ColorHSV(0, 1);
 
+        }
+
+        public override void SetCustomizationValues()
+        {
+            Body.GetComponent<MeshRenderer>().material.SetColor("Color", bodyColor);
+            Cog.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
+            Barrel.GetComponent<MeshRenderer>().material.SetColor("Color", barrelColor);
+            Barrel.transform.localScale = new Vector3(.65f + range, 1, 1);
+            Cog.transform.localScale = new Vector3(1 + spread, 1, 1);
+            Body.transform.localScale = new Vector3(1 + damage, 1, 1);
+
+        }
         public override void Attack()
         {
         

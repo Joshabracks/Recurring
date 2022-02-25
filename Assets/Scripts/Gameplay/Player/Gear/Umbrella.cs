@@ -9,6 +9,9 @@ namespace Gameplay.Player {
         private bool set = false;
         private float angle = 0;
         private bool hasBalloon = false;
+        public GameObject top;
+        Color color1;
+        Color color2;
 
         public override void makeEquip() {
             if (equippedCharacter != null) {
@@ -46,6 +49,19 @@ namespace Gameplay.Player {
                 }
         
             }
+        }
+
+        public override void Randomize()
+        {
+            color1 = Random.ColorHSV(0, 1);
+            color2 = Random.ColorHSV(0, 1);
+            health = Random.Range(1, 10);
+        }
+
+        public override void SetCustomizationValues()
+        {
+            top.GetComponent<MeshRenderer>().material.SetColor("Color_08f30f87981049c7a12b5478743a0dce", color1);
+            top.GetComponent<MeshRenderer>().material.SetColor("Color_e81d83b4d7f34ab39bc7f7a9e9aa3cda", color2);
         }
 
         public override void Equip()

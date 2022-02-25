@@ -23,5 +23,7 @@ namespace Gameplay.Player {
         public abstract void TakeDamage();
         public abstract void MoveModifier();
         public abstract void makeEquip();
+        abstract public void Randomize();
+        abstract public void SetCustomizationValues();
     }
 }

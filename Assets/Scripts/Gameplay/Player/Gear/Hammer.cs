@@ -5,10 +5,12 @@ using UnityEngine;
 namespace Gameplay.Player
 {
 
-    public class Hammer : Gear
+    public class Hammer : Weapon
     {
         private bool set = false;
         private float angle = 0;
+        public GameObject head;
+        public Color color;
 
         private enum AttackState
         {
@@ -18,6 +20,7 @@ namespace Gameplay.Player
         }
 
         private AttackState attackState = AttackState.Idle;
+
         public override void makeEquip()
         {
             if (equippedCharacter != null)
@@ -53,7 +56,18 @@ namespace Gameplay.Player
             }
         }
 
-        public void Attack()
+        public override void Randomize()
+        {
+            damage = Random.Range(2f, 4f) * powerScale;
+            color = Random.ColorHSV(0, 1);
+        }
+
+        public override void SetCustomizationValues()
+        {
+            head.GetComponent<MeshRenderer>().material.SetColor("Color", color);
+        }
+
+        public override void Attack()
         {
             if (attackState == AttackState.Idle && set)
             {

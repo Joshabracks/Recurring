@@ -6,12 +6,24 @@ namespace Gameplay.Player {
 
     public class Innertube : Gear
     {
+        Color color;
         public override void makeEquip() {
             if (equippedCharacter != null) {
                 if (transform.position.x != 0 || transform.position.y != 0 || transform.position.z != 0) {
                     transform.position = Vector3.MoveTowards(transform.position, equippedCharacter.transform.position, Time.deltaTime * 10);
                 }
             }
+        }
+
+        public override void Randomize()
+        {
+            color = Random.ColorHSV(0, 1);
+            health = Random.Range(1, 10);
+        }
+
+        public override void SetCustomizationValues()
+        {
+            gameObject.GetComponent<MeshRenderer>().material.SetColor("Color", color);
         }
 
         public override void Equip()

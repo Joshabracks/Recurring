@@ -6,6 +6,7 @@ namespace Gameplay.Player
 {
     public class Balloon : Gear
     {
+        public Color color;
         public bool set = false;
         public override void makeEquip()
         {
@@ -36,6 +37,17 @@ namespace Gameplay.Player
                 //     transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * 3);
                 // }
             }
+        }
+
+        public override void Randomize()
+        {
+            color = Random.ColorHSV(0, 1);
+            health = Random.Range(1, 10);
+        }
+
+        public override void SetCustomizationValues()
+        {
+            gameObject.GetComponent<MeshRenderer>().material.SetColor("Color", color);
         }
 
         public override void Equip()
