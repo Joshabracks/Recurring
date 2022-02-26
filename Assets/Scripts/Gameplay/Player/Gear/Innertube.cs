@@ -26,31 +26,36 @@ namespace Gameplay.Player {
             gameObject.GetComponent<MeshRenderer>().material.SetColor("Color", color);
         }
 
-        public override void Equip()
+        public override void Equip(Character character)
         {
+            equippedCharacter = character;
+            equippedCharacter.gear.innertube.Drop();
             transform.parent = equippedCharacter.transform;
-            // playerCharacter.AllowedTerrain.Add(Terrain.TerrainType.Water);
+            transform.rotation = equippedCharacter.transform.rotation;
         }
 
         public override void Unequip()
         {
+            equippedCharacter.gear.innertube = null;
             equippedCharacter = null;
             transform.parent = null;
         }
 
-        public override void PickUp()
+        public override void PickUp(Character character)
         {
-            equippedCharacter.gear.Add(this);
-            Equip();
+            if (character.gear.innertube != null && character.gear.innertube.health < health) {
+                Equip(character);
+            }
+
         }
         public override void Drop()
         {
-            equippedCharacter.gear.Remove(this);
             Unequip();
         }
 
-        public override void TakeDamage()
+        public override void TakeDamage(float score)
         {
+            health -= score;
             // do nothing
         }
 

@@ -11,6 +11,7 @@ namespace Gameplay.Player
         private float angle = 0;
         public GameObject head;
         public Color color;
+        public float unequippable = 0;
 
         private enum AttackState
         {
@@ -90,29 +91,38 @@ namespace Gameplay.Player
         }
 
 
-        public override void Equip()
+        public override void Equip(Character character)
         {
+            equippedCharacter = character;
+            equippedCharacter.gear.hammer = this;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
         }
 
         public override void Unequip()
         {
-            equippedCharacter.Unequip(this);
+            transform.parent = null;
+            equippedCharacter.gear.hammer = null;
             equippedCharacter = null;
         }
 
-        public override void PickUp()
+        public override void PickUp(Character character)
         {
-            equippedCharacter.gear.Add(this);
-            Equip();
+            if (unequippable > 0) {
+                unequippable -= Time.deltaTime;
+                return;
+            }
+            if (character.gear.hammer != null) {
+                character.gear.hammer.Drop();
+            }
+            Equip(character);
         }
         public override void Drop()
         {
             Unequip();
         }
 
-        public override void TakeDamage()
+        public override void TakeDamage(float score)
         {
             // do nothing
         }

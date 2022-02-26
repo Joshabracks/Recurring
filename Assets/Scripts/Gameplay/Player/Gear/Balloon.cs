@@ -50,30 +50,29 @@ namespace Gameplay.Player
             gameObject.GetComponent<MeshRenderer>().material.SetColor("Color", color);
         }
 
-        public override void Equip()
+        public override void Equip(Character character)
         {
+            equippedCharacter = character;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
         }
         public override void Unequip()
         {
-            // playerCharacter.AllowedTerrain.Remove(Terrain.TerrainType.Hole);
-            // List<Gear> gear = equippedCharacter.gear;
-            // equippedCharacter.gear = new List<Gear>();
-            // foreach (Gear g in gear) {
-            //     if (g != this) {
-            //         equippedCharacter.gear.Add(g);
-            //     }
-            // }
-            // equippedCharacter.gear.Remove(this as Gear);
-            equippedCharacter.Unequip(this);
+            transform.parent = null;
+            equippedCharacter.gear.balloon = null;
             equippedCharacter = null;
         }
 
-        public override void PickUp()
+        public override void PickUp(Character character)
         {
-            equippedCharacter.gear.Add(this);
-            Equip();
+            if (character.gear.balloon != null && character.gear.balloon.health < health) {
+                character.gear.balloon.Drop();
+                Equip(character);
+            }
+            else if (character.gear.balloon == null)
+            {
+                Equip(character);
+            }
         }
         public override void Drop()
         {
@@ -81,9 +80,9 @@ namespace Gameplay.Player
             Unequip();
         }
 
-        public override void TakeDamage()
+        public override void TakeDamage(float score)
         {
-            // do nothing
+            health -= score;
         }
 
         public override void MoveModifier()

@@ -7,11 +7,10 @@ namespace  Gameplay.Player
     public class PlayerController : MonoBehaviour
     {
         public Character MainCharacter;
-        // public GameObject MainCharacter;
 
         private float blockingPointHoverHeight = 0.5f;
 
-        private void Awake() {
+        public void Initialize() {
             MainCharacter.Randomize();
             MainCharacter.SetCustomizationValues();
         }
@@ -25,7 +24,7 @@ namespace  Gameplay.Player
             MainCharacter.MakeEquip();
             MainCharacter.CheckGearModifiers();
             MainCharacter.CheckTerrainModifiers();
-            floatPlayer();
+            MainCharacter.Float();
             if (MainCharacter.Health <= 0) {
                 return; 
             }
@@ -42,7 +41,7 @@ namespace  Gameplay.Player
                 Gear g = go.GetComponent<Gear>();
                 if (g != null && g.equippedCharacter != MainCharacter) {
                     g.equippedCharacter = MainCharacter;
-                    g.PickUp();
+                    g.PickUp(MainCharacter);
                 }
             }
         }
@@ -92,19 +91,7 @@ namespace  Gameplay.Player
             return null;
         }
 
-        public void floatPlayer() {
-            float height = MainCharacter.transform.position.y;
-            if (MainCharacter.floating) {
-                float verticalOffset = (Mathf.Sin(Time.timeSinceLevelLoad * 5) * 0.1f) + MainCharacter.targetFloatHeight;
-                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, verticalOffset, MainCharacter.transform.position.z), Time.deltaTime * 5);
-            } 
-            else if(MainCharacter.transform.position.y < 0.5f && !MainCharacter.falling) {
-                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 50);
-            }
-            else if(MainCharacter.transform.position.y > 0.5f && !MainCharacter.falling) {
-                MainCharacter.transform.position = Vector3.MoveTowards(MainCharacter.transform.position, new Vector3(MainCharacter.transform.position.x, 0.5f, MainCharacter.transform.position.z), Time.deltaTime * 5);
-            }
-        }
+        
 
         public void movePlayer() {
 

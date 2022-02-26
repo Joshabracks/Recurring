@@ -16,6 +16,10 @@ namespace Gameplay.Terrain
         public float _frequency;
         public float _terrainDensity;
         private float[] biomeData;
+        public int biomeCount() {
+            return biomeData.Length;
+        }
+        
         private Dictionary<int, TerrainType> biomeBorders;
         private Dictionary<int, List<TerrainType>> biomeOrders;
 

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Gameplay.Player;
 
 namespace Gameplay.Terrain
 {
     public class WorldController : MonoBehaviour
     {
+        // templates
+
         private World _world;
         private Dictionary<Vector2, GameObject> chunkRenders;
         public Material material;
@@ -16,8 +19,12 @@ namespace Gameplay.Terrain
         public float frequency = 0.005f;
 
         public int chunkSize = 32;
-        private int _biomes;
-        void Start()
+        // private int _biomes;
+
+        public int biomeCount() {
+            return _world.biomeCount();
+        }
+        public void Initialize()
         {
             chunkRenders = new Dictionary<Vector2, GameObject>();
             _world = new World(seed, chunkSize, frequency, density);

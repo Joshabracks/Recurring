@@ -28,13 +28,14 @@ namespace Gameplay.Player {
                         set = true;
                     }
                 } else {
-                    hasBalloon = false;
-                    foreach (Gear g in equippedCharacter.gear) {
-                        Balloon b = g as Balloon;
-                        if (b != null) {
-                            hasBalloon = true;
-                        }
-                    }
+                    hasBalloon = equippedCharacter && equippedCharacter.gear.balloon != null;
+                    // hasBalloon = false;
+                    // foreach (Gear g in equippedCharacter.gear) {
+                    //     Balloon b = g as Balloon;
+                    //     if (b != null) {
+                    //         hasBalloon = true;
+                    //     }
+                    // }
                     if (equippedCharacter.floating && !hasBalloon) {
                         if (angle > 0) {
                             angle -= Time.deltaTime * 100;
@@ -64,30 +65,39 @@ namespace Gameplay.Player {
             top.GetComponent<MeshRenderer>().material.SetColor("Color_e81d83b4d7f34ab39bc7f7a9e9aa3cda", color2);
         }
 
-        public override void Equip()
+        public override void Equip(Character character)
         {
+            equippedCharacter = character;
+            equippedCharacter.gear.umbrella = this;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
         }
 
         public override void Unequip()
         {
-            equippedCharacter.Unequip(this);
+            equippedCharacter.gear.umbrella = null;
             equippedCharacter = null;
+            transform.parent = null;
         }
 
-        public override void PickUp()
+        public override void PickUp(Character character)
         {
-            equippedCharacter.gear.Add(this);
-            Equip();
+            if (character.gear.umbrella && character.gear.umbrella.health < health) {
+                Equip(character);
+            }
         }
         public override void Drop()
         {
             Unequip();
         }
 
-        public override void TakeDamage()
+        public override void TakeDamage(float score)
         {
+            health -= score;
+            if (health < 0) {
+                Drop();
+                Destroy(gameObject);
+            }
             // do nothing
         }
 

@@ -16,11 +16,11 @@ namespace Gameplay.Player {
             gameObject.tag = "Gear";
         }
         public Character equippedCharacter;
-        public abstract void Equip();
+        public abstract void Equip(Character character);
         public abstract void Unequip();
-        public abstract void PickUp();
+        public abstract void PickUp(Character character);
         public abstract void Drop();
-        public abstract void TakeDamage();
+        public abstract void TakeDamage(float score);
         public abstract void MoveModifier();
         public abstract void makeEquip();
         abstract public void Randomize();

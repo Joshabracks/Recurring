@@ -333,8 +333,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RightEye: {fileID: 3949156423890598986}
-  LeftEye: {fileID: 3949156423752379059}
-  Body: {fileID: 0}
+  LeftEye: {fileID: 3949156424718482144}
+  Body: {fileID: 3949156423752379059}
   gear: []
   Health: 10
   MaxHealth: 10
@@ -358,5 +358,12 @@ MonoBehaviour:
   EyeSize: 0
   EyeSpacing: 0
   BodyHeight: 0
+  BodyWidth: 0
   EyeLookY: 0
   EyeLookX: 0
+  IrisSize: 0
+  PupilSize: 0
+  Smile: 0
+  MouthWidth: 0
+  MouthOpen: 0
+  TeethOpen: 0

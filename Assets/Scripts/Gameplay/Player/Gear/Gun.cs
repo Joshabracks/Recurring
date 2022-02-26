@@ -16,6 +16,7 @@ namespace Gameplay.Player {
         public GameObject Barrel;
         public GameObject Body;
         public GameObject Cog;
+        private float unequippable = 0;
 
         public override void makeEquip() {
             if (equippedCharacter != null) {
@@ -86,31 +87,45 @@ namespace Gameplay.Player {
         
         }
 
-        public override void Equip()
+        public override void Equip(Character character)
         {
-            transform.parent = equippedCharacter.transform;
-            transform.rotation = equippedCharacter.transform.rotation;
+            equippedCharacter = character;
+            equippedCharacter.gear.gun = this;
+            transform.parent = character.transform;
+            transform.rotation = character.transform.rotation;
         }
 
         public override void Unequip()
         {
-            equippedCharacter.Unequip(this);
+            equippedCharacter.gear.gun = null;
             equippedCharacter = null;
+            transform.parent = null;
         }
 
-        public override void PickUp()
+        public override void PickUp(Character character) 
         {
-            equippedCharacter.gear.Add(this);
-            Equip();
+            if (unequippable > 0) {
+                unequippable -= Time.deltaTime;
+                return;
+            }
+            if (character.gear.gun != null) {
+                character.gear.gun.Drop();
+            }
+            Equip(character);
         }
         public override void Drop()
         {
             Unequip();
+            unequippable = 5;
         }
 
-        public override void TakeDamage()
+        public override void TakeDamage(float score)
         {
-            // do nothing
+            health -= score;
+            if (health < 0) {
+                Drop();
+                Destroy(gameObject);
+            }
         }
 
         public override void MoveModifier()
