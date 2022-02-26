@@ -16,6 +16,7 @@ namespace  Gameplay.Player
         }
 
         void Update() {
+            checkActions();
             setMove();
             pickupStuff();
         }
@@ -39,8 +40,8 @@ namespace  Gameplay.Player
                     continue;
                 }
                 Gear g = go.GetComponent<Gear>();
-                if (g != null && g.equippedCharacter != MainCharacter) {
-                    g.equippedCharacter = MainCharacter;
+                if (g != null && g.equippedCharacter == null) {
+                    // g.equippedCharacter = MainCharacter;
                     g.PickUp(MainCharacter);
                 }
             }
@@ -138,6 +139,22 @@ namespace  Gameplay.Player
                 Camera.main.transform.position.y,
                 MainCharacter.transform.position.z
             );
+        }
+
+        public void checkActions()
+        {
+            if (Input.GetMouseButton(0)) 
+            {
+                MainCharacter.MeleeAttack();
+            }
+            if (Input.GetMouseButton(1)) 
+            {
+                MainCharacter.RangeAttack();
+            }
+            if (isPressed(new KeyCode[]{KeyCode.Space}))
+            {
+                MainCharacter.Jump();
+            }
         }
 
         public void setMove() {

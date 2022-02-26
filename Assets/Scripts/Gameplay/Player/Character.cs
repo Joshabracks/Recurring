@@ -87,10 +87,29 @@ namespace Gameplay.Player
         public float MouthWidth;
         public float MouthOpen;
         public float TeethOpen;
+        public float damage;
 
 
 
+        public void MeleeAttack()
+        {
+            if (gear.hammer != null)
+            {
+                gear.hammer.Attack();
+            }
+        }
 
+        public void RangeAttack()
+        {
+            if (gear.gun != null)
+            {
+                gear.gun.Attack();
+            }
+        }
+
+        public void Jump() {
+
+        }
         // private float seconds = 0;
         private void Update()
         {
@@ -122,6 +141,10 @@ namespace Gameplay.Player
 
         private void cleanup()
         {
+            if (damage > 0) {
+                Health -= damage;
+            }
+            damage = 0;
             if (Health < 0)
             {
                 if (gear.balloon != null)
@@ -449,7 +472,7 @@ namespace Gameplay.Player
                     ModifiedSpeed *= 1.1f;
                     break;
                 case TerrainType.Water:
-                    if (transform.position.y < .25f)
+                    if (transform.position.y <= .5f)
                     {
                         ModifiedSpeed *= .5f;
                     }

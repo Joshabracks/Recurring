@@ -97,7 +97,7 @@ namespace Gameplay.State
                 float rightBlock = 0;
                 float leftBlock = 0;
                 ray = new Ray(character.transform.position, character.transform.right);
-                if (Physics.Raycast(ray, out hit, 1))
+                if (Physics.Raycast(ray, out hit, 3))
                 {
                     Character c = hit.collider.gameObject.GetComponent<Character>();
                     if (c != null)
@@ -106,7 +106,7 @@ namespace Gameplay.State
                     }
                 }
                 ray = new Ray(character.transform.position, -character.transform.right);
-                if (Physics.Raycast(ray, out hit, 1))
+                if (Physics.Raycast(ray, out hit, 3))
                 {
                     Character c = hit.collider.gameObject.GetComponent<Character>();
                     if (c != null)
@@ -120,6 +120,9 @@ namespace Gameplay.State
                 character.movement.y = Random.Range(-1f, 1f);
             }
         }
+
+        
+
 
         public bool willMoveHere(TerrainType terrain, Character character)
         {

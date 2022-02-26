@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gameplay.State;
 
 namespace Gameplay.Player
 {
@@ -12,13 +13,17 @@ namespace Gameplay.Player
         public GameObject head;
         public Color color;
         public float unequippable = 0;
-
+        // public List<GameObject> attackMap;
         private enum AttackState
         {
             Idle,
             Strike,
             Reset
         }
+
+        // private void Awake() {
+        //     attackMap = new List<GameObject>();
+        // }
 
         private AttackState attackState = AttackState.Idle;
 
@@ -41,6 +46,9 @@ namespace Gameplay.Player
                     {
                         set = true;
                     }
+                }
+                if (attackState == AttackState.Strike) {
+                    Attack();
                 }
                 if (attackState == AttackState.Reset) {
                     if (angle > 0)
@@ -79,12 +87,65 @@ namespace Gameplay.Player
             {
                 if (angle < 90)
                 {
-                    angle += Time.deltaTime * 200;
-                    transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
+                    angle += Time.deltaTime * 600;
+                    transform.rotation = Quaternion.AngleAxis(angle, transform.right);
                 }
-                else
+                else if (equippedCharacter.ai == null)
                 {
                     // do the thing
+                    // Debug.Log(attackMap.Count);
+                    foreach (Character c in GameObject.Find("StateMachine").GetComponent<StateMachine>()._characterContainer.GetComponentsInChildren<Character>())
+                    {
+                        if (c == this) 
+                        {
+                            continue;
+                        }
+                        Vector3 center = gameObject.GetComponentInChildren<Hammerhead>().transform.position;
+                        float dist;
+                        if (c.gear.umbrella != null) {
+                            dist = Vector3.Distance(center, c.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position);
+                            if (dist <= 2) {
+                                c.gear.umbrella.TakeDamage(damage * (2 - dist));
+                            }
+                        }
+                        dist = Vector3.Distance(center, c.transform.position);
+                        if (dist <= 2) {
+                            if (c.gear.innertube != null) 
+                            {
+                                c.gear.innertube.TakeDamage(damage * (2 - dist));
+                            }
+                            else
+                            {
+                                float damageDealt = damage * (2 - dist);
+                                c.Health -= damageDealt;
+                            }
+                        }
+                    }
+                    attackState = AttackState.Reset;
+                }
+                else 
+                {
+                    Vector3 center = gameObject.GetComponentInChildren<Hammerhead>().transform.position;
+                        float dist;
+                        if (equippedCharacter.ai.mainCharacter.gear.umbrella != null) {
+                            dist = Vector3.Distance(center, equippedCharacter.ai.mainCharacter.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position);
+                            if (dist <= 2) {
+                                equippedCharacter.ai.mainCharacter.gear.umbrella.TakeDamage(damage * (2 - dist));
+                            }
+                        }
+                        dist = Vector3.Distance(center, equippedCharacter.ai.mainCharacter.transform.position);
+                        if (dist <= 2) {
+                            if (equippedCharacter.ai.mainCharacter.gear.innertube != null) 
+                            {
+                                equippedCharacter.ai.mainCharacter.gear.innertube.TakeDamage(damage * (2 - dist));
+                            }
+                            else
+                            {
+                                float damageDealt = damage * (2 - dist);
+                                Debug.Log("HIT CREATURE FOR " + damageDealt.ToString());
+                                equippedCharacter.ai.mainCharacter.Health -= damageDealt;
+                            }
+                        }
                     attackState = AttackState.Reset;
                 }
             }
@@ -93,6 +154,9 @@ namespace Gameplay.Player
 
         public override void Equip(Character character)
         {
+            if (character.gear.hammer != null) {
+                character.gear.hammer.Drop();
+            }
             equippedCharacter = character;
             equippedCharacter.gear.hammer = this;
             transform.parent = equippedCharacter.transform;
@@ -112,9 +176,7 @@ namespace Gameplay.Player
                 unequippable -= Time.deltaTime;
                 return;
             }
-            if (character.gear.hammer != null) {
-                character.gear.hammer.Drop();
-            }
+            
             Equip(character);
         }
         public override void Drop()

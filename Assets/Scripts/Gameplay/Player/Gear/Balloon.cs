@@ -52,7 +52,11 @@ namespace Gameplay.Player
 
         public override void Equip(Character character)
         {
+            if (character.gear.balloon != null) {
+                character.gear.balloon.Drop();
+            }
             equippedCharacter = character;
+            equippedCharacter.gear.balloon = this;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
         }
@@ -65,11 +69,10 @@ namespace Gameplay.Player
 
         public override void PickUp(Character character)
         {
-            if (character.gear.balloon != null && character.gear.balloon.health < health) {
-                character.gear.balloon.Drop();
+            if (character.gear.balloon == null) {
                 Equip(character);
             }
-            else if (character.gear.balloon == null)
+            else if (character.gear.balloon.health < health)
             {
                 Equip(character);
             }

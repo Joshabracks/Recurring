@@ -68,6 +68,9 @@ namespace Gameplay.Player {
         public override void Equip(Character character)
         {
             equippedCharacter = character;
+            if (equippedCharacter.gear.umbrella != null) {
+                equippedCharacter.gear.umbrella.Drop();
+            }
             equippedCharacter.gear.umbrella = this;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
@@ -82,7 +85,7 @@ namespace Gameplay.Player {
 
         public override void PickUp(Character character)
         {
-            if (character.gear.umbrella && character.gear.umbrella.health < health) {
+            if (character.gear.umbrella == null || character.gear.umbrella.health < health) {
                 Equip(character);
             }
         }

@@ -26,6 +26,14 @@ namespace Gameplay.State
         private void Start() {
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
+            Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
+            hammer.Randomize();
+            hammer.SetCustomizationValues();
+            hammer.damage = 7.5f;
+
+            Gun gun = Instantiate(_gunTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
+            gun.Randomize();
+            gun.SetCustomizationValues();
             playerController.Initialize();
             _characterContainer = new GameObject();
             CreateCharacterTypes();
@@ -93,6 +101,27 @@ namespace Gameplay.State
                         Random.Range(-1f, 1f)
                     );
                     character.transform.parent = _characterContainer.transform;
+
+                    character.SetTerrainType();
+                    switch(character.terrainType) {
+                        case TerrainType.Water:
+                            Innertube innertube = Instantiate(_innertubeTemplate, character.transform.position, Quaternion.identity);
+                            innertube.Randomize();
+                            innertube.SetCustomizationValues();
+                            break;
+                        case TerrainType.Lava:
+                            Umbrella umbrella = Instantiate(_umbrellaTemplate, character.transform.position, Quaternion.identity);
+                            umbrella.Randomize();
+                            umbrella.SetCustomizationValues();
+                            break;
+                        case TerrainType.Hole:
+                            Balloon balloon = Instantiate(_balloonTemplate, character.transform.position, Quaternion.identity);
+                            balloon.Randomize();
+                            balloon.SetCustomizationValues();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }

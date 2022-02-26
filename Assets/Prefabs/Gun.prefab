@@ -129,6 +129,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 5
   equippedCharacter: {fileID: 0}
+  damage: 0
+  powerScale: 0.25
+  range: 5
+  projectiles: 1
+  spread: 0
+  barrelColor: {r: 0, g: 0, b: 0, a: 0}
+  bodyColor: {r: 0, g: 0, b: 0, a: 0}
+  cogColor: {r: 0, g: 0, b: 0, a: 0}
+  Barrel: {fileID: 8806092777718430392}
+  Body: {fileID: 8806092779529802448}
+  Cog: {fileID: 8806092779008099760}
+  _bulletTemplate: {fileID: 8069719891707845276, guid: b54c8d2a3445317439f43d15c98bc714, type: 3}
 --- !u!1 &8806092779008099760
 GameObject:
   m_ObjectHideFlags: 0

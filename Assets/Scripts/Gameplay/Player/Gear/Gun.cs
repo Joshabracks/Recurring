@@ -16,7 +16,10 @@ namespace Gameplay.Player {
         public GameObject Barrel;
         public GameObject Body;
         public GameObject Cog;
+        public Bullet _bulletTemplate;
         private float unequippable = 0;
+
+        private float cooldown = 0;
 
         public override void makeEquip() {
             if (equippedCharacter != null) {
@@ -69,7 +72,6 @@ namespace Gameplay.Player {
             barrelColor = Random.ColorHSV(0, 1);
             bodyColor = Random.ColorHSV(0, 1);
             cogColor = Random.ColorHSV(0, 1);
-
         }
 
         public override void SetCustomizationValues()
@@ -77,18 +79,37 @@ namespace Gameplay.Player {
             Body.GetComponent<MeshRenderer>().material.SetColor("Color", bodyColor);
             Cog.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
             Barrel.GetComponent<MeshRenderer>().material.SetColor("Color", barrelColor);
-            Barrel.transform.localScale = new Vector3(.65f + range, 1, 1);
-            Cog.transform.localScale = new Vector3(1 + spread, 1, 1);
-            Body.transform.localScale = new Vector3(1 + damage, 1, 1);
+            // Barrel.transform.localScale = new Vector3(.65f + range, 1, 1);
+            // Cog.transform.localScale = new Vector3(1 + spread, 1, 1);
+            // Body.transform.localScale = new Vector3(1 + damage, 1, 1);
 
         }
         public override void Attack()
         {
-        
+            // Barrel.transform.rotation = new Quaternion(Barrel.transform.rotation.x + (Time.deltaTime * 10), Barrel.transform.rotation.y, Barrel.transform.rotation.z, Barrel.transform.rotation.w);
+            // Cog.transform.rotation = new Quaternion(Cog.transform.rotation.x - (Time.deltaTime * 10), Cog.transform.rotation.y, Cog.transform.rotation.z, Cog.transform.rotation.w);
+            
+            if (cooldown > 0)
+            {
+                cooldown -= Time.deltaTime;
+            }
+            else 
+            {
+                Bullet bullet = Instantiate(_bulletTemplate, Barrel.transform.position, transform.rotation);
+                bullet.transform.rotation = equippedCharacter.transform.rotation;
+                // bullet.transform.rotation = Quaternion.AngleAxis(Random.Range(-spread * 10, spread * 10), bullet.transform.up);
+                bullet.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
+                bullet.transform.localScale = new Vector3(.25f, .25f, .25f);
+                bullet.life = range * Random.Range(1f, 1.25f);
+                bullet.damage = damage;
+            }
         }
 
         public override void Equip(Character character)
         {
+            if (character.gear.gun != null) {
+                character.gear.gun.Drop();
+            }
             equippedCharacter = character;
             equippedCharacter.gear.gun = this;
             transform.parent = character.transform;
@@ -108,9 +129,7 @@ namespace Gameplay.Player {
                 unequippable -= Time.deltaTime;
                 return;
             }
-            if (character.gear.gun != null) {
-                character.gear.gun.Drop();
-            }
+            
             Equip(character);
         }
         public override void Drop()
@@ -130,7 +149,7 @@ namespace Gameplay.Player {
 
         public override void MoveModifier()
         {
-            equippedCharacter.ModifiedSpeed *= .9f;
+            // equippedCharacter.ModifiedSpeed *= .9f;
             // if (equippedCharacter.terrainType == Terrain.TerrainType.Lava) {
             //     equippedCharacter.floating = true;
             //     equippedCharacter.targetFloatHeight += 1;

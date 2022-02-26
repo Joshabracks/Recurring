@@ -29,7 +29,10 @@ namespace Gameplay.Player {
         public override void Equip(Character character)
         {
             equippedCharacter = character;
-            equippedCharacter.gear.innertube.Drop();
+            if (equippedCharacter.gear.innertube != null) {
+                equippedCharacter.gear.innertube.Drop();
+            }
+            equippedCharacter.gear.innertube = this;
             transform.parent = equippedCharacter.transform;
             transform.rotation = equippedCharacter.transform.rotation;
         }
@@ -43,7 +46,7 @@ namespace Gameplay.Player {
 
         public override void PickUp(Character character)
         {
-            if (character.gear.innertube != null && character.gear.innertube.health < health) {
+            if (character.gear.innertube == null || character.gear.innertube.health < health) {
                 Equip(character);
             }
 
@@ -61,12 +64,12 @@ namespace Gameplay.Player {
 
         public override void MoveModifier()
         {
-            equippedCharacter.ModifiedSpeed *= .8f;
+            // equippedCharacter.ModifiedSpeed *= .8f;
             if (equippedCharacter.terrainType == Terrain.TerrainType.Water) 
             {
-                if (equippedCharacter.targetFloatHeight < 0.5f) {
-                    equippedCharacter.ModifiedSpeed *= .6f;
-                }
+                // if (equippedCharacter.targetFloatHeight < 0.5f) {
+                //     equippedCharacter.ModifiedSpeed *= .6f;
+                // }
                 equippedCharacter.floating = true;
                 equippedCharacter.targetFloatHeight -= 0.5f;
             }
