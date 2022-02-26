@@ -60,7 +60,7 @@ namespace Gameplay.State
 
             Vector3 blockingPointHover = new Vector3(
                 character.transform.position.x + direction.x * 2f,
-                character.transform.position.y >= .5f ? character.transform.position.y : .5f,
+                .5f,
                 character.transform.position.z + direction.y * 2f
             );
 

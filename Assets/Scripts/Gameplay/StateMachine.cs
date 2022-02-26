@@ -21,8 +21,8 @@ namespace Gameplay.State
         public PlayerController playerController;
         public CharacterType[] _characterTypes;
         public GameObject _characterContainer;
-        public float nightmareIntensity = .25f;
-        private float spawnRate = 75;
+        public float nightmareIntensity = 0f;
+        private float spawnRate = 25;
         private void Start()
         {
             worldController.Initialize();
@@ -43,7 +43,7 @@ namespace Gameplay.State
 
         void Update()
         {
-            nightmareIntensity += Time.deltaTime * 0.001f;
+            nightmareIntensity += Time.deltaTime * 0.0025f;
             checkChunks();
             checkCharacters();
         }

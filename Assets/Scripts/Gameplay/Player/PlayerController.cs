@@ -103,7 +103,7 @@ namespace  Gameplay.Player
             
             Vector3 blockingPointHover = new Vector3(
                 MainCharacter.transform.position.x,
-                MainCharacter.transform.position.y >= .5f ? MainCharacter.transform.position.y : .5f ,
+                blockingPointHoverHeight ,
                 MainCharacter.transform.position.z
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);
