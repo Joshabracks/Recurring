@@ -43,7 +43,7 @@ namespace Gameplay.State
                 character.transform.position.z + direction.y * 2f
             );
 
-            
+            TerrainType terrainType;
 
             Ray ray = new Ray(blockingPointHover, Vector3.down);
             RaycastHit hit;
@@ -57,16 +57,17 @@ namespace Gameplay.State
                 }
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
-                TerrainType terrainType = (TerrainType)(uv2.x);
+                terrainType = (TerrainType)(uv2.x);
                 // if (!character.AllowedTerrain.Contains(terrainType)) {
                 //     return;
                 // }
-                character.terrainType = terrainType;
+                // character.terrainType = terrainType;
             }
             else
             {
                 return;
             }
+            character.SetTerrainType();
             bool frontBlock = false;
             ray = new Ray(character.transform.position, character.transform.forward);
             if (Physics.Raycast(ray, out hit, 1)) {
@@ -76,7 +77,7 @@ namespace Gameplay.State
                 }
             }
 
-            if (willMoveHere(character.terrainType, character) && !frontBlock)
+            if (willMoveHere(terrainType, character) && !frontBlock)
             {
                 // Debug.Log("MOVE INTO " + character.terrainType.ToString());
                 Vector3 _direction = (blockingPointHover - character.transform.position).normalized;

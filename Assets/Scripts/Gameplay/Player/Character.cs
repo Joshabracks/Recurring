@@ -417,6 +417,22 @@ namespace Gameplay.Player
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, 0.5f, transform.position.z), Time.deltaTime * 5);
             }
         }
+
+        public void SetTerrainType() {
+            Ray ray = new Ray(transform.position, Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                int index = hit.triangleIndex * 3;
+                MeshCollider mc = hit.collider as MeshCollider;
+                if (mc == null) {
+                    return;
+                }
+                Mesh mesh = mc.sharedMesh;
+                Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
+                terrainType = (TerrainType)(uv2.x);
+            }
+        }
         public void CheckTerrainModifiers()
         {
             falling = false;
