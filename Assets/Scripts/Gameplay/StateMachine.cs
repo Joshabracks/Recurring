@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.Player;
 using Gameplay.Terrain;
+using Gameplay.Data;
+using UnityEngine.SceneManagement;
 
 namespace Gameplay.State
 {
@@ -23,6 +25,7 @@ namespace Gameplay.State
         public GameObject _characterContainer;
         public float nightmareIntensity = 0f;
         private float spawnRate = 25;
+        public float GameOverCountdown = 5;
         private void Start()
         {
             worldController.Initialize();
@@ -43,6 +46,15 @@ namespace Gameplay.State
 
         void Update()
         {
+            if (playerController.MainCharacter.Health <= 0) 
+            {
+                GameOverCountdown -= Time.deltaTime;
+                if (GameOverCountdown < 0)
+                {
+                    GameSettings.seed ++;
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+            }
             nightmareIntensity += Time.deltaTime * 0.0025f;
             checkChunks();
             checkCharacters();

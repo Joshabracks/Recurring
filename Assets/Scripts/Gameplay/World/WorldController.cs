@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.Player;
+using Gameplay.Data;
 
 namespace Gameplay.Terrain
 {
@@ -12,7 +13,7 @@ namespace Gameplay.Terrain
         private Dictionary<Vector2, GameObject> chunkRenders;
         public Material material;
         [Range(1, 10000)]
-        public int seed = 1337;
+        public int seed = GameSettings.seed;
         [Range(0, 5)]
         public float density = 0.5f;
         [Range(0, .1f)]
@@ -26,6 +27,7 @@ namespace Gameplay.Terrain
         }
         public void Initialize()
         {
+            seed = GameSettings.seed;
             chunkRenders = new Dictionary<Vector2, GameObject>();
             _world = new World(seed, chunkSize, frequency, density);
             initChunk(new Vector2(0, 0));
