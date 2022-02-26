@@ -24,12 +24,15 @@ namespace Gameplay.State
 
         public void move(Character character)
         {
-            
+
             Vector2 direction;
-            if (Vector3.Distance(character.transform.position, mainCharacter.transform.position) < AttackRadius(aggression)) {
-                Vector2 difference =  new Vector2(mainCharacter.transform.position.x, mainCharacter.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z);
+            if (Vector3.Distance(character.transform.position, mainCharacter.transform.position) < AttackRadius(aggression))
+            {
+                Vector2 difference = new Vector2(mainCharacter.transform.position.x, mainCharacter.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z);
                 direction = difference;
-            } else {
+            }
+            else
+            {
 
                 direction = new Vector2(
                     character.movement.x,
@@ -68,20 +71,21 @@ namespace Gameplay.State
                 return;
             }
             character.SetTerrainType();
-            bool frontBlock = false;
-            ray = new Ray(character.transform.position, character.transform.forward);
-            if (Physics.Raycast(ray, out hit, 1)) {
-                Character c = hit.collider.gameObject.GetComponent<Character>();
-                if (c != null) {
-                    frontBlock = true;
-                }
-            }
+            // bool frontBlock = false;
+            // ray = new Ray(character.transform.position, character.transform.forward);
+            // if (Physics.Raycast(ray, out hit, 1)) {
+            //     Character c = hit.collider.gameObject.GetComponent<Character>();
+            //     if (c != null) {
+            //         frontBlock = true;
+            //     }
+            // }
 
-            if (willMoveHere(terrainType, character) && !frontBlock)
+            if (willMoveHere(terrainType, character))
             {
                 // Debug.Log("MOVE INTO " + character.terrainType.ToString());
                 Vector3 _direction = (blockingPointHover - character.transform.position).normalized;
-                if (_direction != Vector3.zero) {
+                if (_direction != Vector3.zero)
+                {
 
                     //create the rotation we need to be in to look at the target
                     Quaternion _lookRotation = Quaternion.LookRotation(_direction);
@@ -94,34 +98,81 @@ namespace Gameplay.State
                 //     character.transform.position.y,
                 //     character.transform.position.z + direction.y * character.ModifiedSpeed
                 // );
-                float rightBlock = 0;
-                float leftBlock = 0;
-                ray = new Ray(character.transform.position, character.transform.right);
-                if (Physics.Raycast(ray, out hit, 3))
+                // ray = new Ray(character.transform.position, character.transform.right);
+                // if (Physics.Raycast(ray, out hit, 3))
+                // {
+                //     Character c = hit.collider.gameObject.GetComponent<Character>();
+                //     if (c != null)
+                //     {
+                //         rightBlock = .1f;
+                //     }
+                // }
+                // ray = new Ray(character.transform.position, -character.transform.right);
+                // if (Physics.Raycast(ray, out hit, 3))
+                // {
+                //     Character c = hit.collider.gameObject.GetComponent<Character>();
+                //     if (c != null)
+                //     {
+                //         leftBlock = .1f;
+                //     }
+                // }
+                Vector2 blockingDirctions = new Vector2(0, 0);
+                Character[] characters = _characterContainer.transform.GetComponentsInChildren<Character>();
+                foreach (Character c in characters)
                 {
-                    Character c = hit.collider.gameObject.GetComponent<Character>();
-                    if (c != null)
-                    {
-                        rightBlock = .1f;
-                    }
+                    blockingDirctions = applyDistance(character, c, blockingDirctions);
                 }
-                ray = new Ray(character.transform.position, -character.transform.right);
-                if (Physics.Raycast(ray, out hit, 3))
+                // blockingDirctions = applyDistance(character, mainCharacter, blockingDirctions);
+                float forwarMultiplier = applyDistance(character, mainCharacter, blockingDirctions) != Vector2.zero ? 0 : .75f;
+                if (blockingDirctions != Vector2.zero)
                 {
-                    Character c = hit.collider.gameObject.GetComponent<Character>();
-                    if (c != null)
-                    {
-                        leftBlock = .1f;
-                    }
+                    blockingDirctions = blockingDirctions.normalized;
+                    character.transform.position = new Vector3(
+                        character.transform.position.x + (blockingDirctions.x * character.ModifiedSpeed * .25f),
+                        character.transform.position.y,
+                        character.transform.position.z + (blockingDirctions.y * character.ModifiedSpeed * .25f)
+                    );
                 }
-                character.transform.Translate(rightBlock + leftBlock, 0.0f, character.ModifiedSpeed * .75f);
-            } else {
+
+                character.transform.Translate(0, 0.0f, character.ModifiedSpeed * forwarMultiplier);
+
+            }
+            else
+            {
                 character.movement.x = Random.Range(-1f, 1f);
                 character.movement.y = Random.Range(-1f, 1f);
             }
         }
 
-        
+        private Vector2 applyDistance(Character character, Character c, Vector2 blockingDirections) {
+            var dist = Vector3.Distance(c.transform.position, character.transform.position);
+            if (dist < 2)
+            {
+                // Vector2 dir = (new Vector2(c.transform.position.x, c.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z)).normalized;
+
+                // blockingDirctions = (blockingDirctions + dir).normalized;
+                if (c.transform.position.x < character.transform.position.x)
+                {
+                    blockingDirections.x = Mathf.Clamp(blockingDirections.x + 1, 0, 1);
+                }
+                else if (c.transform.position.x > character.transform.position.x)
+                {
+                    blockingDirections.x = Mathf.Clamp(blockingDirections.x - 1, -1, 0);
+                }
+
+                else if (c.transform.position.y < character.transform.position.y)
+                {
+                    blockingDirections.y = Mathf.Clamp(blockingDirections.y + 1, 0, 1);
+                }
+                else if (c.transform.position.y > character.transform.position.y)
+                {
+                    blockingDirections.y = Mathf.Clamp(blockingDirections.y - 1, -1, 0);
+                }
+            }
+            return blockingDirections;
+        }
+
+
 
 
         public bool willMoveHere(TerrainType terrain, Character character)

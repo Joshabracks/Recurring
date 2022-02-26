@@ -160,7 +160,6 @@ GameObject:
   - component: {fileID: 5024271776005788056}
   - component: {fileID: 5024271776005788057}
   - component: {fileID: 393259696932228633}
-  - component: {fileID: 7937732111901178310}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -244,16 +243,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hammer: {fileID: 5024271773948136714}
---- !u!65 &7937732111901178310
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5024271776005788071}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.139204, y: 1.223495, z: 1.661554}
-  m_Center: {x: -0.004570991, y: 0.1117475, z: -0.017055988}

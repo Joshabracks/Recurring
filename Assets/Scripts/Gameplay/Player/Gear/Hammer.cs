@@ -125,15 +125,16 @@ namespace Gameplay.Player
                 }
                 else 
                 {
-                    Vector3 center = gameObject.GetComponentInChildren<Hammerhead>().transform.position;
+                    Vector2 center = new Vector2(gameObject.GetComponentInChildren<Hammerhead>().transform.position.x, gameObject.GetComponentInChildren<Hammerhead>().transform.position.z);
                         float dist;
                         if (equippedCharacter.ai.mainCharacter.gear.umbrella != null) {
-                            dist = Vector3.Distance(center, equippedCharacter.ai.mainCharacter.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position);
+                            Vector2 uPos = equippedCharacter.ai.mainCharacter.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position;
+                            dist = Vector2.Distance(center, uPos);
                             if (dist <= 2) {
                                 equippedCharacter.ai.mainCharacter.gear.umbrella.TakeDamage(damage * (2 - dist));
                             }
                         }
-                        dist = Vector3.Distance(center, equippedCharacter.ai.mainCharacter.transform.position);
+                        dist = Vector3.Distance(center, new Vector2(equippedCharacter.ai.mainCharacter.transform.position.x, equippedCharacter.ai.mainCharacter.transform.position.z));
                         if (dist <= 2) {
                             if (equippedCharacter.ai.mainCharacter.gear.innertube != null) 
                             {

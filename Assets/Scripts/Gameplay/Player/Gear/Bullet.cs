@@ -16,11 +16,12 @@ namespace Gameplay.Player
                 transform.Translate(new Vector3(0, 0, Time.deltaTime * 15), Space.Self);
                 foreach (Character c in GameObject.Find("StateMachine").GetComponent<StateMachine>()._characterContainer.GetComponentsInChildren<Character>())
                 {
-                    Vector3 center = transform.position;
+                    Vector2 center = new Vector2(transform.position.x, transform.position.z);
                     float dist;
                     if (c.gear.umbrella != null)
                     {
-                        dist = Vector3.Distance(center, c.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position);
+                        Vector3 uPos = c.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position;
+                        dist = Vector2.Distance(center, new Vector2(uPos.x, uPos.z));
                         if (dist <= 1)
                         {
                             c.gear.umbrella.TakeDamage(damage);
@@ -28,7 +29,8 @@ namespace Gameplay.Player
                             return;
                         }
                     }
-                    dist = Vector3.Distance(center, c.transform.position);
+                    
+                    dist = Vector2.Distance(center, new Vector2(c.transform.position.x, c.transform.position.z));
                     if (dist <= 1)
                     {
                         if (c.gear.innertube != null)
@@ -39,7 +41,7 @@ namespace Gameplay.Player
                         }
                         else
                         {
-                            Debug.Log("HIT: " + damage);
+                            // Debug.Log("HIT: " + damage);
                             c.Health -= damage;
                             Destroy(gameObject);
                             return;
