@@ -22,6 +22,24 @@ namespace Gameplay.State
             return mood * (aggression + nightmareIntensity) * 100;
         }
 
+        public Weapon ShouldAttack(Character character) {
+            if (character.gear.hammer != null)
+            {
+                if (Vector3.Distance(mainCharacter.transform.position, character.transform.position) < 3)
+                {
+                    return character.gear.hammer;
+                }
+            }
+            if (character.gear.gun != null)
+            {
+                if (Vector3.Distance(mainCharacter.transform.position, character.transform.position) < character.gear.gun.range)
+                {
+                    return character.gear.gun;
+                }
+            }
+            return null;
+        }
+
         public void move(Character character)
         {
 

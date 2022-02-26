@@ -6,7 +6,7 @@ using Gameplay.Terrain;
 
 namespace Gameplay.State
 {
-    
+
 
     public class StateMachine : MonoBehaviour
     {
@@ -23,7 +23,8 @@ namespace Gameplay.State
         public GameObject _characterContainer;
         public float nightmareIntensity = .25f;
         private float spawnRate = 75;
-        private void Start() {
+        private void Start()
+        {
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
@@ -47,16 +48,17 @@ namespace Gameplay.State
             checkCharacters();
         }
 
-        private float minSpawnDistance() {
+        private float minSpawnDistance()
+        {
             // ClipPlanePoints bounds;
             float height = Camera.main.pixelHeight;
             float width = Camera.main.pixelWidth;
             float distance = Vector3.Distance(Camera.main.transform.position, playerController.MainCharacter.transform.position);
 
-            float UpperLeft = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0,height, distance)), playerController.MainCharacter.transform.position);
-            float UpperRight = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(width, height,distance)), playerController.MainCharacter.transform.position);
-            float LowerLeft = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0, 0,  distance)), playerController.MainCharacter.transform.position);
-            float LowerRight = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(width, 0,  distance)), playerController.MainCharacter.transform.position);
+            float UpperLeft = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0, height, distance)), playerController.MainCharacter.transform.position);
+            float UpperRight = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(width, height, distance)), playerController.MainCharacter.transform.position);
+            float LowerLeft = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(0, 0, distance)), playerController.MainCharacter.transform.position);
+            float LowerRight = Vector3.Distance(Camera.main.ScreenToWorldPoint(new Vector3(width, 0, distance)), playerController.MainCharacter.transform.position);
 
             float max = UpperLeft > UpperRight ? UpperLeft : UpperRight;
             max = max > LowerLeft ? max : LowerLeft;
@@ -65,7 +67,8 @@ namespace Gameplay.State
             return max + 10;
         }
 
-        private void checkCharacters() {
+        private void checkCharacters()
+        {
             // Character[] characters = _characterContainer.transform.GetComponentsInChildren<Character>();
             // foreach (Character character in characters) {
             //     if (Vector2.Distance(new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.z), new Vector2(character.transform.position.x, character.transform.position.z)) > drawDistance * 30) {
@@ -73,9 +76,11 @@ namespace Gameplay.State
             //     }
             // }
             Character[] _characters = _characterContainer.transform.GetComponentsInChildren<Character>();
-            if (_characters.Length < nightmareIntensity * spawnRate) {
+            if (_characters.Length < nightmareIntensity * spawnRate)
+            {
                 int newCharacters = Mathf.CeilToInt(nightmareIntensity * spawnRate) - _characters.Length;
-                for (int i = 0; i < newCharacters; i++) {
+                for (int i = 0; i < newCharacters; i++)
+                {
                     CharacterType type = _characterTypes[Random.Range(0, _characterTypes.Length - 1)];
                     float x = Random.Range(-1f, 1f);
                     float y = Random.Range(-1f, 1f);
@@ -97,6 +102,22 @@ namespace Gameplay.State
                     character.ai.selfPreservation = Random.Range(0f, 1f);
                     character.ai.mood = Random.Range(0f, 1f);
                     character.ai.nightmareIntensity = nightmareIntensity;
+                    float getGun = Random.Range(-5f, nightmareIntensity);
+                    if (getGun > 0)
+                    {
+
+                        Gun gun = Instantiate(_gunTemplate, position, Quaternion.identity);
+                        gun.Randomize();
+                        gun.SetCustomizationValues();
+                        gun.damage = Random.Range(0f, nightmareIntensity);
+                    }
+                    else 
+                    {
+                        Hammer hammer = Instantiate(_hammerTemplate, position, Quaternion.identity);
+                        hammer.Randomize();
+                        hammer.SetCustomizationValues();
+                        hammer.damage = Random.Range(0f, nightmareIntensity * 10);
+                    }
                     character.movement = new Vector2(
                         Random.Range(-1f, 1f),
                         Random.Range(-1f, 1f)
@@ -104,7 +125,8 @@ namespace Gameplay.State
                     character.transform.parent = _characterContainer.transform;
 
                     character.SetTerrainType();
-                    switch(character.terrainType) {
+                    switch (character.terrainType)
+                    {
                         case TerrainType.Water:
                             Innertube innertube = Instantiate(_innertubeTemplate, character.transform.position, Quaternion.identity);
                             innertube.Randomize();
@@ -127,18 +149,22 @@ namespace Gameplay.State
             }
         }
 
-        private void CreateCharacterTypes() {
+        private void CreateCharacterTypes()
+        {
             _characterTypes = new CharacterType[10];
-            for (int i = 0; i < _characterTypes.Length; i++) {
+            for (int i = 0; i < _characterTypes.Length; i++)
+            {
                 _characterTypes[i] = new CharacterType(true);
             }
         }
 
 
 
-        private void checkChunks() {
+        private void checkChunks()
+        {
             GameObject currentChunkObject = playerController.GetCurrentChunk();
-            if (currentChunkObject == null) {
+            if (currentChunkObject == null)
+            {
                 return;
             }
             string[] coordsString = currentChunkObject.name.Split(',');

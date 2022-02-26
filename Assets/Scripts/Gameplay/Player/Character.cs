@@ -136,7 +136,18 @@ namespace Gameplay.Player
                 CheckTerrainModifiers();
                 Float(); 
                 ai.move(this);
+                CheckAttack();
                 pickupStuff();
+            }
+        }
+
+        public void CheckAttack()
+        {
+            
+            Weapon weapon = ai.ShouldAttack(this);
+            if (weapon != null)
+            {
+                weapon.Attack();
             }
         }
 
