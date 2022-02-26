@@ -18,9 +18,11 @@ namespace Gameplay.State
         public Umbrella _umbrellaTemplate;
         public Gun _gunTemplate;
         public Hammer _hammerTemplate;
+        public Light sunLight;
         public int drawDistance = 4;
         public WorldController worldController;
         public PlayerController playerController;
+        public ExitGate exitGate;
         public CharacterType[] _characterTypes;
         public GameObject _characterContainer;
         public float nightmareIntensity = 0f;
@@ -28,6 +30,7 @@ namespace Gameplay.State
         public float GameOverCountdown = 5;
         private void Start()
         {
+            exitGate.Place();
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
@@ -46,12 +49,18 @@ namespace Gameplay.State
 
         void Update()
         {
-            if (playerController.MainCharacter.Health <= 0) 
+            TurnSun();
+            if (Vector3.Distance(exitGate.transform.position, playerController.MainCharacter.transform.position) < 3)
+            {
+                GameSettings.seed++;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            if (playerController.MainCharacter.Health <= 0)
             {
                 GameOverCountdown -= Time.deltaTime;
                 if (GameOverCountdown < 0)
                 {
-                    GameSettings.seed ++;
+                    GameSettings.seed++;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 }
             }
@@ -123,7 +132,7 @@ namespace Gameplay.State
                         gun.SetCustomizationValues();
                         gun.damage = Random.Range(0f, nightmareIntensity);
                     }
-                    else 
+                    else
                     {
                         Hammer hammer = Instantiate(_hammerTemplate, position, Quaternion.identity);
                         hammer.Randomize();
@@ -170,7 +179,18 @@ namespace Gameplay.State
             }
         }
 
+        private void TurnSun()
+        {   Vector3 d = (exitGate.transform.position - Camera.main.transform.position);
+            d.x = Mathf.Clamp(d.x, -30, 30);
+            d.z = Mathf.Clamp(d.z, -30, 30);
+            Vector3 _direction = d.normalized;
 
+            //create the rotation we need to be in to look at the target
+            Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+            //rotate us over time according to speed until we are in the required rotation
+            sunLight.transform.rotation = _lookRotation;
+            Debug.Log(d.ToString());
+        }
 
         private void checkChunks()
         {
