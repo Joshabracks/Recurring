@@ -34,6 +34,7 @@ namespace Gameplay.State
             Gun gun = Instantiate(_gunTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             gun.Randomize();
             gun.SetCustomizationValues();
+            gun.damage = .1f;
             playerController.Initialize();
             _characterContainer = new GameObject();
             CreateCharacterTypes();

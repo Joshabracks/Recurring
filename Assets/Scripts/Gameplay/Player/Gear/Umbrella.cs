@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay.Player {
+namespace Gameplay.Player
+{
 
     public class Umbrella : Gear
     {
@@ -13,21 +14,28 @@ namespace Gameplay.Player {
         Color color1;
         Color color2;
 
-        public override void makeEquip() {
-            if (equippedCharacter != null) {
-                if (equippedCharacter.Health <= 0) {
+        public override void makeEquip()
+        {
+            if (equippedCharacter != null)
+            {
+                if (equippedCharacter.Health <= 0)
+                {
                     return;
                 }
-                if (!set) {
+                if (!set)
+                {
                     Vector3 directionOfTravel = equippedCharacter.transform.forward;
                     Vector3 finalDirection = directionOfTravel + directionOfTravel.normalized * -.5f;
                     Vector3 targetPosition = equippedCharacter.transform.position + finalDirection;
                     transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 10);
 
-                    if (transform.position == targetPosition) {
+                    if (transform.position == targetPosition)
+                    {
                         set = true;
                     }
-                } else {
+                }
+                else
+                {
                     hasBalloon = equippedCharacter && equippedCharacter.gear.balloon != null;
                     // hasBalloon = false;
                     // foreach (Gear g in equippedCharacter.gear) {
@@ -36,19 +44,24 @@ namespace Gameplay.Player {
                     //         hasBalloon = true;
                     //     }
                     // }
-                    if (equippedCharacter.floating && !hasBalloon) {
-                        if (angle > 0) {
+                    if (equippedCharacter.floating && !hasBalloon)
+                    {
+                        if (angle > 0)
+                        {
                             angle -= Time.deltaTime * 100;
                             transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
                         }
-                    } else {
-                        if (angle < 60) {
+                    }
+                    else
+                    {
+                        if (angle < 60)
+                        {
                             angle += Time.deltaTime * 100;
                             transform.rotation = Quaternion.AngleAxis(angle, equippedCharacter.transform.right);
                         }
-                    }                
+                    }
                 }
-        
+
             }
         }
 
@@ -68,7 +81,8 @@ namespace Gameplay.Player {
         public override void Equip(Character character)
         {
             equippedCharacter = character;
-            if (equippedCharacter.gear.umbrella != null) {
+            if (equippedCharacter.gear.umbrella != null)
+            {
                 equippedCharacter.gear.umbrella.Drop();
             }
             equippedCharacter.gear.umbrella = this;
@@ -85,7 +99,8 @@ namespace Gameplay.Player {
 
         public override void PickUp(Character character)
         {
-            if (character.gear.umbrella == null || character.gear.umbrella.health < health) {
+            if (character.gear.umbrella == null || character.gear.umbrella.health < health)
+            {
                 Equip(character);
             }
         }
@@ -96,8 +111,20 @@ namespace Gameplay.Player {
 
         public override void TakeDamage(float score)
         {
-            health -= score;
-            if (health < 0) {
+            if (equippedCharacter != null)
+            {
+                if (equippedCharacter.ai != null)
+                {
+                    health -= score;
+                }
+                else 
+                {
+                    equippedCharacter.Health -= score / 3;
+                }
+            }
+
+            if (health < 0)
+            {
                 Drop();
                 Destroy(gameObject);
             }
@@ -106,11 +133,15 @@ namespace Gameplay.Player {
 
         public override void MoveModifier()
         {
-            if (equippedCharacter.terrainType == Terrain.TerrainType.Lava) {
+            if (equippedCharacter.terrainType == Terrain.TerrainType.Lava)
+            {
                 equippedCharacter.floating = true;
                 equippedCharacter.targetFloatHeight += 1;
-            } else if (equippedCharacter.transform.position.y > .5f || (equippedCharacter.terrainType == Terrain.TerrainType.Hole && !equippedCharacter.floating && equippedCharacter.transform.position.y > -2)) {
-                if (!hasBalloon) {
+            }
+            else if (equippedCharacter.transform.position.y > .5f || (equippedCharacter.terrainType == Terrain.TerrainType.Hole && !equippedCharacter.floating && equippedCharacter.transform.position.y > -2))
+            {
+                if (!hasBalloon)
+                {
                     equippedCharacter.floating = true;
                     equippedCharacter.targetFloatHeight = -2;
                 }

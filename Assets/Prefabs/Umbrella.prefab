@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 5
   equippedCharacter: {fileID: 0}
-  top: {fileID: 0}
+  top: {fileID: 9022300963049358333}
 --- !u!1 &9022300962918920954
 GameObject:
   m_ObjectHideFlags: 0

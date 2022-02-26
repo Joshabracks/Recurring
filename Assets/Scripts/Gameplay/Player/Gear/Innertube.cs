@@ -58,7 +58,15 @@ namespace Gameplay.Player {
 
         public override void TakeDamage(float score)
         {
-            health -= score;
+            if (equippedCharacter != null) {
+                if (equippedCharacter.ai != null) {
+                    health -= score;
+                }
+                else 
+                {
+                    equippedCharacter.Health -= score / 2;
+                }
+            }
             // do nothing
         }
 

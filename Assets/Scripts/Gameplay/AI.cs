@@ -88,7 +88,7 @@ namespace Gameplay.State
                 {
 
                     //create the rotation we need to be in to look at the target
-                    Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+                    Quaternion _lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
 
                     //rotate us over time according to speed until we are in the required rotation
                     character.transform.rotation = _lookRotation;
@@ -214,6 +214,8 @@ namespace Gameplay.State
             }
             return true;
         }
+
+        
     }
 
 }

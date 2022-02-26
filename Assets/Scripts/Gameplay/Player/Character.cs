@@ -136,6 +136,21 @@ namespace Gameplay.Player
                 CheckTerrainModifiers();
                 Float(); 
                 ai.move(this);
+                pickupStuff();
+            }
+        }
+
+        public void pickupStuff() {
+            GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
+            foreach (GameObject go in allGear) {
+                if (Vector2.Distance(new Vector2(go.transform.position.x, go.transform.position.z), new Vector2(transform.position.x, transform.position.z)) > 2) {
+                    continue;
+                }
+                Gear g = go.GetComponent<Gear>();
+                if (g != null && g.equippedCharacter == null) {
+                    // g.equippedCharacter = MainCharacter;
+                    g.PickUp(this);
+                }
             }
         }
 
