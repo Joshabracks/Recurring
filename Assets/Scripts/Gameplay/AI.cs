@@ -10,6 +10,7 @@ namespace Gameplay.State
     public class AI
     {
         public Character mainCharacter;
+        public GameObject _characterContainer;
         public float aggression;
         public float selfPreservation;
         public float mood;
@@ -23,6 +24,7 @@ namespace Gameplay.State
 
         public void move(Character character)
         {
+            
             Vector2 direction;
             if (Vector3.Distance(character.transform.position, mainCharacter.transform.position) < AttackRadius(aggression)) {
                 Vector2 difference =  new Vector2(mainCharacter.transform.position.x, mainCharacter.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z);
@@ -65,13 +67,16 @@ namespace Gameplay.State
             {
                 return;
             }
+            bool frontBlock = false;
+            ray = new Ray(character.transform.position, character.transform.forward);
+            if (Physics.Raycast(ray, out hit, 1)) {
+                Character c = hit.collider.gameObject.GetComponent<Character>();
+                if (c != null) {
+                    frontBlock = true;
+                }
+            }
 
-            character.MakeEquip();
-            character.CheckGearModifiers();
-            character.CheckTerrainModifiers();
-            character.Float();
-
-            if (willMoveHere(character.terrainType, character))
+            if (willMoveHere(character.terrainType, character) && !frontBlock)
             {
                 // Debug.Log("MOVE INTO " + character.terrainType.ToString());
                 Vector3 _direction = (blockingPointHover - character.transform.position).normalized;
@@ -88,7 +93,27 @@ namespace Gameplay.State
                 //     character.transform.position.y,
                 //     character.transform.position.z + direction.y * character.ModifiedSpeed
                 // );
-                character.transform.Translate(0.0f, 0.0f, character.ModifiedSpeed);
+                float rightBlock = 0;
+                float leftBlock = 0;
+                ray = new Ray(character.transform.position, character.transform.right);
+                if (Physics.Raycast(ray, out hit, 1))
+                {
+                    Character c = hit.collider.gameObject.GetComponent<Character>();
+                    if (c != null)
+                    {
+                        rightBlock = .1f;
+                    }
+                }
+                ray = new Ray(character.transform.position, -character.transform.right);
+                if (Physics.Raycast(ray, out hit, 1))
+                {
+                    Character c = hit.collider.gameObject.GetComponent<Character>();
+                    if (c != null)
+                    {
+                        leftBlock = .1f;
+                    }
+                }
+                character.transform.Translate(rightBlock + leftBlock, 0.0f, character.ModifiedSpeed * .75f);
             } else {
                 character.movement.x = Random.Range(-1f, 1f);
                 character.movement.y = Random.Range(-1f, 1f);

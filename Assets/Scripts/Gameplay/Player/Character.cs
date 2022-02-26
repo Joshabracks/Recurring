@@ -102,10 +102,21 @@ namespace Gameplay.Player
             // }
             if (ai != null)
             {
-                // do ai stuff
                 cleanup();
-                ai.move(this);
+                // do ai stuff
+                
 
+            }
+        }
+
+        private void FixedUpdate() {
+            if (ai != null)
+            {
+                MakeEquip();
+                CheckGearModifiers();
+                CheckTerrainModifiers();
+                Float(); 
+                ai.move(this);
             }
         }
 
@@ -429,7 +440,7 @@ namespace Gameplay.Player
                     if (!floating)
                     {
                         falling = true;
-                        transform.position = new Vector3(transform.position.x, transform.position.y - (Time.deltaTime * .2f), transform.position.z);
+                        transform.position = new Vector3(transform.position.x, transform.position.y - (Time.deltaTime * .5f), transform.position.z);
                         if (transform.position.y <= -.5f)
                         {
                             new Vector3(transform.position.x, -.5f, transform.position.z);

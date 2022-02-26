@@ -22,6 +22,7 @@ namespace Gameplay.State
         public CharacterType[] _characterTypes;
         public GameObject _characterContainer;
         public float nightmareIntensity = .25f;
+        private float spawnRate = 75;
         private void Start() {
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
@@ -63,8 +64,8 @@ namespace Gameplay.State
             //     }
             // }
             Character[] _characters = _characterContainer.transform.GetComponentsInChildren<Character>();
-            if (_characters.Length < nightmareIntensity * 20) {
-                int newCharacters = Mathf.CeilToInt(nightmareIntensity * 20) - _characters.Length;
+            if (_characters.Length < nightmareIntensity * spawnRate) {
+                int newCharacters = Mathf.CeilToInt(nightmareIntensity * spawnRate) - _characters.Length;
                 for (int i = 0; i < newCharacters; i++) {
                     CharacterType type = _characterTypes[Random.Range(0, _characterTypes.Length - 1)];
                     float x = Random.Range(-1f, 1f);
@@ -81,6 +82,7 @@ namespace Gameplay.State
                     character.Randomize(type);
                     character.SetCustomizationValues();
                     character.ai = new AI();
+                    character.ai._characterContainer = _characterContainer;
                     character.ai.mainCharacter = playerController.MainCharacter;
                     character.ai.aggression = Random.Range(0f, 1f);
                     character.ai.selfPreservation = Random.Range(0f, 1f);
