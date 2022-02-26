@@ -148,7 +148,13 @@ namespace Gameplay.Player
         // {
         //     Randomize();
         // }
-
+        // private void OnDrawGizmos() {
+        //     if (ai != null)
+        //     {
+        //         Gizmos.color = Color.red;
+        //         Gizmos.DrawSphere(transform.position, ai.attackRadius);
+        //     }
+        // }
         public void Randomize()
         {
             // type traits

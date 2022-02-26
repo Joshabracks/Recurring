@@ -9,22 +9,31 @@ namespace Gameplay.State
 
     public class AI
     {
+        public Character mainCharacter;
         public float aggression;
         public float selfPreservation;
         public float mood;
-
-        public float AttackRadius(float nightmareIntensity)
+        public float nightmareIntensity;
+        // public float attackRadius;
+        public float AttackRadius(float aggression)
         {
-            return aggression * nightmareIntensity;
+            // return 10;
+            return mood * (aggression + nightmareIntensity) * 100;
         }
 
         public void move(Character character)
         {
+            Vector2 direction;
+            if (Vector3.Distance(character.transform.position, mainCharacter.transform.position) < AttackRadius(aggression)) {
+                Vector2 difference =  new Vector2(mainCharacter.transform.position.x, mainCharacter.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z);
+                direction = difference;
+            } else {
 
-            Vector2 direction = new Vector2(
-                character.movement.x,
-                character.movement.y
-            ).normalized;
+                direction = new Vector2(
+                    character.movement.x,
+                    character.movement.y
+                ).normalized;
+            }
 
             Vector3 blockingPointHover = new Vector3(
                 character.transform.position.x + direction.x * 2f,
@@ -57,9 +66,14 @@ namespace Gameplay.State
                 return;
             }
 
+            character.MakeEquip();
+            character.CheckGearModifiers();
+            character.CheckTerrainModifiers();
+            character.Float();
+
             if (willMoveHere(character.terrainType, character))
             {
-                
+                // Debug.Log("MOVE INTO " + character.terrainType.ToString());
                 Vector3 _direction = (blockingPointHover - character.transform.position).normalized;
                 if (_direction != Vector3.zero) {
 
@@ -69,15 +83,12 @@ namespace Gameplay.State
                     //rotate us over time according to speed until we are in the required rotation
                     character.transform.rotation = _lookRotation;
                 }
-                character.MakeEquip();
-                character.CheckGearModifiers();
-                character.CheckTerrainModifiers();
-                // floatPlayer();
-                character.transform.position = new Vector3(
-                    character.transform.position.x + direction.x * character.ModifiedSpeed,
-                    character.transform.position.y,
-                    character.transform.position.z + direction.y * character.ModifiedSpeed
-                );
+                // character.transform.position = new Vector3(
+                //     character.transform.position.x + direction.x * character.ModifiedSpeed,
+                //     character.transform.position.y,
+                //     character.transform.position.z + direction.y * character.ModifiedSpeed
+                // );
+                character.transform.Translate(0.0f, 0.0f, character.ModifiedSpeed);
             } else {
                 character.movement.x = Random.Range(-1f, 1f);
                 character.movement.y = Random.Range(-1f, 1f);

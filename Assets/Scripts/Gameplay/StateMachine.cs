@@ -81,6 +81,15 @@ namespace Gameplay.State
                     character.Randomize(type);
                     character.SetCustomizationValues();
                     character.ai = new AI();
+                    character.ai.mainCharacter = playerController.MainCharacter;
+                    character.ai.aggression = Random.Range(0f, 1f);
+                    character.ai.selfPreservation = Random.Range(0f, 1f);
+                    character.ai.mood = Random.Range(0f, 1f);
+                    character.ai.nightmareIntensity = nightmareIntensity;
+                    character.movement = new Vector2(
+                        Random.Range(-1f, 1f),
+                        Random.Range(-1f, 1f)
+                    );
                     character.transform.parent = _characterContainer.transform;
                 }
             }
