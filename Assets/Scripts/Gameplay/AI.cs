@@ -100,7 +100,6 @@ namespace Gameplay.State
 
             if (willMoveHere(terrainType, character))
             {
-                // Debug.Log("MOVE INTO " + character.terrainType.ToString());
                 Vector3 _direction = (blockingPointHover - character.transform.position).normalized;
                 if (_direction != Vector3.zero)
                 {

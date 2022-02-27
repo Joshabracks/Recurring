@@ -13,6 +13,11 @@ namespace Gameplay.Player
         public GameObject head;
         public Color color;
         public float unequippable = 0;
+        public AudioClip[] swingWeapon;
+        // public AudioClip[] hitGround;
+        public AudioClip[] hitFlesh;
+        public AudioClip[] hitArmor;
+    
         // public List<GameObject> attackMap;
         private enum AttackState
         {
@@ -76,10 +81,18 @@ namespace Gameplay.Player
             head.GetComponent<MeshRenderer>().material.SetColor("Color", color);
         }
 
+        public void playSound(AudioClip[] clip, float pitchMin, float pitchMax) {
+            AudioSource source = GetComponent<AudioSource>();
+            source.clip = clip[Random.Range(0, clip.Length - 1)];
+            source.pitch = Random.Range(pitchMin, pitchMax);
+            source.Play();
+        }
+
         public override void Attack()
         {
             if (attackState == AttackState.Idle && set)
             {
+                playSound(swingWeapon, .8f, 1);
                 attackState = AttackState.Strike;
             }
 
@@ -106,6 +119,7 @@ namespace Gameplay.Player
                             dist = Vector3.Distance(center, c.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position);
                             if (dist <= 2) {
                                 c.gear.umbrella.TakeDamage(damage * (2 - dist));
+                                playSound(hitArmor, .9f, 1.1f);
                             }
                         }
                         dist = Vector3.Distance(center, c.transform.position);
@@ -113,14 +127,17 @@ namespace Gameplay.Player
                             if (c.gear.innertube != null) 
                             {
                                 c.gear.innertube.TakeDamage(damage * (2 - dist));
+                                playSound(hitArmor, .9f, 1.1f);
                             }
                             else
                             {
                                 float damageDealt = damage * (2 - dist);
-                                c.Health -= damageDealt;
+                                c.TakeDamage(damageDealt);
+                                playSound(hitFlesh, .9f, 1.1f);
                             }
                         }
                     }
+                    // playSound(hitGround, .8f, 1);
                     attackState = AttackState.Reset;
                 }
                 else 
@@ -131,6 +148,7 @@ namespace Gameplay.Player
                             Vector2 uPos = equippedCharacter.ai.mainCharacter.gear.umbrella.GetComponentInChildren<UmbrellaHead>().transform.position;
                             dist = Vector2.Distance(center, uPos);
                             if (dist <= 2) {
+                                playSound(hitArmor, .9f, 1.1f);
                                 equippedCharacter.ai.mainCharacter.gear.umbrella.TakeDamage(damage * (2 - dist));
                             }
                         }
@@ -139,12 +157,13 @@ namespace Gameplay.Player
                             if (equippedCharacter.ai.mainCharacter.gear.innertube != null) 
                             {
                                 equippedCharacter.ai.mainCharacter.gear.innertube.TakeDamage(damage * (2 - dist));
+                                playSound(hitArmor, .9f, 1.1f);
                             }
                             else
                             {
                                 float damageDealt = damage * (2 - dist);
-                                Debug.Log("HIT CREATURE FOR " + damageDealt.ToString());
-                                equippedCharacter.ai.mainCharacter.Health -= damageDealt;
+                                equippedCharacter.ai.mainCharacter.TakeDamage(damageDealt);
+                                playSound(hitFlesh, .9f, 1.1f);
                             }
                         }
                     attackState = AttackState.Reset;

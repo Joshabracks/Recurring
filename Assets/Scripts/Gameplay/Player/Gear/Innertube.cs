@@ -60,7 +60,6 @@ namespace Gameplay.Player {
         {
             if (equippedCharacter != null) {
                 if (equippedCharacter.ai != null) {
-                    Debug.Log("TUBE: " + health.ToString());
                     health -= score;
                 }
                 else 

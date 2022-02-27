@@ -9,6 +9,33 @@ namespace Gameplay.Player
     {
         public float life;
         public float damage;
+        public AudioClip[] shootNoise;
+        public AudioClip[] hitNoise;
+
+        private void Awake()
+        {
+            AudioSource source = GetComponent<AudioSource>();
+            source.clip = shootNoise[Random.Range(0, shootNoise.Length - 1)];
+            randoPitch(1f, 1.1f);
+            source.Play();
+        }
+
+        private void randoPitch(float a, float b)
+        {
+            AudioSource source = GetComponent<AudioSource>();
+            source.pitch = Random.Range(a, b);
+        }
+
+        private void HitSound()
+        {
+            AudioSource source = GetComponent<AudioSource>();
+            source.clip = hitNoise[Random.Range(0, hitNoise.Length - 1)];
+            randoPitch(1, 1.1f);
+            source.Play();
+            damage = 0;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            Destroy(gameObject, source.clip.length);
+        }
         private void Update()
         {
             if (life > 0)
@@ -25,25 +52,27 @@ namespace Gameplay.Player
                         if (dist <= 1)
                         {
                             c.gear.umbrella.TakeDamage(damage);
-                            Destroy(gameObject);
+                            
+                            HitSound();
                             return;
                         }
                     }
-                    
+
                     dist = Vector2.Distance(center, new Vector2(c.transform.position.x, c.transform.position.z));
                     if (dist <= 1)
                     {
                         if (c.gear.innertube != null)
                         {
                             c.gear.innertube.TakeDamage(damage);
-                            Destroy(gameObject);
+                            
+                            HitSound();
                             return;
                         }
                         else
                         {
-                            // Debug.Log("HIT: " + damage);
-                            c.Health -= damage;
-                            Destroy(gameObject);
+                            c.TakeDamage(damage);
+                            
+                            HitSound();
                             return;
                         }
                     }

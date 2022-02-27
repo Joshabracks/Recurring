@@ -17,6 +17,7 @@ namespace Gameplay.Player
         public float EyeSize { get; }
         public float EyeSpacing { get; }
 
+
         public CharacterType(bool param)
         {
             SkinColor = Random.ColorHSV(0, 1);
@@ -39,6 +40,28 @@ namespace Gameplay.Player
             public Gun gun;
             public Hammer hammer;
         }
+        private float soundCount = 0;
+        public VoiceSet voiceSet;
+        public float voicePitch;
+        public float speechCooldown = 2;
+
+        public enum SpeechQueue {
+            Attack,
+            Hurt,
+            Greeting,
+            Idle,
+        }
+        public SpeechQueue speechQueue = SpeechQueue.Idle;
+
+        private AudioSource voice;
+        private AudioSource lavaPlayer;
+        public AudioClip[] sandSound;
+        public AudioClip[] waterSound;
+        public AudioClip[] grassSound;
+        public AudioClip[] dirtSound;
+        public AudioClip lavaSound;
+        public AudioClip[] quickSandSound;
+        public AudioClip[] rockSound;
         public Equipment gear;
         public GameObject RightEye;
         public GameObject LeftEye;
@@ -107,7 +130,8 @@ namespace Gameplay.Player
             }
         }
 
-        public void Jump() {
+        public void Jump()
+        {
 
         }
         // private float seconds = 0;
@@ -123,18 +147,19 @@ namespace Gameplay.Player
             {
                 cleanup();
                 // do ai stuff
-                
-
+                speak();
             }
+            walkSound();
         }
 
-        private void FixedUpdate() {
+        private void FixedUpdate()
+        {
             if (ai != null)
             {
                 MakeEquip();
                 CheckGearModifiers();
                 CheckTerrainModifiers();
-                Float(); 
+                Float();
                 ai.move(this);
                 CheckAttack();
                 pickupStuff();
@@ -143,22 +168,28 @@ namespace Gameplay.Player
 
         public void CheckAttack()
         {
-            
+
             Weapon weapon = ai.ShouldAttack(this);
             if (weapon != null)
             {
+                speechQueue = SpeechQueue.Attack;
+                speechCooldown = 0;
                 weapon.Attack();
             }
         }
 
-        public void pickupStuff() {
+        public void pickupStuff()
+        {
             GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
-            foreach (GameObject go in allGear) {
-                if (Vector2.Distance(new Vector2(go.transform.position.x, go.transform.position.z), new Vector2(transform.position.x, transform.position.z)) > 2) {
+            foreach (GameObject go in allGear)
+            {
+                if (Vector2.Distance(new Vector2(go.transform.position.x, go.transform.position.z), new Vector2(transform.position.x, transform.position.z)) > 2)
+                {
                     continue;
                 }
                 Gear g = go.GetComponent<Gear>();
-                if (g != null && g.equippedCharacter == null) {
+                if (g != null && g.equippedCharacter == null)
+                {
                     // g.equippedCharacter = MainCharacter;
                     g.PickUp(this);
                 }
@@ -167,7 +198,8 @@ namespace Gameplay.Player
 
         private void cleanup()
         {
-            if (damage > 0) {
+            if (damage > 0)
+            {
                 Health -= damage;
             }
             damage = 0;
@@ -467,20 +499,170 @@ namespace Gameplay.Player
             }
         }
 
-        public void SetTerrainType() {
+        public void SetTerrainType()
+        {
             Ray ray = new Ray(transform.position, Vector3.down);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 int index = hit.triangleIndex * 3;
                 MeshCollider mc = hit.collider as MeshCollider;
-                if (mc == null) {
+                if (mc == null)
+                {
                     return;
                 }
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 terrainType = (TerrainType)(uv2.x);
             }
+        }
+
+        public void walkSound()
+        {
+
+            if (!floating || (terrainType == TerrainType.Water && transform.position.y <= 0))
+            {
+                switch (terrainType)
+                {
+                    case TerrainType.Sand:
+                        if (soundCount < ModifiedSpeed * 3)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(sandSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    case TerrainType.Dirt:
+                        if (soundCount < ModifiedSpeed * 3)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(dirtSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    case TerrainType.Grass:
+                        if (soundCount < ModifiedSpeed * 3)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(grassSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    case TerrainType.Water:
+                        if (soundCount < ModifiedSpeed * 10)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(waterSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    case TerrainType.Rock:
+                        if (soundCount < ModifiedSpeed * 3)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(rockSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    case TerrainType.QuickSand:
+                        if (soundCount < ModifiedSpeed * 3)
+                        {
+                            soundCount += Time.deltaTime;
+                        }
+                        else
+                        {
+                            playSound(quickSandSound, 1, 1.1f);
+                            soundCount = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                if (lavaPlayer == null)
+                {
+                    lavaPlayer = gameObject.AddComponent<AudioSource>();
+                    lavaPlayer.loop = true;
+                    lavaPlayer.spatialBlend = 1;
+                    lavaPlayer.clip = lavaSound;
+                }
+                if (terrainType == TerrainType.Lava)
+                {
+                    if (!lavaPlayer.isPlaying)
+                    {
+                        lavaPlayer.Play();
+                    }
+                    
+                }
+                else if (lavaPlayer.isPlaying) 
+                {
+                    lavaPlayer.Stop();
+                }
+            }
+        }
+
+        public void TakeDamage(float score) {
+            Health -= score;
+            speechQueue = SpeechQueue.Hurt;
+            speechCooldown = 0;
+        }
+
+        public void speak() {
+            if (voice == null) {
+                voice = GetComponent<AudioSource>();
+                voice.pitch = voicePitch;
+                voice.volume = .25f;
+                voice.spatialBlend = 1;
+            }
+            if (voice.isPlaying) {
+                if (voice.time > voice.clip.length - .2f) {
+                    voice.volume -= Time.deltaTime * .02f;
+                }
+            }
+            if (speechCooldown > 0)
+            {
+                speechCooldown -= Time.deltaTime;
+                return;
+            }
+            if (voice.isPlaying) {
+                speechCooldown = 2;
+                return;
+            }
+            int mood = Mathf.FloorToInt(Mathf.Lerp(0, 2.99f, ai.mood));
+            AudioClip[] set = voiceSet.GetSet(mood, speechQueue);
+            AudioClip clip = set[Random.Range(0, set.Length)];
+            voice.clip = clip;
+            voice.Play();
+
+            if (speechQueue == SpeechQueue.Idle) {
+                speechQueue = SpeechQueue.Greeting;
+            } else {
+                speechQueue = SpeechQueue.Idle;             
+            }
+            voice.volume = .25f;
+            speechCooldown = Random.Range(1f, 10f);
+        }
+
+        public void playSound(AudioClip[] clip, float pitchMin, float pitchMax)
+        {
+            AudioSource source = GetComponent<AudioSource>();
+            source.clip = clip[Random.Range(0, clip.Length)];
+            source.pitch = Random.Range(pitchMin, pitchMax);
+            source.Play();
         }
         public void CheckTerrainModifiers()
         {

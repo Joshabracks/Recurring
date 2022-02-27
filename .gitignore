@@ -4,6 +4,7 @@ Temp
 Logs
 Plugins
 Plugins.meta
+*.wav
 # ===========================
 # Default Collab Ignore Rules
 # ===========================

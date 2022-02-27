@@ -18,6 +18,7 @@ namespace Gameplay.State
         public Umbrella _umbrellaTemplate;
         public Gun _gunTemplate;
         public Hammer _hammerTemplate;
+        public VoiceSet[] _voiceSets;
         public Light sunLight;
         public int drawDistance = 4;
         public WorldController worldController;
@@ -123,6 +124,8 @@ namespace Gameplay.State
                     character.ai.selfPreservation = Random.Range(0f, 1f);
                     character.ai.mood = Random.Range(0f, 1f);
                     character.ai.nightmareIntensity = nightmareIntensity;
+                    character.voiceSet = _voiceSets[Random.Range(0, _voiceSets.Length - 1)];
+                    character.voicePitch = Random.Range(.8f, 1.2f);
                     float getGun = Random.Range(-5f, nightmareIntensity);
                     if (getGun > 0)
                     {
@@ -189,7 +192,6 @@ namespace Gameplay.State
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
             //rotate us over time according to speed until we are in the required rotation
             sunLight.transform.rotation = _lookRotation;
-            Debug.Log(d.ToString());
         }
 
         private void checkChunks()

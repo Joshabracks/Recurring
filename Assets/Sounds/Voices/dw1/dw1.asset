@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290692dba4807e743b63d15dc71dfaae, type: 3}
+  m_Name: dw1
+  m_EditorClassIdentifier: 
+  AngryAttack:
+  - {fileID: 8300000, guid: 79496e726141e074697407839efd3b37, type: 3}
+  - {fileID: 8300000, guid: 51cffc9e5bdecda4a9490410c4212c18, type: 3}
+  - {fileID: 8300000, guid: e6b1db83d3bdec745902d039a90e50a2, type: 3}
+  AngryGreeting:
+  - {fileID: 8300000, guid: 124808fbaedf21f429811ab5091a8bdb, type: 3}
+  - {fileID: 8300000, guid: 9332521f7ffb24c478b249e706a79f25, type: 3}
+  AngryHurt:
+  - {fileID: 8300000, guid: 3af85e7064a83b64f92e948bcf7fb84a, type: 3}
+  - {fileID: 8300000, guid: ee33b97f83cf6904aace699d82474ba9, type: 3}
+  - {fileID: 8300000, guid: 4f55f440b9af0b242a7b326c9c8efb37, type: 3}
+  AngryIdle:
+  - {fileID: 8300000, guid: d29572d3ecd95ff4eae6d51bb1a3ac23, type: 3}
+  - {fileID: 8300000, guid: f91ef3a3735ac0144b67ee4e71b95fff, type: 3}
+  - {fileID: 8300000, guid: 776227ad415b8ab47b7e1ee87bc89b48, type: 3}
+  HappyAttack:
+  - {fileID: 8300000, guid: 13ccd83c991ab214b87341342d4fc108, type: 3}
+  - {fileID: 8300000, guid: a08218bbbca169e49b1ddb0edd6cdfe1, type: 3}
+  HappyGreeting:
+  - {fileID: 8300000, guid: 6b48578d7bf1f5c47b6669e5e5e0faff, type: 3}
+  - {fileID: 8300000, guid: e4b33f9ea3ceeaa47bd5e937801532d0, type: 3}
+  HappyHurt:
+  - {fileID: 8300000, guid: d45e2eccc6af51346972380ad992a93d, type: 3}
+  - {fileID: 8300000, guid: 32d94ea32c25a2342979cf07c533e71c, type: 3}
+  - {fileID: 8300000, guid: 422f53af4dc1489479bf5b3da078ad31, type: 3}
+  HappyIdle:
+  - {fileID: 8300000, guid: 612afaf220529354d96e289884244e67, type: 3}
+  - {fileID: 8300000, guid: 4cb921a61f6523746bd2916027121945, type: 3}
+  AnnoyedAttack:
+  - {fileID: 8300000, guid: 06bfc1215e61f3149a1125684191c9db, type: 3}
+  - {fileID: 8300000, guid: ef7ed3953f8a13b48a76daa3cdf6208c, type: 3}
+  AnnoyedGreeting:
+  - {fileID: 8300000, guid: f604d61231b6fd64cbc353216fb194ff, type: 3}
+  - {fileID: 8300000, guid: b3456de7413d1c743abfb308a4038c5c, type: 3}
+  AnnoyedHurt:
+  - {fileID: 8300000, guid: 7fdf6fad5ec78a74e9305c8d4037705e, type: 3}
+  - {fileID: 8300000, guid: d68808c15bef5814387378d6885b4fa3, type: 3}
+  AnnoyedIdle:
+  - {fileID: 8300000, guid: 4ee6a4b1f4317344dabb9053a7593c5d, type: 3}
+  - {fileID: 8300000, guid: 61c3658bd8ea6b84db57e1c462b23388, type: 3}
