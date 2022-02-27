@@ -305,6 +305,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc6c3da651781a74095af5a62e78185b, type: 2}
   - {fileID: 11400000, guid: 5012160c952703e4c84942a01cb9a74d, type: 2}
   - {fileID: 11400000, guid: e6571c809f805a145b97608c58442ad8, type: 2}
+  - {fileID: 11400000, guid: 41f671258d071ba44ba23be6f8dd897c, type: 2}
+  - {fileID: 11400000, guid: 1bc9635cfa1dcf54aa27043df5af3fe6, type: 2}
+  - {fileID: 11400000, guid: def2680f2f0313c458edd59072f79dee, type: 2}
+  - {fileID: 11400000, guid: d7372dff556e8aa4fb5ce94fcef575a8, type: 2}
+  - {fileID: 11400000, guid: 9d21992bbba2dab4dbc66d94bfd0b4e6, type: 2}
+  - {fileID: 11400000, guid: fbda7cba9ee6f554391e9458a04de852, type: 2}
+  - {fileID: 11400000, guid: 914d9fd347adc2048a08450f1ad23043, type: 2}
+  - {fileID: 11400000, guid: 3e07b300cf2c1f2459b9a9cc32c90a81, type: 2}
   sunLight: {fileID: 1663757458}
   drawDistance: 4
   worldController: {fileID: 1129821000}
