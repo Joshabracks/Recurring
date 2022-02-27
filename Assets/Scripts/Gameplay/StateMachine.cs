@@ -5,6 +5,7 @@ using Gameplay.Player;
 using Gameplay.Terrain;
 using Gameplay.Data;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Gameplay.State
 {
@@ -12,6 +13,7 @@ namespace Gameplay.State
 
     public class StateMachine : MonoBehaviour
     {
+        public RectTransform _healthBar;
         public Character _characterTemplate;
         public Innertube _innertubeTemplate;
         public Balloon _balloonTemplate;
@@ -29,8 +31,14 @@ namespace Gameplay.State
         public float nightmareIntensity = 0f;
         private float spawnRate = 25;
         public float GameOverCountdown = 5;
+        public AudioClip[] musicLibrary;
+        public float maxDist = -1;
+        private float fadeout = 5;
+        private float maxMusicVolume = .025f;
+        private bool volumeSet = false;
         private void Start()
         {
+            
             exitGate.Place();
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
@@ -46,15 +54,20 @@ namespace Gameplay.State
             playerController.Initialize();
             _characterContainer = new GameObject();
             CreateCharacterTypes();
+
         }
 
         void Update()
         {
+            _healthBar.transform.localScale = new Vector3(
+                playerController.MainCharacter.Health / playerController.MainCharacter.MaxHealth,
+                1, 1
+            );
             TurnSun();
             if (Vector3.Distance(exitGate.transform.position, playerController.MainCharacter.transform.position) < 3)
             {
                 GameSettings.seed++;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene("CreditsScreen");
             }
             if (playerController.MainCharacter.Health <= 0)
             {
@@ -62,12 +75,47 @@ namespace Gameplay.State
                 if (GameOverCountdown < 0)
                 {
                     GameSettings.seed++;
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    SceneManager.LoadScene("ReminderScreen");
                 }
             }
             nightmareIntensity += Time.deltaTime * 0.0025f;
             checkChunks();
             checkCharacters();
+            playMusic();
+        }
+
+        public void playMusic() {
+            if (maxDist == -1) {
+                maxDist = Vector3.Distance(playerController.MainCharacter.transform.position, exitGate.transform.position);
+            }
+            float dist = Vector3.Distance(playerController.MainCharacter.transform.position, exitGate.transform.position);
+            int index = Mathf.FloorToInt(Mathf.Lerp(0, musicLibrary.Length, (maxDist - dist) / maxDist));
+            AudioClip clip = musicLibrary[index];
+            if (clip != null) {
+                AudioSource source = GetComponent<AudioSource>();
+                if (!volumeSet) {
+                    source.volume = maxMusicVolume;
+                    volumeSet = true;
+                }
+                if (GameOverCountdown < 5) {
+                    source.volume = Mathf.Lerp(0, maxMusicVolume, GameOverCountdown);
+                }
+                if (!source.isPlaying) {
+                    source.clip = clip;
+                    source.Play();
+                } else if (clip != source.clip) {
+                    if (fadeout > 0) {
+                        fadeout -= Time.deltaTime;
+                        source.volume = Mathf.Lerp(0, maxMusicVolume, fadeout);
+                    } else {
+                        source.clip = clip;
+                        source.volume = maxMusicVolume;
+                        source.Play();
+                        fadeout = 5;
+                        
+                    }
+                }
+            }
         }
 
         private float minSpawnDistance()

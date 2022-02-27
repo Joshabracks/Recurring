@@ -625,7 +625,7 @@ namespace Gameplay.Player
             if (voice == null) {
                 voice = GetComponent<AudioSource>();
                 voice.pitch = voicePitch;
-                voice.volume = .25f;
+                voice.volume = 1;
                 voice.spatialBlend = 1;
             }
             if (voice.isPlaying) {

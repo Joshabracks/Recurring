@@ -53,6 +53,7 @@ namespace Gameplay.Player {
         }
         public override void Drop()
         {
+            
             Unequip();
         }
 

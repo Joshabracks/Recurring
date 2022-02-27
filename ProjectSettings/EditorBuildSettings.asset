@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 36f2da8e7589d2142bf8f40a3a930bb1
+  - enabled: 1
+    path: Assets/Scenes/ReminderScreen.unity
+    guid: a06bdda998062b241a65c337e17520ab
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: 108ac11e4f47e7f42a8172fa83477a2f
+  - enabled: 1
+    path: Assets/Scenes/CreditsScreen.unity
+    guid: 122d3116f70c243409bedfe0ed9d3150
   m_configObjects: {}

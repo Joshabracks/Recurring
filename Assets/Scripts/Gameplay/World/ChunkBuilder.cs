@@ -148,7 +148,7 @@ namespace Gameplay.Terrain
                         {
                             Vector3 vertex = new Vector3(squareVertices[i].x + (x * 2), 0, squareVertices[i].z + (y * 2));
                             vertices.Add(vertex);
-                            uv.Add(new Vector2(vertex.x, vertex.z));
+                            uv.Add(new Vector2(vertex.x + (chunk.Data.Width * chunkCoord.x), vertex.z + (chunk.Data.Height * chunkCoord.y)));
                             uv2.Add(new Vector2(_case.y, 1));
                             
                         }

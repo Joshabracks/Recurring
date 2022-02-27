@@ -80,6 +80,7 @@ namespace Gameplay.Player
         public override void Drop()
         {
             // playerCharacter.gear.Remove(this);
+            set = false;
             Unequip();
         }
 

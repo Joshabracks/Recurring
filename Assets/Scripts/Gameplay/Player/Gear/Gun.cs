@@ -134,6 +134,7 @@ namespace Gameplay.Player {
         }
         public override void Drop()
         {
+            set = false;
             Unequip();
             unequippable = 5;
         }

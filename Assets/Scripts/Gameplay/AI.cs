@@ -32,7 +32,7 @@ namespace Gameplay.State
             }
             if (character.gear.gun != null)
             {
-                if (Vector3.Distance(mainCharacter.transform.position, character.transform.position) < character.gear.gun.range)
+                if (Vector3.Distance(mainCharacter.transform.position, character.transform.position) < character.gear.gun.range * 4)
                 {
                     return character.gear.gun;
                 }
