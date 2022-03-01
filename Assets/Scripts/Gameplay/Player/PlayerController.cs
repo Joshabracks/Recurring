@@ -48,6 +48,7 @@ namespace Gameplay.Player
             MainCharacter.Float();
             if (MainCharacter.Health <= 0)
             {
+                // MainCharacter.die();
                 return;
             }
             movePlayer();

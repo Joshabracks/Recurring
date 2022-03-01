@@ -14,6 +14,7 @@ namespace Gameplay.State
     public class StateMachine : MonoBehaviour
     {
         public RectTransform _healthBar;
+        public RectTransform _armorBar;
         public Character _characterTemplate;
         public Innertube _innertubeTemplate;
         public Balloon _balloonTemplate;
@@ -61,10 +62,38 @@ namespace Gameplay.State
 
         void Update()
         {
+            float healthLevel = playerController.MainCharacter.Health / playerController.MainCharacter.MaxHealth;
+            if (healthLevel < 0) {
+                healthLevel = 0;
+            }
+            Debug.Log(healthLevel);
             _healthBar.transform.localScale = new Vector3(
-                playerController.MainCharacter.Health / playerController.MainCharacter.MaxHealth,
+                healthLevel,
                 1, 1
             );
+            _healthBar.gameObject.GetComponent<Image>().color = new Color(
+                1 - healthLevel,
+                healthLevel,
+                0
+            );
+
+            float armorLevel = 0;
+            if (playerController.MainCharacter.gear.innertube != null) {
+                armorLevel =  playerController.MainCharacter.gear.innertube.health / playerController.MainCharacter.MaxHealth;
+                if (armorLevel < 0) {
+                    armorLevel = 0;
+                }
+            }
+            _armorBar.transform.localScale = new Vector3(
+                armorLevel,
+                1, 1
+            );
+            _armorBar.gameObject.GetComponent<Image>().color = new Color(
+                0,
+                healthLevel,
+                1 - healthLevel
+            );
+            
             TurnSun();
             if (Vector3.Distance(exitGate.transform.position, playerController.MainCharacter.transform.position) < 3)
             {

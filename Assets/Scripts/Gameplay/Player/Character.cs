@@ -45,6 +45,7 @@ namespace Gameplay.Player
         public VoiceSet voiceSet;
         public float voicePitch;
         public float speechCooldown = 2;
+        public bool dead;
 
         public enum SpeechQueue {
             Attack,
@@ -138,6 +139,9 @@ namespace Gameplay.Player
         // private float seconds = 0;
         private void Update()
         {
+            if (dead) {
+                return;
+            }
             // seconds += Time.deltaTime;
             // if (seconds >= 1) {
             //     Randomize();
@@ -146,6 +150,8 @@ namespace Gameplay.Player
             // }
             if (ai != null)
             {
+                CheckAttack();
+                pickupStuff();
                 cleanup();
                 // do ai stuff
                 speak();
@@ -155,6 +161,9 @@ namespace Gameplay.Player
 
         private void FixedUpdate()
         {
+            if (dead) {
+                return;
+            }
             if (ai != null)
             {
                 MakeEquip();
@@ -162,8 +171,10 @@ namespace Gameplay.Player
                 CheckTerrainModifiers();
                 Float();
                 ai.move(this);
-                CheckAttack();
-                pickupStuff();
+                
+            }
+            if (suffocating) {
+                Health -= suffocationModifier * Time.deltaTime;
             }
         }
 
@@ -226,15 +237,33 @@ namespace Gameplay.Player
                 {
                     gear.gun.Drop();
                 }
-                Destroy(gameObject);
+                // Destroy(gameObject);
+                die();
                 return;
             }
-            Ray ray = new Ray(transform.position, Vector3.down);
+            Ray ray = new Ray(new Vector3(transform.position.x, 0.5f, transform.position.z), Vector3.down);
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit))
             {
-                Destroy(gameObject);
+                // Destroy(gameObject);
+                die();
             }
+        }
+
+        public void die() {
+            ai.mainCharacter = null;
+            ai = null;
+            Body.transform.parent = null;
+            LeftEye.transform.parent = null;
+            RightEye.transform.parent = null;
+            Body.AddComponent<Rigidbody>();
+            LeftEye.AddComponent<Rigidbody>();
+            RightEye.AddComponent<Rigidbody>();
+            dead = true;
+            Destroy(gameObject);
+            Destroy(Body, 10);
+            Destroy(LeftEye, 10);
+            Destroy(RightEye, 10);
         }
 
         // private void Awake()
@@ -760,8 +789,9 @@ namespace Gameplay.Player
                         transform.position = new Vector3(transform.position.x, transform.position.y - (Time.deltaTime * .5f), transform.position.z);
                         if (transform.position.y <= -.5f)
                         {
-                            new Vector3(transform.position.x, -.5f, transform.position.z);
-                            Health -= Time.deltaTime * suffocationModifier;
+                            transform.position = new Vector3(transform.position.x, -.5f, transform.position.z);
+                            // Health -= Time.deltaTime * suffocationModifier;
+                            suffocating = true;
                         }
                     }
                     break;
