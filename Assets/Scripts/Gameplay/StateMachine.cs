@@ -42,6 +42,8 @@ namespace Gameplay.State
             exitGate.Place();
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
+
+
             Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             hammer.Randomize();
             hammer.SetCustomizationValues();

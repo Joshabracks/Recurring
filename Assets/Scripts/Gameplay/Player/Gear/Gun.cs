@@ -101,7 +101,8 @@ namespace Gameplay.Player {
                 bullet.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
                 bullet.transform.localScale = new Vector3(.25f, .25f, .25f);
                 bullet.life = range * Random.Range(1f, 1.25f);
-                bullet.damage = damage;
+                bullet.damage = damage  * ( 1 / projectiles );
+                cooldown = projectiles;
             }
         }
 
