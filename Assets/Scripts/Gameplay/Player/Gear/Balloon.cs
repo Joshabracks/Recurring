@@ -47,7 +47,7 @@ namespace Gameplay.Player
 
         public override void SetCustomizationValues()
         {
-            gameObject.GetComponent<MeshRenderer>().material.SetColor("Color", color);
+            gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
         }
 
         public override void Equip(Character character)

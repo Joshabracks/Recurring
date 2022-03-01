@@ -76,9 +76,9 @@ namespace Gameplay.Player {
 
         public override void SetCustomizationValues()
         {
-            Body.GetComponent<MeshRenderer>().material.SetColor("Color", bodyColor);
-            Cog.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
-            Barrel.GetComponent<MeshRenderer>().material.SetColor("Color", barrelColor);
+            Body.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", bodyColor);
+            Cog.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", cogColor);
+            Barrel.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", barrelColor);
             // Barrel.transform.localScale = new Vector3(.65f + range, 1, 1);
             // Cog.transform.localScale = new Vector3(1 + spread, 1, 1);
             // Body.transform.localScale = new Vector3(1 + damage, 1, 1);
@@ -101,7 +101,7 @@ namespace Gameplay.Player {
                 bullet.GetComponent<MeshRenderer>().material.SetColor("Color", cogColor);
                 bullet.transform.localScale = new Vector3(.25f, .25f, .25f);
                 bullet.life = range * Random.Range(1f, 1.25f);
-                bullet.damage = damage  * ( 1 / projectiles );
+                bullet.damage = damage / projectiles;
                 cooldown = projectiles;
             }
         }

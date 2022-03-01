@@ -50,7 +50,7 @@ MonoBehaviour:
   equippedCharacter: {fileID: 0}
   damage: 0
   powerScale: 0.25
-  head: {fileID: 5024271776005788071}
+  head: {fileID: 393259696932228633}
   color: {r: 0, g: 0, b: 0, a: 0}
   unequippable: 0
   swingWeapon:

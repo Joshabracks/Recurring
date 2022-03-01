@@ -10,7 +10,7 @@ namespace Gameplay.Player
     {
         private bool set = false;
         private float angle = 0;
-        public GameObject head;
+        public Hammerhead head;
         public Color color;
         public float unequippable = 0;
         public AudioClip[] swingWeapon;
@@ -78,7 +78,7 @@ namespace Gameplay.Player
 
         public override void SetCustomizationValues()
         {
-            head.GetComponent<MeshRenderer>().material.SetColor("Color", color);
+            head.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
         }
 
         public void playSound(AudioClip[] clip, float pitchMin, float pitchMax) {

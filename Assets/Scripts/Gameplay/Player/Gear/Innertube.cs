@@ -61,11 +61,11 @@ namespace Gameplay.Player {
         {
             if (equippedCharacter != null) {
                 if (equippedCharacter.ai != null) {
-                    health -= score;
+                    equippedCharacter.Health -= score / 2;
                 }
                 else 
                 {
-                    equippedCharacter.Health -= score / 2;
+                    health -= score;
                 }
             }
             // do nothing
