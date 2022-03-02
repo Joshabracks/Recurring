@@ -13,6 +13,7 @@ namespace Gameplay.State
 
     public class StateMachine : MonoBehaviour
     {
+        public Text _damageHud;
         public RectTransform _healthBar;
         public RectTransform _armorBar;
         public Character _characterTemplate;
@@ -50,12 +51,13 @@ namespace Gameplay.State
             Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             hammer.Randomize();
             hammer.SetCustomizationValues();
-            hammer.damage = 7.5f;
+            hammer.damage = 4f;
 
             Gun gun = Instantiate(_gunTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             gun.Randomize();
             gun.SetCustomizationValues();
-            gun.damage = .1f;
+            gun.damage = 1f;
+            gun.speed = 4f;
             playerController.Initialize();
             _characterContainer = new GameObject();
             CreateCharacterTypes();
@@ -66,6 +68,7 @@ namespace Gameplay.State
 
         void Update()
         {
+            _damageHud.text = $"Gun Damage: {playerController.MainCharacter.gunDamageLevel}\nGun Speed: {playerController.MainCharacter.gunSpeedLevel}\nHammer Damage: {playerController.MainCharacter.hammerLevel}";
             float healthLevel = playerController.MainCharacter.Health / playerController.MainCharacter.MaxHealth;
             if (healthLevel < 0) {
                 healthLevel = 0;
@@ -168,7 +171,8 @@ namespace Gameplay.State
             max = max > LowerLeft ? max : LowerLeft;
             max = max > LowerRight ? max : LowerRight;
 
-            return max + 10;
+
+            return max + 20;
         }
 
         private void checkCharacters()
@@ -208,7 +212,7 @@ namespace Gameplay.State
                     character.ai.nightmareIntensity = nightmareIntensity;
                     character.voiceSet = _voiceSets[Random.Range(0, _voiceSets.Length - 1)];
                     character.voicePitch = Random.Range(.8f, 1.2f);
-                    float getGun = Random.Range(-5f, nightmareIntensity);
+                    float getGun = Random.Range(0, 2);
                     if (getGun > 0)
                     {
 

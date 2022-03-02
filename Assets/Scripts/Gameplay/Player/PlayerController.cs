@@ -72,7 +72,6 @@ namespace Gameplay.Player
 
 
 
-
         public void turnPlayer()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

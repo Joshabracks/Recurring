@@ -82,6 +82,13 @@ namespace Gameplay.Player
         public float targetFloatHeight = 0;
         public float verticalVelocity = 0;
         private float suffocationModifier = .4f;
+        public int gunDamageLevel = 1;
+        public int gunDamageProgress = 0;
+        public int gunSpeedLevel = 1;
+        public int gunSpeedProgress = 0;
+        public int hammerLevel = 1;
+        public int hammerProgress = 0;
+        
         public AI ai;
 
 
@@ -185,7 +192,9 @@ namespace Gameplay.Player
             if (weapon != null)
             {
                 speechQueue = SpeechQueue.Attack;
-                speechCooldown = 0;
+                if (gear.gun == null) {
+                    speechCooldown = 0;
+                }
                 weapon.Attack();
             }
         }
@@ -714,6 +723,18 @@ namespace Gameplay.Player
             }
         }
 
+        public void LevelUpGunDamage() {
+            gear.gun.damage += 1f;
+        }
+
+        public void LevelUpGunSpeed() {
+            gear.gun.speed += 1f;
+        }
+
+        public void LevelUpHammer() {
+            gear.hammer.damage += 2f;
+        }
+
         public void TakeDamage(float score) {
             Health -= score;
             speechQueue = SpeechQueue.Hurt;
@@ -818,7 +839,7 @@ namespace Gameplay.Player
                 case TerrainType.QuickSand:
                     if (transform.position.y < .5f)
                     {
-                        ModifiedSpeed *= Mathf.Clamp((transform.position.y + .5f), .2f, 1);
+                        ModifiedSpeed *= .65f - Mathf.Clamp((transform.position.y + .5f), .2f, 1);
                     }
                     if (!floating)
                     {
