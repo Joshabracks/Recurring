@@ -839,7 +839,7 @@ namespace Gameplay.Player
                 case TerrainType.QuickSand:
                     if (transform.position.y < .5f)
                     {
-                        ModifiedSpeed *= .65f - Mathf.Clamp((transform.position.y + .5f), .2f, 1);
+                        ModifiedSpeed *= .55f;
                     }
                     if (!floating)
                     {
