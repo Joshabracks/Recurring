@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +6,7 @@ public class QuestIndicatorArrow : MonoBehaviour
     public GameObject target;
     public GameObject playerCharacter;
     public GameObject arrow;
-
+    public Text distance;
     
 
     // Update is called once per frame
@@ -40,6 +38,8 @@ public class QuestIndicatorArrow : MonoBehaviour
 
     // playerCharacter.transform.LookAt(target.transform);
     arrow.transform.position = Camera.main.WorldToScreenPoint(hitPoint);
+    distance.transform.position = arrow.transform.position;
+    distance.text = Mathf.FloorToInt(Vector3.Distance(playerCharacter.transform.position, target.transform.position)).ToString();
     Vector2 dir = Camera.main.ScreenToWorldPoint(playerCharacter.transform.position);
     float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
     Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);

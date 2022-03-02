@@ -91,11 +91,11 @@ namespace Gameplay.State
                 armorLevel,
                 1, 1
             );
-            _armorBar.gameObject.GetComponent<Image>().color = new Color(
-                0,
-                healthLevel,
-                1 - healthLevel
-            );
+            // _armorBar.gameObject.GetComponent<Image>().color = new Color(
+            //     0,
+            //     healthLevel,
+            //     1 - healthLevel
+            // );
             
             TurnSun();
             if (Vector3.Distance(exitGate.transform.position, playerController.MainCharacter.transform.position) < 3)

@@ -721,6 +721,9 @@ namespace Gameplay.Player
         }
 
         public void speak() {
+            if (ai == null) {
+                return;
+            }
             if (voice == null) {
                 voice = GetComponent<AudioSource>();
                 voice.pitch = voicePitch;
