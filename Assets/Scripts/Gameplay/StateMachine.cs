@@ -27,6 +27,7 @@ namespace Gameplay.State
         public WorldController worldController;
         public PlayerController playerController;
         public ExitGate exitGate;
+        public QuestIndicatorArrow arrow;
         public CharacterType[] _characterTypes;
         public GameObject _characterContainer;
         public float nightmareIntensity = 0f;
@@ -37,6 +38,7 @@ namespace Gameplay.State
         private float fadeout = 5;
         private float maxMusicVolume = .025f;
         private bool volumeSet = false;
+
         private void Start()
         {
             
@@ -58,6 +60,8 @@ namespace Gameplay.State
             _characterContainer = new GameObject();
             CreateCharacterTypes();
 
+            arrow.playerCharacter = playerController.MainCharacter.gameObject;
+
         }
 
         void Update()
@@ -66,7 +70,6 @@ namespace Gameplay.State
             if (healthLevel < 0) {
                 healthLevel = 0;
             }
-            Debug.Log(healthLevel);
             _healthBar.transform.localScale = new Vector3(
                 healthLevel,
                 1, 1
