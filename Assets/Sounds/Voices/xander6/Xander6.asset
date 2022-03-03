@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290692dba4807e743b63d15dc71dfaae, type: 3}
+  m_Name: Xander6
+  m_EditorClassIdentifier: 
+  AngryAttack:
+  - {fileID: 8300000, guid: 0bd2bdc71fcab2d47be61f32ac8abbcf, type: 3}
+  - {fileID: 8300000, guid: 348a2739be2e3a64b8f78b6c62ecb5c8, type: 3}
+  AngryGreeting:
+  - {fileID: 8300000, guid: 0252a2c94c52b844f99b44386cc6c621, type: 3}
+  AngryHurt:
+  - {fileID: 8300000, guid: b9ef0c80133347d409d2aaaaaa10d3b3, type: 3}
+  AngryIdle:
+  - {fileID: 8300000, guid: ba00e94bdada02e499eeff4dc166945a, type: 3}
+  HappyAttack:
+  - {fileID: 8300000, guid: d3f6be64732329d41a7274f2d7f4343a, type: 3}
+  HappyGreeting:
+  - {fileID: 8300000, guid: 5e6299f6a433e384796815a3b947f4b7, type: 3}
+  HappyHurt:
+  - {fileID: 8300000, guid: 6aae9c0c85552a84fae64d7a2b0cff47, type: 3}
+  - {fileID: 8300000, guid: faa1dde260feb1b42a47e48002fbe5cf, type: 3}
+  HappyIdle:
+  - {fileID: 8300000, guid: 70a8e69185ed40447b96fd70f2cedffe, type: 3}
+  AnnoyedAttack:
+  - {fileID: 8300000, guid: d7069ab794356f240957915b6197f337, type: 3}
+  AnnoyedGreeting:
+  - {fileID: 8300000, guid: 799dc8dea3ba6f54eae9bef4d4e3f54c, type: 3}
+  AnnoyedHurt:
+  - {fileID: 8300000, guid: 1d7df6af08b9f5e4fb64f366f1a91e92, type: 3}
+  - {fileID: 8300000, guid: aa6adcf51aa68e24aa419e448254d76f, type: 3}
+  - {fileID: 8300000, guid: 2ae2201438a24844790832b90e3951d3, type: 3}
+  AnnoyedIdle:
+  - {fileID: 8300000, guid: 17f2b16a172e115468aa7334829b4e05, type: 3}
+  - {fileID: 8300000, guid: fc7d6ed402aa3e24d90f418f5b1a3a0d, type: 3}

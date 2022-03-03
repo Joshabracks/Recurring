@@ -5,10 +5,17 @@ namespace Gameplay.Terrain {
         Grass,
         Water,
         Hole,
+        Rock,
+        QuickSand,
+        Lava,
     }
 
-    public enum BlockingTerrainType {
-        Water,
-        Hole
+    public class BlockingTerrainType {
+        public TerrainType[] Types = new TerrainType[] {
+            TerrainType.Water,
+            TerrainType.Hole,
+            TerrainType.QuickSand,
+            TerrainType.Lava
+        };
     }
 }

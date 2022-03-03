@@ -1,56 +1,28 @@
-
 using UnityEngine;
 
 namespace Gameplay.Data
 {
 
-    public class GameSettings
+    public static class GameSettings
     {
-        private struct SettingsValues
-        {
-            public int TargetFramerate;
-            public int ChunkSize;
-            public int WorldSeed;
-            public float Frequency;
-            public float TerrainDensity;
-        }
-
-        private SettingsValues values;
-
-        public void Init()
-        {
-            Load();
-            Apply();
-        }
-
-        public void Load()
-        {
-            values = getSettingsFromFile();
-        }
-
-        public void Apply()
-        {
-            Application.targetFrameRate = values.TargetFramerate;
-        }
-
-        private SettingsValues getSettingsFromFile()
-        {
-            FileSystem fs = new FileSystem();
-            string path = $"{Application.dataPath}/Data/SettingsValues/-1.json";
-            if (!fs.Exists(path))
-            {
-                Debug.Log("create " + path);
-                fs.SaveJSON(new SettingsValues
-                {
-                    TargetFramerate = 60,
-                    ChunkSize = 64,
-                    WorldSeed = 1337,
-                    Frequency = 0.97f,
-                    TerrainDensity = .5f
-                });
-            }
-            SettingsValues settings = fs.LoadFromJSON<SettingsValues>(path);
-            return settings;
-        }
+        public static int seed = 13;
+        public static float bodyHeight = .5f;
+        public static float bodyWidth = 1f;
+        public static float eyeSize = .75f;
+        public static float eyeOpen = .5f;
+        public static float eyeSpacing = -0.5f;
+        public static float irisSize = 0.1305f;
+        public static float pupilSize = .08f;
+        public static float roughness = .5f;
+        public static float smile = .255f;
+        public static float mouthWidth = .115f;
+        public static float mouthOpen = .2f;
+        public static float teethOpen = .1f;
+        public static float eyeX = -.2498f;
+        public static float eyeY = .1f;
+        public static Color eyeColor = Color.white;
+        public static Color irisColor = Color.green;
+        public static Color pupilColor = Color.black;
+        public static Color bodyColor = Color.yellow;
     }
 }

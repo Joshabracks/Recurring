@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290692dba4807e743b63d15dc71dfaae, type: 3}
+  m_Name: Coleman2
+  m_EditorClassIdentifier: 
+  AngryAttack:
+  - {fileID: 8300000, guid: 16da5575d9a304d4fb741347bfc48ebd, type: 3}
+  - {fileID: 8300000, guid: f161cb003ab47e3439d566a4e03f9925, type: 3}
+  AngryGreeting:
+  - {fileID: 8300000, guid: 43ede06b93054484ea56fedf94d7e827, type: 3}
+  AngryHurt:
+  - {fileID: 8300000, guid: 555b2d637bd31e944a685ea25a3dbd91, type: 3}
+  - {fileID: 8300000, guid: 94f56ce069bc1e44da2bc74e723a1f25, type: 3}
+  AngryIdle:
+  - {fileID: 8300000, guid: 4c3593d8354059e46b30ca3cd5e5b484, type: 3}
+  - {fileID: 8300000, guid: 2f13c585885e130449850290e98370b0, type: 3}
+  HappyAttack:
+  - {fileID: 8300000, guid: 0f595a5b4dbdff94eabd160b59be2132, type: 3}
+  HappyGreeting:
+  - {fileID: 8300000, guid: c6323c5a851f6c94eafe2f9a56f101e8, type: 3}
+  - {fileID: 8300000, guid: fa8b2ae72aea6e840b642657baa7bb71, type: 3}
+  - {fileID: 8300000, guid: ff94083c289e3f640b1c9e1d841e277d, type: 3}
+  HappyHurt:
+  - {fileID: 8300000, guid: 15473e2f43b98d14aaff920d21003ed0, type: 3}
+  - {fileID: 8300000, guid: 917f010091f089d4ab871839bc373733, type: 3}
+  HappyIdle:
+  - {fileID: 8300000, guid: 9e4c7140b51bd9c4abc3e6586520193e, type: 3}
+  - {fileID: 8300000, guid: d97093015a2de374ab6c7db121d6a692, type: 3}
+  - {fileID: 8300000, guid: bc932a424a00f7a4595848e105870fe6, type: 3}
+  AnnoyedAttack:
+  - {fileID: 8300000, guid: 6f0c2d33e766321428588656aff59629, type: 3}
+  AnnoyedGreeting:
+  - {fileID: 8300000, guid: 54fc2b6d327db7d479c18f6cf668727d, type: 3}
+  - {fileID: 8300000, guid: f6d42432e989a29479df68af9a9e6751, type: 3}
+  AnnoyedHurt:
+  - {fileID: 8300000, guid: b801b77598e4784439b9d99a7e065536, type: 3}
+  - {fileID: 8300000, guid: 3e0b720f9ad33f24c90a64b62a4db1e1, type: 3}
+  AnnoyedIdle:
+  - {fileID: 8300000, guid: 358402ac2e3d14f488247cdfc2bf1532, type: 3}
+  - {fileID: 8300000, guid: a376506f8c658144ba9a99ebe7182963, type: 3}

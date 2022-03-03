@@ -1,26 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Gameplay.Player;
+using Gameplay.Data;
 
 namespace Gameplay.Terrain
 {
     public class WorldController : MonoBehaviour
     {
+        // templates
+
         private World _world;
         private Dictionary<Vector2, GameObject> chunkRenders;
         public Material material;
-        [Range(1, 10000)]
-        public int seed = 1337;
         [Range(0, 5)]
         public float density = 0.5f;
         [Range(0, .1f)]
         public float frequency = 0.005f;
-
         public int chunkSize = 32;
-        private int _biomes;
-        void Start()
+        public int biomeCount() {
+            return _world.biomeCount();
+        }
+        public void Initialize()
         {
             chunkRenders = new Dictionary<Vector2, GameObject>();
-            _world = new World(seed, chunkSize, frequency, density);
+            _world = new World(GameSettings.seed, chunkSize, frequency, density);
             initChunk(new Vector2(0, 0));
         }
 
@@ -48,10 +51,11 @@ namespace Gameplay.Terrain
             ChunkBuilder chunkBuilder = new ChunkBuilder();
             for (int i = 0; i < keys.Length; i++) {
                 if (!_world.IsChunkRendered(keys[i])) {
-                    Mesh mesh = chunkBuilder.BuildChunkMesh(_world, keys[i]);
+                    Vector3 pos = new Vector3(keys[i].x * 2 * chunkSize, 0, keys[i].y * 2 * chunkSize);
+                    Mesh mesh = chunkBuilder.BuildChunkMesh(_world, keys[i], new Vector2(pos.x, pos.z));
                     GameObject go = new GameObject();
                     go.transform.parent = gameObject.transform;
-                    go.transform.position = new Vector3(keys[i].x * 2 * chunkSize, 0, keys[i].y * 2 * chunkSize);
+                    go.transform.position = pos;
                     
                     MeshRenderer renderer = go.AddComponent<MeshRenderer>();
                     renderer.material = material;

@@ -1,141 +1,202 @@
 using UnityEngine;
 using Gameplay.Terrain;
-
-namespace  Gameplay.Player 
+using Gameplay.Data;
+namespace Gameplay.Player
 {
-    
+
     public class PlayerController : MonoBehaviour
     {
-        public PlayerCharacter MainCharacter;
-        public GameObject MainCharacterModel;
+        public Character MainCharacter;
 
-        
-        void Start() {
-            MainCharacter = new PlayerCharacter();
+        private float blockingPointHoverHeight = 0.5f;
+
+        public void Initialize()
+        {
+            MainCharacter.BodyHeight = GameSettings.bodyHeight;
+            MainCharacter.BodyWidth = GameSettings.bodyWidth;
+            MainCharacter.EyeSize = GameSettings.eyeSize;
+            MainCharacter.EyelidPosition = GameSettings.eyeOpen;
+            MainCharacter.EyeSpacing = GameSettings.eyeSpacing;
+            MainCharacter.IrisSize = GameSettings.irisSize;
+            MainCharacter.PupilSize = GameSettings.pupilSize;
+            MainCharacter.SkinRoughness = GameSettings.roughness;
+            MainCharacter.Smile = GameSettings.smile;
+            MainCharacter.MouthWidth = GameSettings.mouthWidth;
+            MainCharacter.MouthOpen = GameSettings.mouthOpen;
+            MainCharacter.TeethOpen = GameSettings.teethOpen;
+            MainCharacter.EyeLookX = GameSettings.eyeX;
+            MainCharacter.EyeLookY = GameSettings.eyeY;
+            MainCharacter.SkinColor = GameSettings.bodyColor;
+            MainCharacter.EyeColor = GameSettings.eyeColor;
+            MainCharacter.IrisColor = GameSettings.irisColor;
+            MainCharacter.PupilColor = GameSettings.pupilColor;
+            MainCharacter.SetCustomizationValues();
         }
 
-        void Update() {
+        void Update()
+        {
+            checkActions();
             setMove();
+            MainCharacter.pickupStuff();
         }
-        
-        void FixedUpdate() {
+
+        void FixedUpdate()
+        {
+            MainCharacter.MakeEquip();
+            MainCharacter.CheckGearModifiers();
+            MainCharacter.CheckTerrainModifiers();
+            MainCharacter.Float();
+            if (MainCharacter.Health <= 0)
+            {
+                // MainCharacter.die();
+                return;
+            }
             movePlayer();
             turnPlayer();
         }
 
-        public void turnPlayer() {
-            Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+        public void turnPlayer()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast (ray, out hit)) 
+            if (Physics.Raycast(ray, out hit))
             {
                 Vector3 Target = hit.point;
+                Target.y = MainCharacter.transform.position.y;
                 //find the vector pointing from our position to the target
-                Vector3 _direction = (Target - MainCharacterModel.transform.position).normalized;
+                Vector3 _direction = (Target - MainCharacter.transform.position).normalized;
 
                 //create the rotation we need to be in to look at the target
                 Quaternion _lookRotation = Quaternion.LookRotation(_direction);
 
                 //rotate us over time according to speed until we are in the required rotation
-                MainCharacterModel.transform.rotation = _lookRotation;
-            }    
+                MainCharacter.transform.rotation = _lookRotation;
+            }
         }
 
-        public GameObject GetCurrentChunk() {
+        public GameObject GetCurrentChunk()
+        {
             Vector2 direction = new Vector2(
                 MainCharacter.movement.x,
                 MainCharacter.movement.y
             ).normalized;
-            
+
             Vector3 blockingPointHover = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * 1f,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * 1f
+                MainCharacter.transform.position.x + direction.x * 1f,
+                blockingPointHoverHeight,
+                MainCharacter.transform.position.z + direction.y * 1f
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) 
+            if (Physics.Raycast(ray, out hit))
             {
                 GameObject go = hit.collider.gameObject;
-                if (go.tag == "Chunk") {
+                if (go.tag == "Chunk")
+                {
                     return go;
                 }
             }
             return null;
         }
 
-        public void movePlayer() {
+
+
+        public void movePlayer()
+        {
 
             Vector2 direction = new Vector2(
                 MainCharacter.movement.x,
                 MainCharacter.movement.y
             ).normalized;
-            
+
             Vector3 blockingPointHover = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * 1f,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * 1f
+                MainCharacter.transform.position.x,
+                blockingPointHoverHeight,
+                MainCharacter.transform.position.z
             );
             Ray ray = new Ray(blockingPointHover, Vector3.down);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) 
+            if (Physics.Raycast(ray, out hit))
             {
                 int index = hit.triangleIndex * 3;
                 MeshCollider mc = hit.collider as MeshCollider;
-                if (mc == null) {
+                if (mc == null)
+                {
                     return;
                 }
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 TerrainType terrainType = (TerrainType)(uv2.x);
-                if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
-                    return;
-                }
+                MainCharacter.terrainType = terrainType;
             }
-            else 
+            else
             {
                 return;
             }
 
-            MainCharacterModel.transform.position = new Vector3(
-                MainCharacterModel.transform.position.x + direction.x * MainCharacter.Speed,
-                MainCharacterModel.transform.position.y,
-                MainCharacterModel.transform.position.z + direction.y * MainCharacter.Speed
+            MainCharacter.transform.position = new Vector3(
+                MainCharacter.transform.position.x + direction.x * MainCharacter.ModifiedSpeed,
+                MainCharacter.transform.position.y,
+                MainCharacter.transform.position.z + direction.y * MainCharacter.ModifiedSpeed
             );
 
             Camera.main.transform.position = new Vector3(
-                MainCharacterModel.transform.position.x,
+                MainCharacter.transform.position.x,
                 Camera.main.transform.position.y,
-                MainCharacterModel.transform.position.z
+                MainCharacter.transform.position.z
             );
         }
 
-        public void setMove() {
+        public void checkActions()
+        {
+            if (Input.GetMouseButton(0))
+            {
+                MainCharacter.MeleeAttack();
+            }
+            if (Input.GetMouseButton(1))
+            {
+                MainCharacter.RangeAttack();
+            }
+            if (isPressed(new KeyCode[] { KeyCode.Space }))
+            {
+                MainCharacter.Jump();
+            }
+        }
+
+        public void setMove()
+        {
             int y = 0;
             int x = 0;
-            KeyCode[] up = new KeyCode[]{KeyCode.W, KeyCode.UpArrow};
-            KeyCode[] down = new KeyCode[]{KeyCode.S, KeyCode.DownArrow};
-            KeyCode[] left = new KeyCode[]{KeyCode.A, KeyCode.LeftArrow};
-            KeyCode[] right = new KeyCode[]{KeyCode.D, KeyCode.RightArrow};
+            KeyCode[] up = new KeyCode[] { KeyCode.W, KeyCode.UpArrow };
+            KeyCode[] down = new KeyCode[] { KeyCode.S, KeyCode.DownArrow };
+            KeyCode[] left = new KeyCode[] { KeyCode.A, KeyCode.LeftArrow };
+            KeyCode[] right = new KeyCode[] { KeyCode.D, KeyCode.RightArrow };
 
-            if (isPressed(up)) {
+            if (isPressed(up))
+            {
                 y++;
             }
-            if (isPressed(down)) {
+            if (isPressed(down))
+            {
                 y--;
             }
-            if (isPressed(left)) {
+            if (isPressed(left))
+            {
                 x--;
             }
-            if (isPressed(right)) {
+            if (isPressed(right))
+            {
                 x++;
             }
             MainCharacter.movement = new Vector2(x, y);
         }
 
-        private bool isPressed(KeyCode[] keyCodes) 
+        private bool isPressed(KeyCode[] keyCodes)
         {
-            foreach ( KeyCode code in keyCodes) {
-                if (Input.GetKey(code)) {
+            foreach (KeyCode code in keyCodes)
+            {
+                if (Input.GetKey(code))
+                {
                     return true;
                 }
             }
@@ -143,6 +204,6 @@ namespace  Gameplay.Player
         }
 
 
-        
+
     }
 }
