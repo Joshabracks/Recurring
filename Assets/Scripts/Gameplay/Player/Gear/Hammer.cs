@@ -14,22 +14,14 @@ namespace Gameplay.Player
         public Color color;
         public float unequippable = 0;
         public AudioClip[] swingWeapon;
-        // public AudioClip[] hitGround;
         public AudioClip[] hitFlesh;
         public AudioClip[] hitArmor;
-
-        // public List<GameObject> attackMap;
         private enum AttackState
         {
             Idle,
             Strike,
             Reset
         }
-
-        // private void Awake() {
-        //     attackMap = new List<GameObject>();
-        // }
-
         private AttackState attackState = AttackState.Idle;
 
         public override void makeEquip()
@@ -65,7 +57,6 @@ namespace Gameplay.Player
                     }
                     else
                     {
-                        // do the thing
                         attackState = AttackState.Idle;
                     }
                 }
@@ -108,8 +99,6 @@ namespace Gameplay.Player
                 }
                 else if (equippedCharacter.ai == null)
                 {
-                    // do the thing
-                    // Debug.Log(attackMap.Count);
                     foreach (Character c in GameObject.Find("StateMachine").GetComponent<StateMachine>()._characterContainer.GetComponentsInChildren<Character>())
                     {
                         if (c == this)
@@ -143,7 +132,6 @@ namespace Gameplay.Player
                             }
                         }
                     }
-                    // playSound(hitGround, .8f, 1);
                     attackState = AttackState.Reset;
                 }
                 else
@@ -206,13 +194,8 @@ namespace Gameplay.Player
             {
 
                 character.hammerProgress++;
-                // if (character.hammerProgress > character.hammerLevel)
-                // {
-                    // character.hammerProgress = 0;
-                    character.hammerLevel++;
-                    character.LevelUpHammer();
-                // }
-                
+                character.hammerLevel++;
+                character.LevelUpHammer();
                 Destroy(gameObject);
             }
 
@@ -237,7 +220,6 @@ namespace Gameplay.Player
 
         public override void MoveModifier()
         {
-            // equippedCharacter.ModifiedSpeed *= .85f
         }
     }
 }

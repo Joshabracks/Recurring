@@ -12,22 +12,16 @@ namespace Gameplay.Terrain
         private World _world;
         private Dictionary<Vector2, GameObject> chunkRenders;
         public Material material;
-        // [Range(1, 10000)]
-        // public int seed = GameSettings.seed;
         [Range(0, 5)]
         public float density = 0.5f;
         [Range(0, .1f)]
         public float frequency = 0.005f;
-
         public int chunkSize = 32;
-        // private int _biomes;
-
         public int biomeCount() {
             return _world.biomeCount();
         }
         public void Initialize()
         {
-            // seed = GameSettings.seed;
             chunkRenders = new Dictionary<Vector2, GameObject>();
             _world = new World(GameSettings.seed, chunkSize, frequency, density);
             initChunk(new Vector2(0, 0));

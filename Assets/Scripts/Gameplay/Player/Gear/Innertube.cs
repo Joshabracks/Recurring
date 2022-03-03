@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.Player {
@@ -68,17 +66,12 @@ namespace Gameplay.Player {
                     health -= score;
                 }
             }
-            // do nothing
         }
 
         public override void MoveModifier()
         {
-            // equippedCharacter.ModifiedSpeed *= .8f;
             if (equippedCharacter.terrainType == Terrain.TerrainType.Water) 
             {
-                // if (equippedCharacter.targetFloatHeight < 0.5f) {
-                //     equippedCharacter.ModifiedSpeed *= .6f;
-                // }
                 equippedCharacter.floating = true;
                 equippedCharacter.targetFloatHeight -= 0.5f;
             }

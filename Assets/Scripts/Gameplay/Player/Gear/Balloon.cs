@@ -26,16 +26,6 @@ namespace Gameplay.Player
                         set = true;
                     }
                 }
-                // transform.position = Vector3.MoveTowards(transform.position, new Vector3(equippedCharacter.transform.position.x - .5f, equippedCharacter.transform.position.y + 1, equippedCharacter.transform.position.z), Time.deltaTime * 10);
-
-                // Vector3 _direction = (equippedCharacter.transform.position - transform.position).normalized;
-                // if (_direction != Vector3.zero) {
-                //     //create the rotation we need to be in to look at the target        
-                //     Quaternion _lookRotation = Quaternion.LookRotation(_direction + Vector3.up);
-
-                //     //rotate us over time according to speed until we are in the required rotation
-                //     transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * 3);
-                // }
             }
         }
 
@@ -79,7 +69,6 @@ namespace Gameplay.Player
         }
         public override void Drop()
         {
-            // playerCharacter.gear.Remove(this);
             set = false;
             Unequip();
         }

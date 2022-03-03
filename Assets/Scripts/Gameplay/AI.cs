@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.Terrain;
 using Gameplay.Player;
@@ -15,10 +13,8 @@ namespace Gameplay.State
         public float selfPreservation;
         public float mood;
         public float nightmareIntensity;
-        // public float attackRadius;
         public float AttackRadius(float aggression)
         {
-            // return 10;
             return mood * (aggression + nightmareIntensity) * 100;
         }
 
@@ -79,24 +75,12 @@ namespace Gameplay.State
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 terrainType = (TerrainType)(uv2.x);
-                // if (!character.AllowedTerrain.Contains(terrainType)) {
-                //     return;
-                // }
-                // character.terrainType = terrainType;
             }
             else
             {
                 return;
             }
             character.SetTerrainType();
-            // bool frontBlock = false;
-            // ray = new Ray(character.transform.position, character.transform.forward);
-            // if (Physics.Raycast(ray, out hit, 1)) {
-            //     Character c = hit.collider.gameObject.GetComponent<Character>();
-            //     if (c != null) {
-            //         frontBlock = true;
-            //     }
-            // }
 
             if (willMoveHere(terrainType, character))
             {
@@ -110,36 +94,12 @@ namespace Gameplay.State
                     //rotate us over time according to speed until we are in the required rotation
                     character.transform.rotation = _lookRotation;
                 }
-                // character.transform.position = new Vector3(
-                //     character.transform.position.x + direction.x * character.ModifiedSpeed,
-                //     character.transform.position.y,
-                //     character.transform.position.z + direction.y * character.ModifiedSpeed
-                // );
-                // ray = new Ray(character.transform.position, character.transform.right);
-                // if (Physics.Raycast(ray, out hit, 3))
-                // {
-                //     Character c = hit.collider.gameObject.GetComponent<Character>();
-                //     if (c != null)
-                //     {
-                //         rightBlock = .1f;
-                //     }
-                // }
-                // ray = new Ray(character.transform.position, -character.transform.right);
-                // if (Physics.Raycast(ray, out hit, 3))
-                // {
-                //     Character c = hit.collider.gameObject.GetComponent<Character>();
-                //     if (c != null)
-                //     {
-                //         leftBlock = .1f;
-                //     }
-                // }
                 Vector2 blockingDirctions = new Vector2(0, 0);
                 Character[] characters = _characterContainer.transform.GetComponentsInChildren<Character>();
                 foreach (Character c in characters)
                 {
                     blockingDirctions = applyDistance(character, c, blockingDirctions);
                 }
-                // blockingDirctions = applyDistance(character, mainCharacter, blockingDirctions);
                 float forwarMultiplier = applyDistance(character, mainCharacter, blockingDirctions) != Vector2.zero ? 0 : .75f;
                 if (blockingDirctions != Vector2.zero)
                 {
@@ -165,9 +125,6 @@ namespace Gameplay.State
             var dist = Vector3.Distance(c.transform.position, character.transform.position);
             if (dist < 2)
             {
-                // Vector2 dir = (new Vector2(c.transform.position.x, c.transform.position.z) - new Vector2(character.transform.position.x, character.transform.position.z)).normalized;
-
-                // blockingDirctions = (blockingDirctions + dir).normalized;
                 if (c.transform.position.x < character.transform.position.x)
                 {
                     blockingDirections.x = Mathf.Clamp(blockingDirections.x + 1, 0, 1);
@@ -188,9 +145,6 @@ namespace Gameplay.State
             }
             return blockingDirections;
         }
-
-
-
 
         public bool willMoveHere(TerrainType terrain, Character character)
         {

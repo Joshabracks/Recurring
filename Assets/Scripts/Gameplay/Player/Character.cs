@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.Terrain;
 using Gameplay.State;
-using Gameplay.Data;
 
 namespace Gameplay.Player
 {
@@ -74,7 +72,6 @@ namespace Gameplay.Player
         public float ModifiedSpeed = .2f;
         public Vector2 movement;
         public TerrainType terrainType;
-        // public List<TerrainType> AllowedTerrain;
         public bool floating = false;
         public bool falling = false;
         public bool suffocating = false;
@@ -143,24 +140,16 @@ namespace Gameplay.Player
         {
 
         }
-        // private float seconds = 0;
         private void Update()
         {
             if (dead) {
                 return;
             }
-            // seconds += Time.deltaTime;
-            // if (seconds >= 1) {
-            //     Randomize();
-            //     SetCustomizationValues();
-            //     seconds = 0;
-            // }
             if (ai != null)
             {
                 CheckAttack();
                 pickupStuff();
                 cleanup();
-                // do ai stuff
                 speak();
             }
             walkSound();
@@ -211,7 +200,6 @@ namespace Gameplay.Player
                 Gear g = go.GetComponent<Gear>();
                 if (g != null && g.equippedCharacter == null)
                 {
-                    // g.equippedCharacter = MainCharacter;
                     g.PickUp(this);
                 }
             }
@@ -246,7 +234,6 @@ namespace Gameplay.Player
                 {
                     gear.gun.Drop();
                 }
-                // Destroy(gameObject);
                 die();
                 return;
             }
@@ -254,7 +241,6 @@ namespace Gameplay.Player
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit))
             {
-                // Destroy(gameObject);
                 die();
             }
         }
@@ -275,17 +261,6 @@ namespace Gameplay.Player
             Destroy(RightEye, 10);
         }
 
-        // private void Awake()
-        // {
-        //     Randomize();
-        // }
-        // private void OnDrawGizmos() {
-        //     if (ai != null)
-        //     {
-        //         Gizmos.color = Color.red;
-        //         Gizmos.DrawSphere(transform.position, ai.attackRadius);
-        //     }
-        // }
         public void Randomize()
         {
             // type traits
@@ -307,10 +282,8 @@ namespace Gameplay.Player
             TeethOpen = Random.Range(0, .238f);
             Smile = Random.Range(-0.1f, .671f);
 
-
             EyeLookY = Random.Range(.05f, .147f);
             EyeLookX = -.2498f;
-            // EyeLookX = Random.Range(-.27f, -.23f);
         }
 
         public void Randomize(CharacterType type)
@@ -406,72 +379,6 @@ namespace Gameplay.Player
             Vector3 directionOfTravelLeft = Body.transform.right;
             Vector3 leftEyeDirection = directionOfTravelLeft + directionOfTravelLeft.normalized * EyeSpacing;
             LeftEye.transform.position = Body.transform.position + leftEyeDirection;
-             // MainCharacter.Randomize();
-            // Material _body = Body.GetComponent<MeshRenderer>().material;
-            // Material _rightEye = RightEye.GetComponent<MeshRenderer>().material;
-            // Material _leftEye = LeftEye.GetComponent<MeshRenderer>().material;
-            // // SkinColor
-            // _body.SetColor("Color_c9b0e0dfacb84c87a24618eea7b3d861", GameSettings.bodyColor);
-            // _rightEye.SetColor("Color_8cbb982647ed49f0a5c9f595711113f0", GameSettings.bodyColor);
-            // _leftEye.SetColor("Color_8cbb982647ed49f0a5c9f595711113f0", GameSettings.bodyColor);
-            // // SkinRoughness
-            // _body.SetFloat("Vector1_84b477cc3c2e4d089342a26b2a53ab9e", GameSettings.roughness);
-            // _rightEye.SetFloat("Vector1_549f0fee6d3c40239cb492f1c0dfe4df", GameSettings.roughness);
-            // _leftEye.SetFloat("Vector1_549f0fee6d3c40239cb492f1c0dfe4df", GameSettings.roughness);
-            // // EyeColor
-            // _rightEye.SetColor("Color_ca45d8a7905f40c291a1451df70014b0", GameSettings.eyeColor);
-            // _leftEye.SetColor("Color_ca45d8a7905f40c291a1451df70014b0", GameSettings.eyeColor);
-            // // Eye Open
-            // _rightEye.SetFloat("Vector1_4f08c76a1404422a8d66ae996bd2fbfa", GameSettings.eyeOpen);
-            // _leftEye.SetFloat("Vector1_4f08c76a1404422a8d66ae996bd2fbfa", GameSettings.eyeOpen);
-            // // IrisColor
-            // _rightEye.SetColor("Color_ac1f9112475c432685728afe941b7661", GameSettings.irisColor);
-            // _leftEye.SetColor("Color_ac1f9112475c432685728afe941b7661", GameSettings.irisColor);
-            // // PupilColor
-            // _rightEye.SetColor("Color_c0e17f4523ff42719aacaa10999c39c9", GameSettings.pupilColor);
-            // _leftEye.SetColor("Color_c0e17f4523ff42719aacaa10999c39c9", GameSettings.pupilColor);
-            // // IrisSize
-            // _rightEye.SetFloat("Vector1_eae4e3df392e4e06844152a91f4b5887", GameSettings.irisSize);
-            // _leftEye.SetFloat("Vector1_eae4e3df392e4e06844152a91f4b5887", GameSettings.irisSize);
-            // // PupilSize
-            // _rightEye.SetFloat("Vector1_572ab91db3d54d6c95239de619484396", GameSettings.pupilSize);
-            // _leftEye.SetFloat("Vector1_572ab91db3d54d6c95239de619484396", GameSettings.pupilSize);
-            // // LookX
-            // _rightEye.SetFloat("Vector1_9979475be7dd4d029c53f3b8d0bbb64a", GameSettings.eyeX);
-            // _leftEye.SetFloat("Vector1_9979475be7dd4d029c53f3b8d0bbb64a", GameSettings.eyeX);
-            // // LookY
-            // _rightEye.SetFloat("Vector1_bcb7e772ac2543f0a4f4ee289502ad17", GameSettings.eyeY);
-            // _leftEye.SetFloat("Vector1_bcb7e772ac2543f0a4f4ee289502ad17", GameSettings.eyeY);
-            // // Mouth
-            // _body.SetFloat("Vector1_6decf4ff65b849a3a10735c6af22a86c", GameSettings.mouthOpen);
-            // _body.SetFloat("Vector1_9785ac54f99345cdac2f47ee51317a62", GameSettings.mouthWidth);
-            // _body.SetFloat("Vector1_fe2e7edb90364604929ec17303e41edb", GameSettings.smile);
-            // _body.SetFloat("Vector1_a57ded8bb1e042dfbb2e2f2ab0e0bc3f", GameSettings.teethOpen);
-            // // BodyHeight
-            // Body.gameObject.transform.localScale = new Vector3(
-            //     GameSettings.bodyWidth,
-            //     GameSettings.bodyHeight,
-            //     GameSettings.bodyWidth
-            // );
-            // // EyeSize
-            // RightEye.gameObject.transform.localScale = new Vector3(
-            //     GameSettings.eyeSize,
-            //     GameSettings.eyeSize,
-            //     GameSettings.eyeSize
-            // );
-            // LeftEye.gameObject.transform.localScale = new Vector3(
-            //     GameSettings.eyeSize,
-            //     GameSettings.eyeSize,
-            //     GameSettings.eyeSize
-            // );
-            // // EyeSpacing
-            // Vector3 directionOfTravelRight =  Body.transform.right;
-            // Vector3 rightEyeDirection = directionOfTravelRight + directionOfTravelRight.normalized * GameSettings.eyeSpacing;
-            // RightEye.transform.position = Body.transform.position + rightEyeDirection;
-
-            // Vector3 directionOfTravelLeft = Body.transform.right;
-            // Vector3 leftEyeDirection = directionOfTravelLeft + directionOfTravelLeft.normalized * GameSettings.eyeSpacing;
-            // LeftEye.transform.position = Body.transform.position + leftEyeDirection;
         }
 
         public void CheckGearModifiers()
@@ -479,10 +386,6 @@ namespace Gameplay.Player
             floating = false;
             ModifiedSpeed = Speed;
             targetFloatHeight = 0.5f;
-            // foreach (Gear g in gear)
-            // {
-            //     g.MoveModifier();
-            // }
             if (gear.balloon != null)
             {
                 gear.balloon.MoveModifier();
@@ -506,23 +409,8 @@ namespace Gameplay.Player
 
         }
 
-        // public void Unequip(Gear g)
-        // {
-
-        //     // gear.Remove(g);
-        //     switch(g.GetType()) {
-        //         case typeof(Balloon):
-        //             gear.balloon = null;
-        //             break;
-        //     }
-        // }
-
         public void MakeEquip()
         {
-            // foreach (Gear g in gear)
-            // {
-            //     g.makeEquip();
-            // }
             if (gear.balloon != null)
             {
                 gear.balloon.makeEquip();
@@ -568,25 +456,6 @@ namespace Gameplay.Player
                     gear.gun = null;
                 }
             }
-
-            // int i = 0;
-
-            // while (i < gear.Count)
-            // {
-            //     Gear g = gear[i];
-            //     if (g.health < 0)
-            //     {
-            //         g.Unequip();
-            //         Unequip(g);
-            //         Destroy(g);
-            //         Destroy(g.gameObject);
-            //         i = 0;
-            //     }
-            //     else
-            //     {
-            //         i++;
-            //     }
-            // }
         }
 
         public void Float()
@@ -724,11 +593,11 @@ namespace Gameplay.Player
         }
 
         public void LevelUpGunDamage() {
-            gear.gun.damage += 1f;
+            gear.gun.damage += .5f;
         }
 
         public void LevelUpGunSpeed() {
-            gear.gun.speed += 1f;
+            gear.gun.speed += .5f;
         }
 
         public void LevelUpHammer() {
@@ -814,7 +683,6 @@ namespace Gameplay.Player
                         if (transform.position.y <= -.5f)
                         {
                             transform.position = new Vector3(transform.position.x, -.5f, transform.position.z);
-                            // Health -= Time.deltaTime * suffocationModifier;
                             suffocating = true;
                         }
                     }
@@ -853,14 +721,6 @@ namespace Gameplay.Player
                     }
                     break;
                 case TerrainType.Lava:
-                    // foreach (Gear g in gear)
-                    // {
-                    //     if (g.GetType() == typeof(Balloon))
-                    //     {
-                    //         Balloon b = g as Balloon;
-                    //         b.health -= Time.deltaTime * 3;
-                    //     }
-                    // }
                     if (gear.balloon != null)
                     {
                         gear.balloon.health -= Time.deltaTime * 3;

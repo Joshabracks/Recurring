@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.Player
@@ -37,13 +35,6 @@ namespace Gameplay.Player
                 else
                 {
                     hasBalloon = equippedCharacter && equippedCharacter.gear.balloon != null;
-                    // hasBalloon = false;
-                    // foreach (Gear g in equippedCharacter.gear) {
-                    //     Balloon b = g as Balloon;
-                    //     if (b != null) {
-                    //         hasBalloon = true;
-                    //     }
-                    // }
                     if (equippedCharacter.floating && !hasBalloon)
                     {
                         if (angle > 0)

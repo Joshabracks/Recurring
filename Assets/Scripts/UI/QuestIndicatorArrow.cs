@@ -26,8 +26,6 @@ public class QuestIndicatorArrow : MonoBehaviour
         // Raycast against the plane
         if(planes[i].Raycast(ray, out var distance))
         {
-            // Since a plane is mathematical infinite
-            // what you would want is the one that hits with the shortest ray distance
             if(distance < currentMinDistance)
             {
                 hitPoint = ray.GetPoint(distance - .75f);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Gameplay.Player;
 using Gameplay.Terrain;
@@ -94,11 +92,6 @@ namespace Gameplay.State
                 armorLevel,
                 1, 1
             );
-            // _armorBar.gameObject.GetComponent<Image>().color = new Color(
-            //     0,
-            //     healthLevel,
-            //     1 - healthLevel
-            // );
             
             TurnSun();
             if (Vector3.Distance(exitGate.transform.position, playerController.MainCharacter.transform.position) < 3)
@@ -177,12 +170,6 @@ namespace Gameplay.State
 
         private void checkCharacters()
         {
-            // Character[] characters = _characterContainer.transform.GetComponentsInChildren<Character>();
-            // foreach (Character character in characters) {
-            //     if (Vector2.Distance(new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.z), new Vector2(character.transform.position.x, character.transform.position.z)) > drawDistance * 30) {
-            //         Destroy(character);
-            //     }
-            // }
             Character[] _characters = _characterContainer.transform.GetComponentsInChildren<Character>();
             if (_characters.Length < nightmareIntensity * spawnRate)
             {
@@ -269,7 +256,8 @@ namespace Gameplay.State
         }
 
         private void TurnSun()
-        {   Vector3 d = (exitGate.transform.position - Camera.main.transform.position);
+        {   
+            Vector3 d = (exitGate.transform.position - Camera.main.transform.position);
             d.x = Mathf.Clamp(d.x, -30, 30);
             d.z = Mathf.Clamp(d.z, -30, 30);
             Vector3 _direction = d.normalized;

@@ -1,8 +1,7 @@
 using UnityEngine;
+
 namespace Gameplay.Player
 {
-
-
     [CreateAssetMenu]
     public class VoiceSet : ScriptableObject
     {

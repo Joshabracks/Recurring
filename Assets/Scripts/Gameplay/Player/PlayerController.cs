@@ -55,23 +55,6 @@ namespace Gameplay.Player
             turnPlayer();
         }
 
-        // void pickupStuff() {
-        //     GameObject[] allGear = GameObject.FindGameObjectsWithTag("Gear");
-        //     foreach (GameObject go in allGear) {
-        //         if (Vector2.Distance(new Vector2(go.transform.position.x, go.transform.position.z), new Vector2(MainCharacter.transform.position.x, MainCharacter.transform.position.z)) > 2) {
-        //             continue;
-        //         }
-        //         Gear g = go.GetComponent<Gear>();
-        //         if (g != null && g.equippedCharacter == null) {
-        //             // g.equippedCharacter = MainCharacter;
-        //             g.PickUp(MainCharacter);
-        //         }
-        //     }
-        // }
-
-
-
-
         public void turnPlayer()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -144,9 +127,6 @@ namespace Gameplay.Player
                 Mesh mesh = mc.sharedMesh;
                 Vector2 uv2 = mesh.uv2[mesh.triangles[index]];
                 TerrainType terrainType = (TerrainType)(uv2.x);
-                // if (!MainCharacter.AllowedTerrain.Contains(terrainType)) {
-                //     return;
-                // }
                 MainCharacter.terrainType = terrainType;
             }
             else
