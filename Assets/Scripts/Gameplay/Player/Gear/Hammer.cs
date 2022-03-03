@@ -101,7 +101,7 @@ namespace Gameplay.Player
                 {
                     foreach (Character c in GameObject.Find("StateMachine").GetComponent<StateMachine>()._characterContainer.GetComponentsInChildren<Character>())
                     {
-                        if (c == this)
+                        if (c == equippedCharacter)
                         {
                             continue;
                         }

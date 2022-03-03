@@ -10,6 +10,7 @@ namespace Gameplay.Player
         public float damage;
         public AudioClip[] shootNoise;
         public AudioClip[] hitNoise;
+        public Character character;
 
         private void Awake()
         {
@@ -42,6 +43,9 @@ namespace Gameplay.Player
                 transform.Translate(new Vector3(0, 0, Time.deltaTime * 15), Space.Self);
                 foreach (Character c in GameObject.Find("StateMachine").GetComponent<StateMachine>()._characterContainer.GetComponentsInChildren<Character>())
                 {
+                    if (c == character) {
+                        continue;
+                    }
                     Vector2 center = new Vector2(transform.position.x, transform.position.z);
                     float dist;
                     if (c.gear.umbrella != null)
@@ -60,7 +64,12 @@ namespace Gameplay.Player
                     dist = Vector2.Distance(center, new Vector2(c.transform.position.x, c.transform.position.z));
                     if (dist <= 1)
                     {
-                        if (c.gear.innertube != null)
+                        if (c.gear.balloon != null) {
+                            c.gear.balloon.TakeDamage(damage);
+                            HitSound();
+                            return;
+                        }
+                        else if (c.gear.innertube != null)
                         {
                             c.gear.innertube.TakeDamage(damage);
                             

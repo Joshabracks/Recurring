@@ -44,7 +44,7 @@ namespace Gameplay.State
             exitGate.Place();
             worldController.Initialize();
             playerController.MainCharacter = Instantiate(_characterTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
-
+            playerController.MainCharacter.transform.parent = _characterContainer.transform;
 
             Hammer hammer = Instantiate(_hammerTemplate, new Vector3(0, .5f, 0), Quaternion.identity);
             hammer.Randomize();
@@ -57,7 +57,6 @@ namespace Gameplay.State
             gun.damage = 1f;
             gun.speed = 4f;
             playerController.Initialize();
-            _characterContainer = new GameObject();
             CreateCharacterTypes();
 
             arrow.playerCharacter = playerController.MainCharacter.gameObject;
@@ -206,14 +205,15 @@ namespace Gameplay.State
                         Gun gun = Instantiate(_gunTemplate, position, Quaternion.identity);
                         gun.Randomize();
                         gun.SetCustomizationValues();
-                        gun.damage = Random.Range(0f, nightmareIntensity);
+                        gun.damage = Random.Range(.1f, .25f + nightmareIntensity);
+                        gun.speed = Random.Range(.1f, .25f + nightmareIntensity);
                     }
                     else
                     {
                         Hammer hammer = Instantiate(_hammerTemplate, position, Quaternion.identity);
                         hammer.Randomize();
                         hammer.SetCustomizationValues();
-                        hammer.damage = Random.Range(0f, nightmareIntensity * 10);
+                        hammer.damage = Random.Range(1f, 1f + nightmareIntensity * 10);
                     }
                     character.movement = new Vector2(
                         Random.Range(-1f, 1f),

@@ -593,11 +593,11 @@ namespace Gameplay.Player
         }
 
         public void LevelUpGunDamage() {
-            gear.gun.damage += .5f;
+            gear.gun.damage += .25f;
         }
 
         public void LevelUpGunSpeed() {
-            gear.gun.speed += .5f;
+            gear.gun.speed += .25f;
         }
 
         public void LevelUpHammer() {

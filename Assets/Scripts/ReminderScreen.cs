@@ -13,7 +13,7 @@ public class ReminderScreen : MonoBehaviour
         "Collect enemy weapons to improve your own",
         "Innertubes are for armor and floating",
         "Drowning hurts",
-        "Lava can pop your balloon",
+        "Lava and Bullets can pop balloons",
         "Umbrellas block bullets and catch hot to help you over lava. \nBut not at the same time",
         "Hammers hit harder than bullets",
         "The longer your dream, the stronger your enemies",
