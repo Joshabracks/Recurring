@@ -83,6 +83,7 @@ namespace Gameplay.Player
                 bullet.transform.localScale = new Vector3(.25f, .25f, .25f);
                 bullet.life = range * UnityEngine.Random.Range(1f, 1.25f);
                 bullet.damage = damage;
+                bullet.character = equippedCharacter;
                 cooldown = 1 / speed;
             }
         }
